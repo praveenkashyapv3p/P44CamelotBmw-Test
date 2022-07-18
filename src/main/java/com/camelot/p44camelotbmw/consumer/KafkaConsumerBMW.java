@@ -14,7 +14,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-
 @Service
 public class KafkaConsumerBMW {
     @Autowired
@@ -28,8 +27,6 @@ public class KafkaConsumerBMW {
     DeliveryInformationMapper deliveryInformationMapper = new DeliveryInformationMapper();
     @KafkaListener(topics = "p44Data", groupId = "bmwGroup")
     public void getTransformedMessage(String message) {
-
-
         Gson gson = new Gson();
         String jsonStartingString = "{\"records\":[{\"key\":";
         String jsonStringValue = ",\"value\":";
@@ -55,15 +52,6 @@ public class KafkaConsumerBMW {
         }catch (Exception e){
             e.printStackTrace();
         }
-
-
-
-
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.APPLICATION_JSON);
-//        HttpEntity<String> entity = new HttpEntity<>(message, headers);
-//        //ResponseEntity<String> response = restTemplate.postForEntity("https://p44-tracking-data-int.bmwgroup.com", entity, String.class);
-//        System.out.println("response.getBody())");
     }
 
 }
