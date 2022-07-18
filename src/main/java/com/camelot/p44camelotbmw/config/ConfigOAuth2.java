@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,12 +20,9 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.SSLContext;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.security.KeyStore;
 
@@ -68,21 +68,30 @@ public class ConfigOAuth2 extends AuthorizationServerConfigurerAdapter {
 
     }
 
+
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) throws Exception {
         char[] password = "praveen".toCharArray();
-
-        SSLContext sslContext = SSLContextBuilder.create().loadKeyMaterial(keyStore("classpath:bmw-int.jks", password), password).loadTrustMaterial(null, new TrustSelfSignedStrategy()).build();
+        //String certFile = "";
+        ResourceLoader resourceLoader = new DefaultResourceLoader();
+        Resource resource = resourceLoader.getResource("classpath:bmw-int.jks");
+//        try{
+//            Reader reader = new InputStreamReader(resource.getInputStream());
+//            certFile =  FileCopyUtils.copyToString(reader);
+//        } catch (IOException e){
+//            e.printStackTrace();
+//        }
+        SSLContext sslContext = SSLContextBuilder.create().loadKeyMaterial(keyStore(resource, password), password).loadTrustMaterial(null, new TrustSelfSignedStrategy()).build();
 
         HttpClient client = HttpClients.custom().setSSLContext(sslContext).build();
         return builder.requestFactory(() -> new HttpComponentsClientHttpRequestFactory(client)).build();
     }
 
 
-    private KeyStore keyStore(String file, char[] password) throws Exception {
+    private KeyStore keyStore(Resource resource, char[] password) throws Exception {
         KeyStore keyStore = KeyStore.getInstance("PKCS12");
-        File key = ResourceUtils.getFile(file);
-        try (InputStream in = new FileInputStream(key)) {
+        //File key = ResourceUtils.getFile(file);
+        try (InputStream in = resource.getInputStream()) {
             keyStore.load(in, password);
         }
         return keyStore;
