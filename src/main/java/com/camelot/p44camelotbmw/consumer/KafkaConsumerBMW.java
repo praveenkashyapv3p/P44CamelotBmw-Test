@@ -51,7 +51,7 @@ public class KafkaConsumerBMW {
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<String> entity = new HttpEntity<>(bmwJson, headers);
             ResponseEntity<String> response = restTemplate.postForEntity("https://p44-tracking-data-int.bmwgroup.com", entity, String.class);
-            System.out.println("response.getBody())"+response.getBody());
+            System.out.println("response: " + response.getBody());
         }catch (Exception e){
             e.printStackTrace();
         }
