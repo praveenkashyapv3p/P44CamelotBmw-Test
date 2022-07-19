@@ -10,13 +10,12 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
 public class KafkaConsumerBMW {
-    @Autowired
-    private RestTemplate restTemplate;
     BMWMapping bmwMapping = new BMWMapping();
     IdentifiersMapper identifiersMapping = new IdentifiersMapper();
     ContactInformationMapper contactInformationMapping = new ContactInformationMapper();
@@ -24,7 +23,10 @@ public class KafkaConsumerBMW {
     TransportLegMapper transportLegMapper = new TransportLegMapper();
     TechnicalDetailsMapper technicalDetailsMapper = new TechnicalDetailsMapper();
     DeliveryInformationMapper deliveryInformationMapper = new DeliveryInformationMapper();
-    //@KafkaListener(topics = "p44Data", groupId = "bmwGroup")
+    @Autowired
+    private RestTemplate restTemplate;
+    
+    @KafkaListener(topics = "p44Data", groupId = "bmwGroup")
     public void getTransformedMessage(String message) {
         Gson gson = new Gson();
         String jsonStartingString = "{\"records\":[{\"key\":";
@@ -32,7 +34,7 @@ public class KafkaConsumerBMW {
         String jsonEndString = "}]}";
         P44Shipment myObj = gson.fromJson(message, new TypeToken<P44Shipment>() {
         }.getType());
-        try{
+        try {
             identifiersMapping.mapIdentifiers(myObj, message, bmwMapping);
             contactInformationMapping.mapContactInfo(message, bmwMapping);
             currentLocationInfoMapper.mapCurrLocInfo(message, bmwMapping);
@@ -48,9 +50,9 @@ public class KafkaConsumerBMW {
             HttpEntity<String> entity = new HttpEntity<>(bmwJson, headers);
             ResponseEntity<String> response = restTemplate.postForEntity("https://p44-tracking-data-int.bmwgroup.com", entity, String.class);
             System.out.println("response: " + response.getBody());
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
+    
 }
