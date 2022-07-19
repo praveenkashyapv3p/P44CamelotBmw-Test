@@ -32,7 +32,6 @@ public class ConfigOAuth2 extends AuthorizationServerConfigurerAdapter {
     @Autowired
     PasswordEncoder passwordEncoder;
     @Autowired
-    //@Qualifier("authenticationManagerBean")
     private AuthenticationManager authenticationManager;
 
     @Bean
@@ -72,17 +71,9 @@ public class ConfigOAuth2 extends AuthorizationServerConfigurerAdapter {
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) throws Exception {
         char[] password = "praveen".toCharArray();
-        //String certFile = "";
         ResourceLoader resourceLoader = new DefaultResourceLoader();
         Resource resource = resourceLoader.getResource("classpath:bmw-int.jks");
-//        try{
-//            Reader reader = new InputStreamReader(resource.getInputStream());
-//            certFile =  FileCopyUtils.copyToString(reader);
-//        } catch (IOException e){
-//            e.printStackTrace();
-//        }
         SSLContext sslContext = SSLContextBuilder.create().loadKeyMaterial(keyStore(resource, password), password).loadTrustMaterial(null, new TrustSelfSignedStrategy()).build();
-
         HttpClient client = HttpClients.custom().setSSLContext(sslContext).build();
         return builder.requestFactory(() -> new HttpComponentsClientHttpRequestFactory(client)).build();
     }
@@ -90,7 +81,6 @@ public class ConfigOAuth2 extends AuthorizationServerConfigurerAdapter {
 
     private KeyStore keyStore(Resource resource, char[] password) throws Exception {
         KeyStore keyStore = KeyStore.getInstance("PKCS12");
-        //File key = ResourceUtils.getFile(file);
         try (InputStream in = resource.getInputStream()) {
             keyStore.load(in, password);
         }

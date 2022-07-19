@@ -10,7 +10,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -25,7 +24,7 @@ public class KafkaConsumerBMW {
     TransportLegMapper transportLegMapper = new TransportLegMapper();
     TechnicalDetailsMapper technicalDetailsMapper = new TechnicalDetailsMapper();
     DeliveryInformationMapper deliveryInformationMapper = new DeliveryInformationMapper();
-    @KafkaListener(topics = "p44Data", groupId = "bmwGroup")
+    //@KafkaListener(topics = "p44Data", groupId = "bmwGroup")
     public void getTransformedMessage(String message) {
         Gson gson = new Gson();
         String jsonStartingString = "{\"records\":[{\"key\":";

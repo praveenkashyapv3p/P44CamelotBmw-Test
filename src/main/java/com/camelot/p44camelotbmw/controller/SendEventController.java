@@ -1,11 +1,8 @@
 package com.camelot.p44camelotbmw.controller;
 
-import com.camelot.p44camelotbmw.bmwentity.BMWMapping;
-import com.camelot.p44camelotbmw.jsonmapper.*;
-import com.camelot.p44camelotbmw.p44entity.P44Shipment;
+import com.camelot.p44camelotbmw.consumer.KafkaConsumerBMW;
+import com.camelot.p44camelotbmw.jsonmapper.TechnicalDetailsMapper;
 import com.camelot.p44camelotbmw.producer.KafkaProducer;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SendEventController {
     private final KafkaProducer producer;
-
+    KafkaConsumerBMW kafkaConsumerBMW = new KafkaConsumerBMW();
 
     public SendEventController(KafkaProducer producer) {
         this.producer = producer;
@@ -46,7 +43,8 @@ public class SendEventController {
 //        }
         try {
             String jsonKey = String.valueOf(TechnicalDetailsMapper.get64MostSignificantBitsForVersion1());
-            this.producer.writeP44Message(jsonKey, shipmentJson);
+            //this.producer.writeP44Message(jsonKey, shipmentJson);
+            kafkaConsumerBMW.getTransformedMessage(shipmentJson);
             return ResponseEntity.ok().build();
         }catch (Exception e){
             return ResponseEntity.internalServerError().build();
