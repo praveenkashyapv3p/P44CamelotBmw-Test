@@ -28,13 +28,12 @@ import java.security.KeyStore;
 
 @Configuration
 public class ConfigOAuth2 extends AuthorizationServerConfigurerAdapter {
-
+    
     @Autowired
     PasswordEncoder passwordEncoder;
     @Autowired
-    //@Qualifier("authenticationManagerBean")
     private AuthenticationManager authenticationManager;
-
+    
     @Bean
     public JwtAccessTokenConverter tokenEnhancer() {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
@@ -44,53 +43,44 @@ public class ConfigOAuth2 extends AuthorizationServerConfigurerAdapter {
         converter.setVerifierKey(publicKey);
         return converter;
     }
-
+    
     @Bean
     public JwtTokenStore tokenStore() {
         return new JwtTokenStore(tokenEnhancer());
     }
-
+    
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         endpoints.pathMapping("/oauth/token", "/v1/auth/token").authenticationManager(authenticationManager).tokenStore(tokenStore()).accessTokenConverter(tokenEnhancer());
     }
-
+    
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) {
         security.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
     }
-
+    
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         String clientId = "p44Prod";
         String clientSecret = "$2a$12$w42qnoiKWqs6PA3urxohX";
         clients.inMemory().withClient(clientId).secret(passwordEncoder.encode(clientSecret)).scopes("read", "write").authorizedGrantTypes("client_credentials", "refresh_token").accessTokenValiditySeconds(2000).refreshTokenValiditySeconds(20000);
-
+        
     }
-
-
+    
+    
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) throws Exception {
         char[] password = "praveen".toCharArray();
-        //String certFile = "";
         ResourceLoader resourceLoader = new DefaultResourceLoader();
         Resource resource = resourceLoader.getResource("classpath:bmw-int.jks");
-//        try{
-//            Reader reader = new InputStreamReader(resource.getInputStream());
-//            certFile =  FileCopyUtils.copyToString(reader);
-//        } catch (IOException e){
-//            e.printStackTrace();
-//        }
         SSLContext sslContext = SSLContextBuilder.create().loadKeyMaterial(keyStore(resource, password), password).loadTrustMaterial(null, new TrustSelfSignedStrategy()).build();
-
         HttpClient client = HttpClients.custom().setSSLContext(sslContext).build();
         return builder.requestFactory(() -> new HttpComponentsClientHttpRequestFactory(client)).build();
     }
-
-
+    
+    
     private KeyStore keyStore(Resource resource, char[] password) throws Exception {
         KeyStore keyStore = KeyStore.getInstance("PKCS12");
-        //File key = ResourceUtils.getFile(file);
         try (InputStream in = resource.getInputStream()) {
             keyStore.load(in, password);
         }
