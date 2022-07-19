@@ -46,6 +46,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .preload(false)
                 .maxAgeInSeconds(31536000)
                 .requestMatcher(AnyRequestMatcher.INSTANCE);
+        http.requiresChannel().antMatchers("/v1/sendEvent").requiresSecure();
+        http.requiresChannel().antMatchers("/v1/createShipment").requiresSecure();
+        http.requiresChannel().antMatchers("/v1/auth/token").requiresSecure();
     }
 
     @Bean
