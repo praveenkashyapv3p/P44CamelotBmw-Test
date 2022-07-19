@@ -22,7 +22,7 @@ public class SendEventController {
         try {
             String jsonKey = String.valueOf(TechnicalDetailsMapper.get64MostSignificantBitsForVersion1());
             this.producer.writeP44Message(jsonKey, shipmentJson);
-            kafkaConsumerBMW.getTransformedMessage(shipmentJson);
+            //fkaConsumerBMW.getTransformedMessage(shipmentJson);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
