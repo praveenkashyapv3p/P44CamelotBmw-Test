@@ -1,15 +1,13 @@
-
 package com.camelot.p44camelotbmw.bmwentity;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import javax.annotation.Generated;
 import java.util.List;
 
-@Generated("jsonschema2pojo")
-public class BMWMapping {
 
+public class BMWMapping {
+    
     @SerializedName("identifiers")
     @Expose
     private Identifiers identifiers;
@@ -40,87 +38,87 @@ public class BMWMapping {
     @SerializedName("technicalDetails")
     @Expose
     private List<TechnicalDetail> technicalDetails = null;
-
+    
     public Identifiers getIdentifiers() {
         return identifiers;
     }
-
+    
     public void setIdentifiers(Identifiers identifiers) {
         this.identifiers = identifiers;
     }
-
+    
     public List<ContactInformation> getContactInformation() {
         return contactInformation;
     }
-
+    
     public void setContactInformation(List<ContactInformation> contactInformation) {
         this.contactInformation = contactInformation;
     }
-
+    
     public CurrentLocationInfos getCurrentLocationInfos() {
         return currentLocationInfos;
     }
-
+    
     public void setCurrentLocationInfos(CurrentLocationInfos currentLocationInfos) {
         this.currentLocationInfos = currentLocationInfos;
     }
-
+    
     public String getTransportationNetwork() {
         return transportationNetwork;
     }
-
+    
     public void setTransportationNetwork(String transportationNetwork) {
         this.transportationNetwork = transportationNetwork;
     }
-
+    
     public String getMainTransportMode() {
         return mainTransportMode;
     }
-
+    
     public void setMainTransportMode(String mainTransportMode) {
         this.mainTransportMode = mainTransportMode;
     }
-
+    
     public DeliveryInformations getDeliveryInformations() {
         return deliveryInformations;
     }
-
+    
     public void setDeliveryInformations(DeliveryInformations deliveryInformations) {
         this.deliveryInformations = deliveryInformations;
     }
-
+    
     public List<TransportLegInfo> getTransportLegInfos() {
         return transportLegInfos;
     }
-
+    
     public void setTransportLegInfos(List<TransportLegInfo> transportLegInfos) {
         this.transportLegInfos = transportLegInfos;
     }
-
+    
     public ContainerDimensions getContainerDimensions() {
         return containerDimensions;
     }
-
+    
     public void setContainerDimensions(ContainerDimensions containerDimensions) {
         this.containerDimensions = containerDimensions;
     }
-
+    
     public List<Material> getMaterials() {
         return materials;
     }
-
+    
     public void setMaterials(List<Material> materials) {
         this.materials = materials;
     }
-
+    
     public List<TechnicalDetail> getTechnicalDetails() {
         return technicalDetails;
     }
-
+    
     public void setTechnicalDetails(List<TechnicalDetail> technicalDetails) {
         this.technicalDetails = technicalDetails;
     }
-
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -172,5 +170,5 @@ public class BMWMapping {
         }
         return sb.toString();
     }
-
+    
 }

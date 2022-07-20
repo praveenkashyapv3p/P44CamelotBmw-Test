@@ -1,14 +1,11 @@
-
 package com.camelot.p44camelotbmw.bmwentity;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import javax.annotation.Generated;
 
-@Generated("jsonschema2pojo")
 public class DeliveryInformations {
-
+    
     @SerializedName("planPickUpDate")
     @Expose
     private String planPickUpDate;
@@ -30,63 +27,63 @@ public class DeliveryInformations {
     @SerializedName("eventSendingDateTimeUTC")
     @Expose
     private String eventSendingDateTimeUTC;
-
+    
     public String getPlanPickUpDate() {
         return planPickUpDate;
     }
-
+    
     public void setPlanPickUpDate(String planPickUpDate) {
         this.planPickUpDate = planPickUpDate;
     }
-
+    
     public String getPlanDeliveryDate() {
         return planDeliveryDate;
     }
-
+    
     public void setPlanDeliveryDate(String planDeliveryDate) {
         this.planDeliveryDate = planDeliveryDate;
     }
-
+    
     public String getEtaDateTimeUTC() {
         return etaDateTimeUTC;
     }
-
+    
     public void setEtaDateTimeUTC(String etaDateTimeUTC) {
         this.etaDateTimeUTC = etaDateTimeUTC;
     }
-
+    
     public String getEtaDateRoutePartUTC() {
         return etaDateRoutePartUTC;
     }
-
+    
     public void setEtaDateRoutePartUTC(String etaDateRoutePartUTC) {
         this.etaDateRoutePartUTC = etaDateRoutePartUTC;
     }
-
+    
     public String getEtdDateNextRoutePart() {
         return etdDateNextRoutePart;
     }
-
+    
     public void setEtdDateNextRoutePart(String etdDateNextRoutePart) {
         this.etdDateNextRoutePart = etdDateNextRoutePart;
     }
-
+    
     public String getEventCreationDateTimeUTC() {
         return eventCreationDateTimeUTC;
     }
-
+    
     public void setEventCreationDateTimeUTC(String eventCreationDateTimeUTC) {
         this.eventCreationDateTimeUTC = eventCreationDateTimeUTC;
     }
-
+    
     public String getEventSendingDateTimeUTC() {
         return eventSendingDateTimeUTC;
     }
-
+    
     public void setEventSendingDateTimeUTC(String eventSendingDateTimeUTC) {
         this.eventSendingDateTimeUTC = eventSendingDateTimeUTC;
     }
-
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -126,5 +123,5 @@ public class DeliveryInformations {
         }
         return sb.toString();
     }
-
+    
 }

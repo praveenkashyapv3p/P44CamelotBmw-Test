@@ -1,11 +1,10 @@
-
 package com.camelot.p44camelotbmw.bmwentity;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class CurrentLocationInfos {
-
+    
     @SerializedName("longitude")
     @Expose
     private String longitude;
@@ -30,71 +29,71 @@ public class CurrentLocationInfos {
     @SerializedName("timeStamps")
     @Expose
     private String timeStamps;
-
+    
     public String getLongitude() {
         return longitude;
     }
-
+    
     public void setLongitude(String longitude) {
         this.longitude = longitude;
     }
-
+    
     public String getLatitude() {
         return latitude;
     }
-
+    
     public void setLatitude(String latitude) {
         this.latitude = latitude;
     }
-
+    
     public String getGeoDateTimeUTC() {
         return geoDateTimeUTC;
     }
-
+    
     public void setGeoDateTimeUTC(String geoDateTimeUTC) {
         this.geoDateTimeUTC = geoDateTimeUTC;
     }
-
+    
     public String getLocationID() {
         return locationID;
     }
-
+    
     public void setLocationID(String locationID) {
         this.locationID = locationID;
     }
-
+    
     public String getLocationName() {
         return locationName;
     }
-
+    
     public void setLocationName(String locationName) {
         this.locationName = locationName;
     }
-
+    
     public String getStatusCode() {
         return statusCode;
     }
-
+    
     public void setStatusCode(String statusCode) {
         this.statusCode = statusCode;
     }
-
+    
     public String getStatusName() {
         return statusName;
     }
-
+    
     public void setStatusName(String statusName) {
         this.statusName = statusName;
     }
-
+    
     public String getTimeStamps() {
         return timeStamps;
     }
-
+    
     public void setTimeStamps(String timeStamps) {
         this.timeStamps = timeStamps;
     }
-
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -138,5 +137,5 @@ public class CurrentLocationInfos {
         }
         return sb.toString();
     }
-
+    
 }

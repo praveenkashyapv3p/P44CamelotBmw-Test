@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class TransportLeg7 {
-
+    
     @SerializedName("tsp7Loc")
     @Expose
     private String tsp7Loc;
@@ -20,47 +20,47 @@ public class TransportLeg7 {
     @SerializedName("departureActual")
     @Expose
     private String departureActual;
-
+    
     public String getTsp7Loc() {
         return tsp7Loc;
     }
-
+    
     public void setTsp7Loc(String tsp7Loc) {
         this.tsp7Loc = tsp7Loc;
     }
-
+    
     public String getArrivalPrediction() {
         return arrivalPrediction;
     }
-
+    
     public void setArrivalPrediction(String arrivalPrediction) {
         this.arrivalPrediction = arrivalPrediction;
     }
-
+    
     public String getArrivalActual() {
         return arrivalActual;
     }
-
+    
     public void setArrivalActual(String arrivalActual) {
         this.arrivalActual = arrivalActual;
     }
-
+    
     public String getDeparturePrediction() {
         return departurePrediction;
     }
-
+    
     public void setDeparturePrediction(String departurePrediction) {
         this.departurePrediction = departurePrediction;
     }
-
+    
     public String getDepartureActual() {
         return departureActual;
     }
-
+    
     public void setDepartureActual(String departureActual) {
         this.departureActual = departureActual;
     }
-
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -92,5 +92,5 @@ public class TransportLeg7 {
         }
         return sb.toString();
     }
-
+    
 }

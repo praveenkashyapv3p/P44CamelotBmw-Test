@@ -4,7 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class PointOfDelivery {
-
+    
     @SerializedName("podLoc")
     @Expose
     private String podLoc;
@@ -14,31 +14,31 @@ public class PointOfDelivery {
     @SerializedName("arrivalActual")
     @Expose
     private String arrivalActual;
-
+    
     public String getPodLoc() {
         return podLoc;
     }
-
+    
     public void setPodLoc(String podLoc) {
         this.podLoc = podLoc;
     }
-
+    
     public String getArrivalPrediction() {
         return arrivalPrediction;
     }
-
+    
     public void setArrivalPrediction(String arrivalPrediction) {
         this.arrivalPrediction = arrivalPrediction;
     }
-
+    
     public String getArrivalActual() {
         return arrivalActual;
     }
-
+    
     public void setArrivalActual(String arrivalActual) {
         this.arrivalActual = arrivalActual;
     }
-
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -62,5 +62,5 @@ public class PointOfDelivery {
         }
         return sb.toString();
     }
-
+    
 }

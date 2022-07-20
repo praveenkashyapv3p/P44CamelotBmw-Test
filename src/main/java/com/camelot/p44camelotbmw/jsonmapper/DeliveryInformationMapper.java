@@ -10,16 +10,16 @@ import com.google.gson.JsonParser;
 import java.time.Instant;
 
 public class DeliveryInformationMapper {
-
+    
     DeliveryInformations deliveryInformations = new DeliveryInformations();
-
+    
     public void mapDeliveryInformation(String shipmentJson, BMWMapping bmwMapping) {
         String eventPlannedDate = "";
-
+        
         deliveryInformations.setEventCreationDateTimeUTC(Instant.now().toString());
-
+        
         deliveryInformations.setEventSendingDateTimeUTC(Instant.now().toString());
-
+        
         JsonObject relShipJSON = (JsonObject) JsonParser.parseString(shipmentJson);
         JsonArray eventsTypeDepFrmStp = (JsonArray) relShipJSON.get("events");
         for (JsonElement eventsTyp : eventsTypeDepFrmStp) {
@@ -28,7 +28,7 @@ public class DeliveryInformationMapper {
             }
         }
         deliveryInformations.setPlanDeliveryDate(eventPlannedDate);
-
+        
         bmwMapping.setDeliveryInformations(deliveryInformations);
     }
 }

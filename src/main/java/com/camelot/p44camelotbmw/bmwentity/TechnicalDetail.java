@@ -1,14 +1,11 @@
-
 package com.camelot.p44camelotbmw.bmwentity;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import javax.annotation.Generated;
 
-@Generated("jsonschema2pojo")
 public class TechnicalDetail {
-
+    
     @SerializedName("lifecycleStatus")
     @Expose
     private String lifecycleStatus;
@@ -18,31 +15,31 @@ public class TechnicalDetail {
     @SerializedName("correlationId")
     @Expose
     private String correlationId;
-
+    
     public String getLifecycleStatus() {
         return lifecycleStatus;
     }
-
+    
     public void setLifecycleStatus(String lifecycleStatus) {
         this.lifecycleStatus = lifecycleStatus;
     }
-
+    
     public String getLifecycleStatusVerbose() {
         return lifecycleStatusVerbose;
     }
-
+    
     public void setLifecycleStatusVerbose(String lifecycleStatusVerbose) {
         this.lifecycleStatusVerbose = lifecycleStatusVerbose;
     }
-
+    
     public String getCorrelationId() {
         return correlationId;
     }
-
+    
     public void setCorrelationId(String correlationId) {
         this.correlationId = correlationId;
     }
-
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -66,5 +63,5 @@ public class TechnicalDetail {
         }
         return sb.toString();
     }
-
+    
 }

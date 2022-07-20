@@ -1,11 +1,10 @@
-
 package com.camelot.p44camelotbmw.bmwentity;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class ContactInformation {
-
+    
     @SerializedName("sender")
     @Expose
     private Sender sender;
@@ -15,31 +14,31 @@ public class ContactInformation {
     @SerializedName("carrier")
     @Expose
     private Carrier carrier;
-
+    
     public Sender getSender() {
         return sender;
     }
-
+    
     public void setSender(Sender sender) {
         this.sender = sender;
     }
-
+    
     public Recepient getRecepient() {
         return recepient;
     }
-
+    
     public void setRecepient(Recepient recepient) {
         this.recepient = recepient;
     }
-
+    
     public Carrier getCarrier() {
         return carrier;
     }
-
+    
     public void setCarrier(Carrier carrier) {
         this.carrier = carrier;
     }
-
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -63,5 +62,5 @@ public class ContactInformation {
         }
         return sb.toString();
     }
-
+    
 }

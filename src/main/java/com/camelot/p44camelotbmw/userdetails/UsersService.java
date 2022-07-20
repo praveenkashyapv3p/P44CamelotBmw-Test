@@ -6,12 +6,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UsersService  implements UserDetailsService {
-
-
+public class UsersService implements UserDetailsService {
+    
     @Autowired
     UsersDBQuery usersDBQuery;
-
+    
     @Override
     public UsersHelper loadUserByUsername(final String username) throws UsernameNotFoundException {
         UsersPojo usersPojo;

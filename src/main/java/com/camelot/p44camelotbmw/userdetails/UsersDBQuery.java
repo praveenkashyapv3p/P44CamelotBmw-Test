@@ -12,8 +12,8 @@ import java.util.Map;
 
 @Repository
 public class UsersDBQuery {
-
-
+    
+    
     public UsersPojo getUserDetails(String username) {
         Collection<GrantedAuthority> listOfGrantedAuthorities = new ArrayList<>();
         UsersPojo user = new UsersPojo();
@@ -23,7 +23,7 @@ public class UsersDBQuery {
             Map<String, String> stCod = userList.getUser();
             user.setUsername(username);
             user.setPassword(stCod.get(username));
-
+            
             list1.add(user);
         } catch (Exception e) {
             e.printStackTrace();

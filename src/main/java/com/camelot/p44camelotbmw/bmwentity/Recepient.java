@@ -1,37 +1,34 @@
-
 package com.camelot.p44camelotbmw.bmwentity;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import javax.annotation.Generated;
 
-@Generated("jsonschema2pojo")
 public class Recepient {
-
+    
     @SerializedName("recipientID")
     @Expose
     private String recipientID;
     @SerializedName("name")
     @Expose
     private String name;
-
+    
     public String getRecipientID() {
         return recipientID;
     }
-
+    
     public void setRecipientID(String recipientID) {
         this.recipientID = recipientID;
     }
-
+    
     public String getName() {
         return name;
     }
-
+    
     public void setName(String name) {
         this.name = name;
     }
-
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -51,5 +48,5 @@ public class Recepient {
         }
         return sb.toString();
     }
-
+    
 }

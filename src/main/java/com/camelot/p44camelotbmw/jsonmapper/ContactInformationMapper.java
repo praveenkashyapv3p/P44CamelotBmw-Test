@@ -12,11 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ContactInformationMapper {
-
+    
     ContactInformation contactInformation = new ContactInformation();
-
+    
     Carrier carrier = new Carrier();
-
+    
     public void mapContactInfo(String shipmentJson, BMWMapping bmwMapping) {
         List<ContactInformation> contactInformation1 = new ArrayList<>();
         JsonObject relShipIdentJSON = (JsonObject) JsonParser.parseString(shipmentJson);
@@ -32,6 +32,5 @@ public class ContactInformationMapper {
         contactInformation.setCarrier(carrier);
         contactInformation1.add(contactInformation);
         bmwMapping.setContactInformation(contactInformation1);
-        //System.out.println("contactinfo: " + carrier);
     }
 }

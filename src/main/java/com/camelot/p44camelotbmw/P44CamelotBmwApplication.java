@@ -9,9 +9,9 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @EnableAuthorizationServer
 @EnableResourceServer
 public class P44CamelotBmwApplication {
-
+    
     public static void main(String[] args) {
         SpringApplication.run(P44CamelotBmwApplication.class, args);
     }
-
+    
 }

@@ -41,7 +41,7 @@ public class KafkaConsumerBMW {
             bmwMapping.setTransportationNetwork("SHIP");
             bmwMapping.setMainTransportMode("SEA");
             transportLegMapper.mapTransportLegInfos(message, bmwMapping);
-            technicalDetailsMapper.mapTechnicalDetails(message, bmwMapping);
+            technicalDetailsMapper.mapTechnicalDetails(bmwMapping);
             deliveryInformationMapper.mapDeliveryInformation(message, bmwMapping);
             String jsonKey = String.valueOf(TechnicalDetailsMapper.get64MostSignificantBitsForVersion1());
             String bmwJson = jsonStartingString + jsonKey + jsonStringValue + new Gson().toJson(bmwMapping) + jsonEndString;

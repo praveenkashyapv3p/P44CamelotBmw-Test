@@ -9,15 +9,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class IdentifiersMapper {
-    //BMWMapping bmwMapping = new BMWMapping();
     Identifiers identifiers = new Identifiers();
-
+    
     public void mapIdentifiers(P44Shipment p44Shipment, String shipmentJson, BMWMapping bmwMapping) {
-
+        
         identifiers.setInternalP44Identifier(p44Shipment.getShipment().getId());
-
+        
         identifiers.setContainerID(p44Shipment.getShipment().getIdentifiers().get(0).getValue());
-
+        
         JsonObject relShipJSON = (JsonObject) JsonParser.parseString(shipmentJson);
         JsonArray relShipIdent = (JsonArray) relShipJSON.get("shipment").getAsJsonObject().get("relatedShipments");
         for (JsonElement relIden : relShipIdent) {
@@ -28,7 +27,7 @@ public class IdentifiersMapper {
                     identifiers.setBookingNumberBOL(relshipIdent.getAsJsonObject().get("value").getAsString());
             }
         }
-
+        
         JsonArray routeInfo = (JsonArray) relShipJSON.get("shipment").getAsJsonObject().get("routeInfo").getAsJsonObject().get("routeSegments");
         JsonArray eventsTypeDepFrmStp = (JsonArray) relShipJSON.get("events");
         String eventStopId;
@@ -45,12 +44,11 @@ public class IdentifiersMapper {
                                 identifiers.setVesselName(relshipmIdent.getAsJsonObject().get("value").getAsString());
                         }
                     }
-
+                    
                 }
             }
-
+            
         }
         bmwMapping.setIdentifiers(identifiers);
-        //System.out.println("identifiers: " + identifiers);
     }
 }

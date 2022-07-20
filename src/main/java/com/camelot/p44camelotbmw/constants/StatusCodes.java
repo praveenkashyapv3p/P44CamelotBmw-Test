@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StatusCodes {
-
+    
     public Map<String, String> getStatusCodes() {
         return new HashMap<>() {
             {

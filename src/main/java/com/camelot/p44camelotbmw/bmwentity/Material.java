@@ -1,14 +1,11 @@
-
 package com.camelot.p44camelotbmw.bmwentity;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import javax.annotation.Generated;
 
-@Generated("jsonschema2pojo")
 public class Material {
-
+    
     @SerializedName("materialNumber")
     @Expose
     private String materialNumber;
@@ -21,39 +18,39 @@ public class Material {
     @SerializedName("deliverNoteNumber")
     @Expose
     private String deliverNoteNumber;
-
+    
     public String getMaterialNumber() {
         return materialNumber;
     }
-
+    
     public void setMaterialNumber(String materialNumber) {
         this.materialNumber = materialNumber;
     }
-
+    
     public String getPurchaseOrder() {
         return purchaseOrder;
     }
-
+    
     public void setPurchaseOrder(String purchaseOrder) {
         this.purchaseOrder = purchaseOrder;
     }
-
+    
     public String getQuantity() {
         return quantity;
     }
-
+    
     public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
-
+    
     public String getDeliverNoteNumber() {
         return deliverNoteNumber;
     }
-
+    
     public void setDeliverNoteNumber(String deliverNoteNumber) {
         this.deliverNoteNumber = deliverNoteNumber;
     }
-
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -81,5 +78,5 @@ public class Material {
         }
         return sb.toString();
     }
-
+    
 }

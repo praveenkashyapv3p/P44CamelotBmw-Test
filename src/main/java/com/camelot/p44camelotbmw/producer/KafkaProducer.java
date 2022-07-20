@@ -14,12 +14,10 @@ public class KafkaProducer {
     private KafkaTemplate<String, String> kafkaTemplate;
 
     public void writeP44Message(String id, String msg) {
-        //System.out.println(msg);
         this.kafkaTemplate.send(P44TOPIC, id, msg);
     }
 
     public void writeBMWMessage(String id, String msg) {
-        //System.out.println(msg);
         this.kafkaTemplate.send(BMWTOPIC, id, msg);
     }
 

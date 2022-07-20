@@ -12,9 +12,9 @@ import java.time.Instant;
 import java.util.Map;
 
 public class CurrentLocationInfoMapper {
-
+    
     CurrentLocationInfos currentLocationInfos = new CurrentLocationInfos();
-
+    
     public void mapCurrLocInfo(String shipmentJson, BMWMapping bmwMapping) {
         StatusCodes statusCodes = new StatusCodes();
         String eventStopId = "", statusName = "", eventsType = "";
@@ -24,6 +24,7 @@ public class CurrentLocationInfoMapper {
         JsonArray states = (JsonArray) ShipJSON.get("states");
         for (JsonElement eventsTyp : events) {
             if (eventsTyp.getAsJsonObject().has("dateTime")) {
+                currentLocationInfos.setTimeStamps(eventsTyp.getAsJsonObject().get("dateTime").getAsString());
                 eventStopId = eventsTyp.getAsJsonObject().get("stopId").getAsString();
                 eventsType = eventsTyp.getAsJsonObject().get("type").getAsString();
             }
@@ -31,32 +32,32 @@ public class CurrentLocationInfoMapper {
         for (JsonElement position : stops) {
             assert eventStopId != null;
             if (eventStopId.equals(position.getAsJsonObject().get("id").getAsString())) {
-
+                
                 currentLocationInfos.setLongitude(position.getAsJsonObject().get("location").getAsJsonObject().get("coordinates").getAsJsonObject().get("longitude").getAsString());
-
+                
                 currentLocationInfos.setLatitude(position.getAsJsonObject().get("location").getAsJsonObject().get("coordinates").getAsJsonObject().get("latitude").getAsString());
-
+                
                 currentLocationInfos.setLocationName(position.getAsJsonObject().get("location").getAsJsonObject().get("name").getAsString());
-
+                
                 JsonElement relShipIdentifiers = position.getAsJsonObject().get("location").getAsJsonObject().get("identifiers");
                 for (JsonElement relShipIdent : relShipIdentifiers.getAsJsonArray()) {
                     currentLocationInfos.setLocationID(relShipIdent.getAsJsonObject().get("value").getAsString());
                 }
-
+                
                 for (JsonElement statesTyp : states) {
                     statusName = statesTyp.getAsJsonObject().get("type").getAsString();
                 }
-
+                
                 Map<String, String> stCod = statusCodes.getStatusCodes();
                 currentLocationInfos.setStatusCode(stCod.get(eventsType));
-
+                
                 currentLocationInfos.setStatusName(statusName);
-
+                
                 currentLocationInfos.setTimeStamps(Instant.now().toString());
             }
         }
-
-
+        
+        
         bmwMapping.setCurrentLocationInfos(currentLocationInfos);
         //System.out.println("currentLocationInfos" + currentLocationInfos);
     }

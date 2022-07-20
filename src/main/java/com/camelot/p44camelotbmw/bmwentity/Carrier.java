@@ -1,37 +1,34 @@
-
 package com.camelot.p44camelotbmw.bmwentity;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import javax.annotation.Generated;
 
-@Generated("jsonschema2pojo")
 public class Carrier {
-
+    
     @SerializedName("carrierID")
     @Expose
     private String carrierID;
     @SerializedName("carrierName")
     @Expose
     private String carrierName;
-
+    
     public String getCarrierID() {
         return carrierID;
     }
-
+    
     public void setCarrierID(String carrierID) {
         this.carrierID = carrierID;
     }
-
+    
     public String getCarrierName() {
         return carrierName;
     }
-
+    
     public void setCarrierName(String carrierName) {
         this.carrierName = carrierName;
     }
-
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -51,5 +48,5 @@ public class Carrier {
         }
         return sb.toString();
     }
-
+    
 }

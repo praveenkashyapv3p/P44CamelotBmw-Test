@@ -1,14 +1,11 @@
-
 package com.camelot.p44camelotbmw.bmwentity;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import javax.annotation.Generated;
 
-@Generated("jsonschema2pojo")
 public class Identifiers {
-
+    
     @SerializedName("internalP44Identifier")
     @Expose
     private String internalP44Identifier;
@@ -24,47 +21,47 @@ public class Identifiers {
     @SerializedName("vesselName")
     @Expose
     private String vesselName;
-
+    
     public String getInternalP44Identifier() {
         return internalP44Identifier;
     }
-
+    
     public void setInternalP44Identifier(String internalP44Identifier) {
         this.internalP44Identifier = internalP44Identifier;
     }
-
+    
     public String getContainerID() {
         return containerID;
     }
-
+    
     public void setContainerID(String containerID) {
         this.containerID = containerID;
     }
-
+    
     public String getBmwShipmentID() {
         return bmwShipmentID;
     }
-
+    
     public void setBmwShipmentID(String bmwShipmentID) {
         this.bmwShipmentID = bmwShipmentID;
     }
-
+    
     public String getBookingNumberBOL() {
         return bookingNumberBOL;
     }
-
+    
     public void setBookingNumberBOL(String bookingNumberBOL) {
         this.bookingNumberBOL = bookingNumberBOL;
     }
-
+    
     public String getVesselName() {
         return vesselName;
     }
-
+    
     public void setVesselName(String vesselName) {
         this.vesselName = vesselName;
     }
-
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -96,5 +93,5 @@ public class Identifiers {
         }
         return sb.toString();
     }
-
+    
 }

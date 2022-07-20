@@ -1,37 +1,34 @@
-
 package com.camelot.p44camelotbmw.bmwentity;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import javax.annotation.Generated;
 
-@Generated("jsonschema2pojo")
 public class ContainerDimensions {
-
+    
     @SerializedName("totalWeightKGS")
     @Expose
     private String totalWeightKGS;
     @SerializedName("totalVolumeCBM")
     @Expose
     private String totalVolumeCBM;
-
+    
     public String getTotalWeightKGS() {
         return totalWeightKGS;
     }
-
+    
     public void setTotalWeightKGS(String totalWeightKGS) {
         this.totalWeightKGS = totalWeightKGS;
     }
-
+    
     public String getTotalVolumeCBM() {
         return totalVolumeCBM;
     }
-
+    
     public void setTotalVolumeCBM(String totalVolumeCBM) {
         this.totalVolumeCBM = totalVolumeCBM;
     }
-
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -51,5 +48,5 @@ public class ContainerDimensions {
         }
         return sb.toString();
     }
-
+    
 }
