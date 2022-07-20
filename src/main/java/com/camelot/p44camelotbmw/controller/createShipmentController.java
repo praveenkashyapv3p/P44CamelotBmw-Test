@@ -13,17 +13,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class createShipmentController {
     
-    private final KafkaProducer producer;
+    //private final KafkaProducer producer;
     
     public createShipmentController(KafkaProducer producer) {
-        this.producer = producer;
+        //this.producer = producer;
     }
     
     @PostMapping(value = "/v1/createShipment", consumes = "application/json")
     public ResponseEntity<?> shipmentDetailsFromP44(@RequestBody String message) {
         //message = message.trim().replaceAll("\r\n", "");
         String jsonKey = String.valueOf(TechnicalDetailsMapper.get64MostSignificantBitsForVersion1());
-        this.producer.writeBMWMessage(jsonKey, message);
+        //this.producer.writeBMWMessage(jsonKey, message);
         return ResponseEntity.ok().build();
     }
     
