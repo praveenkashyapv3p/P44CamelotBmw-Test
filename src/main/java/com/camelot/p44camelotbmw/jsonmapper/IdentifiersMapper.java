@@ -36,7 +36,7 @@ public class IdentifiersMapper {
             JsonArray routSegIndent = routSegIdentifiers.getAsJsonArray();
             String fromStopId = routSegIden.getAsJsonObject().get("fromStopId").getAsString();
             for (JsonElement eventsTyp : eventsTypeDepFrmStp) {
-                if ("DEPARTURE_FROM_STOP".equals(eventsTyp.getAsJsonObject().get("type").getAsString())) {
+                if ("DEPARTURE_FROM_STOP".equals(eventsTyp.getAsJsonObject().get("type").getAsString()) && eventsTyp.getAsJsonObject().has("stopId")) {
                     eventStopId = eventsTyp.getAsJsonObject().get("stopId").getAsString();
                     if (eventStopId.equals(fromStopId) && eventsTyp.getAsJsonObject().has("dateTime")) {
                         for (JsonElement relshipmIdent : routSegIndent) {
@@ -44,7 +44,7 @@ public class IdentifiersMapper {
                                 identifiers.setVesselName(relshipmIdent.getAsJsonObject().get("value").getAsString());
                         }
                     }
-                    
+    
                 }
             }
             

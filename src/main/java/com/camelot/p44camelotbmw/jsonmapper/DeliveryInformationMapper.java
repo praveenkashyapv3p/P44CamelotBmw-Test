@@ -23,7 +23,7 @@ public class DeliveryInformationMapper {
         JsonObject relShipJSON = (JsonObject) JsonParser.parseString(shipmentJson);
         JsonArray eventsTypeDepFrmStp = (JsonArray) relShipJSON.get("events");
         for (JsonElement eventsTyp : eventsTypeDepFrmStp) {
-            if ("DELIVERY".equals(eventsTyp.getAsJsonObject().get("type").getAsString())) {
+            if ("DELIVERY".equals(eventsTyp.getAsJsonObject().get("type").getAsString()) && eventsTyp.getAsJsonObject().has("plannedDateTime")) {
                 eventPlannedDate = eventsTyp.getAsJsonObject().get("plannedDateTime").getAsString();
             }
         }
