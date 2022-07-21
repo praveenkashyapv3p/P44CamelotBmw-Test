@@ -7,7 +7,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class KafkaProducer {
     
+    /*Development Topic*/
+    //private static final String P44TOPIC = "p44DataLocal";
+    /*Production Topic*/
     private static final String P44TOPIC = "p44Data";
+    /*Development Topic*/
+    //private static final String BMWTOPIC = "bmwDataLocal";
+    /*Production Topic*/
     private static final String BMWTOPIC = "bmwData";
     
     @Autowired

@@ -33,6 +33,9 @@ public class KafkaConsumerBMW {
         this.producer = producer;
     }
     
+    /*Development Consumer*/
+    //@KafkaListener(topics = "p44DataLocal", groupId = "p44DataLocalGroup")
+    /*Production Consumer*/
     @KafkaListener(topics = "p44Data", groupId = "bmwGroup")
     public void getTransformedMessage(String message) {
         Gson gson = new Gson();
