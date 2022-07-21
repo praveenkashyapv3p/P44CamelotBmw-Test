@@ -41,7 +41,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests().anyRequest().authenticated();
-        http.headers().httpStrictTransportSecurity().includeSubDomains(true).preload(false).maxAgeInSeconds(31536000).requestMatcher(AnyRequestMatcher.INSTANCE);
+        http.headers().httpStrictTransportSecurity().includeSubDomains(true).preload(true).maxAgeInSeconds(31536000).requestMatcher(AnyRequestMatcher.INSTANCE);
         http.requiresChannel().antMatchers("/v1/sendEvent").requiresSecure();
         http.requiresChannel().antMatchers("/v1/createShipment").requiresSecure();
         http.requiresChannel().antMatchers("/v1/auth/token").requiresSecure();

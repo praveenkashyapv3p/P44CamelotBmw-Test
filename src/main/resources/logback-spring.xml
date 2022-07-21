@@ -38,6 +38,11 @@
         <appender-ref ref="Console"/>
     </root>
 
+    <!-- LOG everything at ERROR level -->
+    <root level="ERROR">
+        <appender-ref ref="RollingFile"/>
+    </root>
+
     <!-- LOG "com.camelot*" at TRACE level -->
     <logger name="com.camelot" level="trace" additivity="false">
         <appender-ref ref="RollingFile"/>
