@@ -6,6 +6,8 @@ import com.camelot.p44camelotbmw.p44entity.P44Shipment;
 import com.camelot.p44camelotbmw.producer.KafkaProducer;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +19,8 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class KafkaConsumerBMW {
+    
+    private static final Logger logger = LogManager.getLogger(KafkaConsumerBMW.class);
     BMWMapping bmwMapping = new BMWMapping();
     IdentifiersMapper identifiersMapping = new IdentifiersMapper();
     ContactInformationMapper contactInformationMapping = new ContactInformationMapper();
@@ -62,7 +66,7 @@ public class KafkaConsumerBMW {
             ResponseEntity<String> response = restTemplate.postForEntity("https://p44-tracking-data-int.bmwgroup.com", entity, String.class);
             //System.out.println("response: " + response.getBody());
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Mapping failure " + e);
         }
     }
     

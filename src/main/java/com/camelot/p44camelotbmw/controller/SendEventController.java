@@ -6,6 +6,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class SendEventController {
+    private static final Logger logger = LogManager.getLogger(SendEventController.class);
     private final KafkaProducer producer;
     
     
@@ -37,7 +40,8 @@ public class SendEventController {
             }
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
+            logger.error("Invalid JSON or JSON Structure mismatch from Project44 message " + e);
+            return ResponseEntity.badRequest().build();
         }
     }
 }
