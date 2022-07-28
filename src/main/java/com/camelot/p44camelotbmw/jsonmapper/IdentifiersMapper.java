@@ -9,13 +9,16 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class IdentifiersMapper {
-    Identifiers identifiers = new Identifiers();
+    
     
     public void mapIdentifiers(P44Shipment p44Shipment, String shipmentJson, BMWMapping bmwMapping) {
+        Identifiers identifiers = new Identifiers();
+        String internalP44Identifier = "", containerID = "", bmwShipmentID = "", bookingNumberBOL = "", vesselName = "";
         
-        identifiers.setInternalP44Identifier(p44Shipment.getShipment().getId());
-        
-        identifiers.setContainerID(p44Shipment.getShipment().getIdentifiers().get(0).getValue());
+        internalP44Identifier = p44Shipment.getShipment().getId();
+        identifiers.setInternalP44Identifier(internalP44Identifier);
+        containerID = p44Shipment.getShipment().getIdentifiers().get(0).getValue();
+        identifiers.setContainerID(containerID);
         
         JsonObject relShipJSON = (JsonObject) JsonParser.parseString(shipmentJson);
         JsonArray relShipIdent = (JsonArray) relShipJSON.get("shipment").getAsJsonObject().get("relatedShipments");
@@ -23,8 +26,10 @@ public class IdentifiersMapper {
             JsonElement relShipIdentifiers = relIden.getAsJsonObject().get("identifiers");
             JsonArray relIndent = relShipIdentifiers.getAsJsonArray();
             for (JsonElement relshipIdent : relIndent) {
-                if ("BOOKING_NUMBER".equals(relshipIdent.getAsJsonObject().get("type").getAsString()))
-                    identifiers.setBookingNumberBOL(relshipIdent.getAsJsonObject().get("value").getAsString());
+                if ("BOOKING_NUMBER".equals(relshipIdent.getAsJsonObject().get("type").getAsString())) {
+                    bookingNumberBOL = relshipIdent.getAsJsonObject().get("value").getAsString();
+                    identifiers.setBookingNumberBOL(bookingNumberBOL);
+                }
             }
         }
         
@@ -36,19 +41,32 @@ public class IdentifiersMapper {
             JsonArray routSegIndent = routSegIdentifiers.getAsJsonArray();
             String fromStopId = routSegIden.getAsJsonObject().get("fromStopId").getAsString();
             for (JsonElement eventsTyp : eventsTypeDepFrmStp) {
-                if ("DEPARTURE_FROM_STOP".equals(eventsTyp.getAsJsonObject().get("type").getAsString()) && eventsTyp.getAsJsonObject().has("stopId")) {
+//                if (Arrays.asList("DEPARTURE_FROM_STOP", "GATE_OUT_FULL", "GATE_OUT_EMPTY").contains(eventsTyp.getAsJsonObject().get("type").getAsString()) && eventsTyp.getAsJsonObject().has("stopId")) {
+//                    eventStopId = eventsTyp.getAsJsonObject().get("stopId").getAsString();
+//                    if (eventStopId.equals(fromStopId) && (eventsTyp.getAsJsonObject().has("dateTime") || eventsTyp.getAsJsonObject().has("receivedDateTime")) ){
+//                        for (JsonElement relshipmIdent : routSegIndent) {
+//                            if (relshipmIdent.getAsJsonObject().get("type").getAsString().equals("VESSEL_NAME"))
+//                                identifiers.setVesselName(relshipmIdent.getAsJsonObject().get("value").getAsString());
+//                        }
+//                    }
+//
+//                }
+                if (eventsTyp.getAsJsonObject().has("stopId")) {
                     eventStopId = eventsTyp.getAsJsonObject().get("stopId").getAsString();
-                    if (eventStopId.equals(fromStopId) && eventsTyp.getAsJsonObject().has("dateTime")) {
+                    if (eventStopId.equals(fromStopId) && (eventsTyp.getAsJsonObject().has("dateTime"))) {
                         for (JsonElement relshipmIdent : routSegIndent) {
-                            if (relshipmIdent.getAsJsonObject().get("type").getAsString().equals("VESSEL_NAME"))
-                                identifiers.setVesselName(relshipmIdent.getAsJsonObject().get("value").getAsString());
+                            if (relshipmIdent.getAsJsonObject().get("type").getAsString().equals("VESSEL_NAME")) {
+                                vesselName = relshipmIdent.getAsJsonObject().get("value").getAsString();
+                                identifiers.setVesselName(vesselName);
+                            }
                         }
                     }
-    
+                    
                 }
             }
             
         }
+        identifiers.setBmwShipmentID(bmwShipmentID);
         bmwMapping.setIdentifiers(identifiers);
     }
 }

@@ -8,16 +8,15 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import java.time.Instant;
 import java.util.Map;
 
 public class CurrentLocationInfoMapper {
     
-    CurrentLocationInfos currentLocationInfos = new CurrentLocationInfos();
     
     public void mapCurrLocInfo(String shipmentJson, BMWMapping bmwMapping) {
+        CurrentLocationInfos currentLocationInfos = new CurrentLocationInfos();
         StatusCodes statusCodes = new StatusCodes();
-        String eventStopId = "", statusName = "", eventsType = "";
+        String eventStopId = "", statusName = "", eventsType = "", timeStamp = "", longitude = "", latitude = "", geoDateTimeUTC = "", locationID = "", locationName = "", statusCode = "";
         JsonObject ShipJSON = (JsonObject) JsonParser.parseString(shipmentJson);
         JsonArray stops = (JsonArray) ShipJSON.get("shipment").getAsJsonObject().get("routeInfo").getAsJsonObject().get("stops");
         JsonArray events = (JsonArray) ShipJSON.get("events");
@@ -28,35 +27,44 @@ public class CurrentLocationInfoMapper {
                 eventStopId = eventsTyp.getAsJsonObject().get("stopId").getAsString();
                 eventsType = eventsTyp.getAsJsonObject().get("type").getAsString();
             }
+//            else if ( eventsTyp.getAsJsonObject().has("receivedDateTime")) {
+//                currentLocationInfos.setTimeStamps(eventsTyp.getAsJsonObject().get("receivedDateTime").getAsString());
+//                eventStopId = eventsTyp.getAsJsonObject().get("stopId").getAsString();
+//                eventsType = eventsTyp.getAsJsonObject().get("type").getAsString();
+//            }
         }
         for (JsonElement position : stops) {
             assert eventStopId != null;
             if (eventStopId.equals(position.getAsJsonObject().get("id").getAsString())) {
-                
-                currentLocationInfos.setLongitude(position.getAsJsonObject().get("location").getAsJsonObject().get("coordinates").getAsJsonObject().get("longitude").getAsString());
-                
-                currentLocationInfos.setLatitude(position.getAsJsonObject().get("location").getAsJsonObject().get("coordinates").getAsJsonObject().get("latitude").getAsString());
-                
-                currentLocationInfos.setLocationName(position.getAsJsonObject().get("location").getAsJsonObject().get("name").getAsString());
+                longitude = position.getAsJsonObject().get("location").getAsJsonObject().get("coordinates").getAsJsonObject().get("longitude").getAsString();
+                currentLocationInfos.setLongitude(longitude);
+                latitude = position.getAsJsonObject().get("location").getAsJsonObject().get("coordinates").getAsJsonObject().get("latitude").getAsString();
+                currentLocationInfos.setLatitude(latitude);
+                locationName = position.getAsJsonObject().get("location").getAsJsonObject().get("name").getAsString();
+                currentLocationInfos.setLocationName(locationName);
                 
                 JsonElement relShipIdentifiers = position.getAsJsonObject().get("location").getAsJsonObject().get("identifiers");
                 for (JsonElement relShipIdent : relShipIdentifiers.getAsJsonArray()) {
-                    currentLocationInfos.setLocationID(relShipIdent.getAsJsonObject().get("value").getAsString());
+                    locationID = relShipIdent.getAsJsonObject().get("value").getAsString();
+                    currentLocationInfos.setLocationID(locationID);
                 }
                 
                 for (JsonElement statesTyp : states) {
                     statusName = statesTyp.getAsJsonObject().get("type").getAsString();
+                    timeStamp = statesTyp.getAsJsonObject().get("startDateTime").getAsString();
                 }
                 
                 Map<String, String> stCod = statusCodes.getStatusCodes();
-                currentLocationInfos.setStatusCode(stCod.get(eventsType));
+                statusCode = stCod.get(eventsType);
+                currentLocationInfos.setStatusCode(statusCode);
                 
                 currentLocationInfos.setStatusName(statusName);
                 
-                currentLocationInfos.setTimeStamps(Instant.now().toString());
+                currentLocationInfos.setTimeStamps(timeStamp);
             }
         }
         
+        //currentLocationInfos.setGeoDateTimeUTC(geoDateTimeUTC);
         
         bmwMapping.setCurrentLocationInfos(currentLocationInfos);
         //System.out.println("currentLocationInfos" + currentLocationInfos);

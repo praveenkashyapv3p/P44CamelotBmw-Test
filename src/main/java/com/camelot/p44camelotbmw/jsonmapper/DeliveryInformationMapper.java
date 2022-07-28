@@ -11,14 +11,15 @@ import java.time.Instant;
 
 public class DeliveryInformationMapper {
     
-    DeliveryInformations deliveryInformations = new DeliveryInformations();
     
     public void mapDeliveryInformation(String shipmentJson, BMWMapping bmwMapping) {
-        String eventPlannedDate = "";
+        DeliveryInformations deliveryInformations = new DeliveryInformations();
+        String eventPlannedDate = "", planPickUpDate = "", planDeliveryDate = "", etaDateTimeUTC = "", etaDateRoutePartUTC = "", etdDateNextRoutePart = "", eventCreationDateTimeUTC = "", eventSendingDateTimeUTC = "";
         
-        deliveryInformations.setEventCreationDateTimeUTC(Instant.now().toString());
+        deliveryInformations.setEventCreationDateTimeUTC(eventCreationDateTimeUTC);
         
-        deliveryInformations.setEventSendingDateTimeUTC(Instant.now().toString());
+        eventSendingDateTimeUTC = Instant.now().toString();
+        deliveryInformations.setEventSendingDateTimeUTC(eventSendingDateTimeUTC);
         
         JsonObject relShipJSON = (JsonObject) JsonParser.parseString(shipmentJson);
         JsonArray eventsTypeDepFrmStp = (JsonArray) relShipJSON.get("events");
@@ -28,6 +29,11 @@ public class DeliveryInformationMapper {
             }
         }
         deliveryInformations.setPlanDeliveryDate(eventPlannedDate);
+        deliveryInformations.setPlanPickUpDate(planPickUpDate);
+        deliveryInformations.setPlanDeliveryDate(planDeliveryDate);
+        deliveryInformations.setEtaDateTimeUTC(etaDateTimeUTC);
+        deliveryInformations.setEtaDateRoutePartUTC(etaDateRoutePartUTC);
+        deliveryInformations.setEtdDateNextRoutePart(etdDateNextRoutePart);
         
         bmwMapping.setDeliveryInformations(deliveryInformations);
     }

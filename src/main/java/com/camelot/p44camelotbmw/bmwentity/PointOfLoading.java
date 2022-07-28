@@ -8,18 +8,18 @@ public class PointOfLoading {
     @SerializedName("polLoc")
     @Expose
     private String polLoc;
-    @SerializedName("departurePrediction")
-    @Expose
-    private String departurePrediction;
-    @SerializedName("departureActual")
-    @Expose
-    private String departureActual;
     @SerializedName("arrivalPrediction")
     @Expose
     private String arrivalPrediction;
     @SerializedName("arrivalActual")
     @Expose
     private String arrivalActual;
+    @SerializedName("departurePrediction")
+    @Expose
+    private String departurePrediction;
+    @SerializedName("departureActual")
+    @Expose
+    private String departureActual;
     
     public String getPolLoc() {
         return polLoc;

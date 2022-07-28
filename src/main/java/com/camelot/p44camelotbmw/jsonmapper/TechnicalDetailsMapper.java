@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TechnicalDetailsMapper {
-    TechnicalDetail technicalDetail = new TechnicalDetail();
+    
     
     public static long get64MostSignificantBitsForVersion1() {
         LocalDateTime start = LocalDateTime.of(1582, 10, 15, 0, 0, 0);
@@ -23,8 +23,13 @@ public class TechnicalDetailsMapper {
     }
     
     public void mapTechnicalDetails(BMWMapping bmwMapping) {
+        TechnicalDetail technicalDetail = new TechnicalDetail();
+        String lifecycleStatus = "", lifecycleStatusVerbose = "", correlationId = "";
         List<TechnicalDetail> techDet = new ArrayList<>();
-        technicalDetail.setCorrelationId(String.valueOf(get64MostSignificantBitsForVersion1()));
+        correlationId = String.valueOf(get64MostSignificantBitsForVersion1());
+        technicalDetail.setCorrelationId(correlationId);
+        technicalDetail.setLifecycleStatus(lifecycleStatus);
+        technicalDetail.setLifecycleStatusVerbose(lifecycleStatusVerbose);
         techDet.add(technicalDetail);
         bmwMapping.setTechnicalDetails(techDet);
     }

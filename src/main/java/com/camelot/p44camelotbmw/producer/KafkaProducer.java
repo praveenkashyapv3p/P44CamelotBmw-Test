@@ -15,6 +15,10 @@ public class KafkaProducer {
     //private static final String BMWTOPIC = "bmwDataLocal";
     /*Production Topic*/
     private static final String BMWTOPIC = "bmwData";
+    /*Development Topic*/
+    //private static final String BMWPUSH = "BMWPushLocal";
+    /*Production Topic*/
+    private static final String BMWPUSH = "BMWPush";
     
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
@@ -25,6 +29,10 @@ public class KafkaProducer {
     
     public void writeBMWMessage(String id, String msg) {
         this.kafkaTemplate.send(BMWTOPIC, id, msg);
+    }
+    
+    public void writeBMWPushMessage(String id, String msg) {
+        this.kafkaTemplate.send(BMWPUSH, id, msg);
     }
     
 }

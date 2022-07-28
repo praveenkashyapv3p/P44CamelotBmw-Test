@@ -64,6 +64,7 @@ public class ConfigOAuth2 extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory().withClient("p44Prod").secret(passwordEncoder.encode("$2a$12$w42qnoiKWqs6PA3urxohX")).scopes("read").authorizedGrantTypes("client_credentials").accessTokenValiditySeconds(2000).refreshTokenValiditySeconds(20000);
+        clients.inMemory().withClient("bmwTest").secret(passwordEncoder.encode("$2a$12$pqzt83QlYx2eCIbGjyK9f")).scopes("read").authorizedGrantTypes("client_credentials").accessTokenValiditySeconds(2000).refreshTokenValiditySeconds(20000);
     }
     
     
