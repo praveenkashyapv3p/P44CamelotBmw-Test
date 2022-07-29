@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -47,11 +48,16 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.requiresChannel().antMatchers("/v1/auth/token").requiresSecure();
     }
     
+    @Override
+    public void configure(WebSecurity web) {
+        web.ignoring().antMatchers("/v1/health");
+    }
+    
     @Bean
     public HttpFirewall configureFirewall() {
         StrictHttpFirewall strictHttpFirewall = new StrictHttpFirewall();
         strictHttpFirewall.setAllowBackSlash(true);
-        strictHttpFirewall.setAllowedHttpMethods(List.of("POST"));
+        strictHttpFirewall.setAllowedHttpMethods(List.of("POST", "GET"));
         return strictHttpFirewall;
     }
     
