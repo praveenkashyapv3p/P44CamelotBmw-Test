@@ -37,9 +37,9 @@ public class KafkaConsumerP44 {
     }
     
     /*Development Consumer*/
-    @KafkaListener(topics = "p44DataLocal", groupId = "p44DataLocalGroup")
+    //@KafkaListener(topics = "p44DataLocal", groupId = "p44DataLocalGroup")
     /*Production Consumer*/
-    // @KafkaListener(topics = "p44Data", groupId = "bmwGroup")
+     @KafkaListener(topics = "p44Data", groupId = "bmwGroup")
     public void getP44Message(String message) {
         Gson gson = new Gson();
         String jsonStartingString = "{\"records\":[{\"key\":";
@@ -63,7 +63,7 @@ public class KafkaConsumerP44 {
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<String> entity = new HttpEntity<>(bmwJson, headers);
             ResponseEntity<String> response = restTemplate.postForEntity("https://p44-tracking-data-int.bmwgroup.com", entity, String.class);
-            //System.out.println("response: " + bmwJson);
+            //System.out.println("response: " + response + "\n" + bmwJson);
         } catch (Exception e) {
             logger.error("Mapping failure " + e);
         }
