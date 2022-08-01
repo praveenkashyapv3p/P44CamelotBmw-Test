@@ -16,9 +16,9 @@ public class KafkaProducer {
     /*Production Topic*/
     private static final String BMWTOPIC = "bmwData";
     /*Development Topic*/
-    //private static final String BMWPUSH = "BMWPushLocal";
+    private static final String BMWPUSH = "bmwPushLocal";
     /*Production Topic*/
-    private static final String BMWPUSH = "BMWPush";
+    //private static final String BMWPUSH = "bmwPush";
     
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
