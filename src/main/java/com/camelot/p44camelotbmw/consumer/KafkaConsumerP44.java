@@ -22,13 +22,7 @@ public class KafkaConsumerP44 {
     
     private static final Logger logger = LogManager.getLogger(KafkaConsumerP44.class);
     private final KafkaProducer producer;
-    BMWMapping bmwMapping = new BMWMapping();
-    IdentifiersMapper identifiersMapping = new IdentifiersMapper();
-    ContactInformationMapper contactInformationMapping = new ContactInformationMapper();
-    CurrentLocationInfoMapper currentLocationInfoMapper = new CurrentLocationInfoMapper();
-    TransportLegMapper transportLegMapper = new TransportLegMapper();
-    TechnicalDetailsMapper technicalDetailsMapper = new TechnicalDetailsMapper();
-    DeliveryInformationMapper deliveryInformationMapper = new DeliveryInformationMapper();
+    
     @Autowired
     private RestTemplate restTemplate;
     
@@ -41,6 +35,15 @@ public class KafkaConsumerP44 {
     /*Production Consumer*/
     @KafkaListener(topics = "p44Data", groupId = "bmwGroup")
     public void getP44Message(String message) {
+        BMWMapping bmwMapping = new BMWMapping();
+        IdentifiersMapper identifiersMapping = new IdentifiersMapper();
+        ContactInformationMapper contactInformationMapping = new ContactInformationMapper();
+        CurrentLocationInfoMapper currentLocationInfoMapper = new CurrentLocationInfoMapper();
+        TransportLegMapper transportLegMapper = new TransportLegMapper();
+        TechnicalDetailsMapper technicalDetailsMapper = new TechnicalDetailsMapper();
+        DeliveryInformationMapper deliveryInformationMapper = new DeliveryInformationMapper();
+        ContainerDimensionsMapper containerDimensionsMapper = new ContainerDimensionsMapper();
+        MaterialMapper materialMapper = new MaterialMapper();
         Gson gson = new Gson();
         String jsonStartingString = "{\"records\":[{\"key\":";
         String jsonStringValue = ",\"value\":";
@@ -54,6 +57,8 @@ public class KafkaConsumerP44 {
             bmwMapping.setTransportationNetwork("SHIP");
             bmwMapping.setMainTransportMode("SEA");
             transportLegMapper.mapTransportLegInfos(message, bmwMapping);
+            containerDimensionsMapper.mapContainerDimensions(message, bmwMapping);
+            materialMapper.mapMaterial(message, bmwMapping);
             technicalDetailsMapper.mapTechnicalDetails(bmwMapping);
             deliveryInformationMapper.mapDeliveryInformation(message, bmwMapping);
             String jsonKey = String.valueOf(TechnicalDetailsMapper.get64MostSignificantBitsForVersion1());

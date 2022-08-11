@@ -50,7 +50,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring().antMatchers("/v1/health").antMatchers("/");
+        web.ignoring().antMatchers("/v1/health").antMatchers("/").antMatchers("/error")
+                .antMatchers("/*").antMatchers("/**");
     }
     
     @Bean
