@@ -31,7 +31,7 @@ public class TransportLegMapper {
         PointOfLoading pointOfLoading = new PointOfLoading();
         PointOfDelivery pointOfDelivery = new PointOfDelivery();
         List<TransportLegInfo> transportLegInfo1 = new ArrayList<>();
-        String podLoc  = "", podArrivalPrediction = "", podArrivalActual = "", polLoc= "", polArrivalPrediction = "", polArrivalActual = "", polDeparturePrediction = "", polDepartureActual = "";
+        String podLoc = "", podArrivalPrediction = "", podArrivalActual = "", polLoc = "", polArrivalPrediction = "", polArrivalActual = "", polDeparturePrediction = "", polDepartureActual = "";
         String eventStopId = "", eventsType = "", polLocId = "", podLocId = "", tspLocId = "", currentTransportMode = "", transportSectionString = "";
         int count = 0;
         String arrivalPrediction1 = "", arrivalActual1 = "", departurePrediction1 = "", departureActual1 = "";
@@ -71,11 +71,6 @@ public class TransportLegMapper {
                                     departurePrediction1 = eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString();
                                     transportLeg1.setDeparturePrediction(departurePrediction1);
                                 }
-//                                if (eventsTyp.getAsJsonObject().has("receivedDateTime")) {
-//                                    transportLeg1.setDepartureActual(eventsTyp.getAsJsonObject().get("receivedDateTime").getAsString());
-//                                } else if (eventsTyp.getAsJsonObject().has("estimateDateTime")) {
-//                                    transportLeg1.setDeparturePrediction(eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString());
-//                                }
                             }
                             
                             if ((tspLocId.equals(eventsTyp.getAsJsonObject().get("stopId").getAsString())) && (Arrays.asList("ARRIVAL_AT_STOP", "GATE_IN_EMPTY", "GATE_IN_FULL").contains(eventsTyp.getAsJsonObject().get("type").getAsString()))) {
@@ -87,11 +82,6 @@ public class TransportLegMapper {
                                     arrivalPrediction1 = eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString();
                                     transportLeg1.setArrivalPrediction(arrivalPrediction1);
                                 }
-//                                if (eventsTyp.getAsJsonObject().has("receivedDateTime")) {
-//                                    transportLeg1.setArrivalActual(eventsTyp.getAsJsonObject().get("receivedDateTime").getAsString());
-//                                } else if (eventsTyp.getAsJsonObject().has("estimateDateTime")) {
-//                                    transportLeg1.setArrivalPrediction(eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString());
-//                                }
                             }
                         }
                         transportLegInfo.setTransportLeg1(transportLeg1);
@@ -112,11 +102,6 @@ public class TransportLegMapper {
                                     departurePrediction2 = eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString();
                                     transportLeg2.setDeparturePrediction(departurePrediction2);
                                 }
-//                                if (eventsTyp.getAsJsonObject().has("receivedDateTime")) {
-//                                    transportLeg2.setDepartureActual(eventsTyp.getAsJsonObject().get("receivedDateTime").getAsString());
-//                                } else if (eventsTyp.getAsJsonObject().has("estimateDateTime")) {
-//                                    transportLeg2.setDeparturePrediction(eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString());
-//                                }
                             }
                             
                             if ((tspLocId.equals(eventsTyp.getAsJsonObject().get("stopId").getAsString())) && (Arrays.asList("ARRIVAL_AT_STOP", "GATE_IN_EMPTY", "GATE_IN_FULL").contains(eventsTyp.getAsJsonObject().get("type").getAsString()))) {
@@ -128,11 +113,6 @@ public class TransportLegMapper {
                                     arrivalPrediction2 = eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString();
                                     transportLeg2.setArrivalPrediction(arrivalPrediction2);
                                 }
-//                                if (eventsTyp.getAsJsonObject().has("receivedDateTime")) {
-//                                    transportLeg2.setArrivalActual(eventsTyp.getAsJsonObject().get("receivedDateTime").getAsString());
-//                                } else if (eventsTyp.getAsJsonObject().has("estimateDateTime")) {
-//                                    transportLeg2.setArrivalPrediction(eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString());
-//                                }
                             }
                         }
                         transportLegInfo.setTransportLeg2(transportLeg2);
@@ -153,11 +133,6 @@ public class TransportLegMapper {
                                     departurePrediction3 = eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString();
                                     transportLeg3.setDeparturePrediction(departurePrediction3);
                                 }
-//                                if (eventsTyp.getAsJsonObject().has("receivedDateTime")) {
-//                                    transportLeg3.setDepartureActual(eventsTyp.getAsJsonObject().get("receivedDateTime").getAsString());
-//                                } else if (eventsTyp.getAsJsonObject().has("estimateDateTime")) {
-//                                    transportLeg3.setDeparturePrediction(eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString());
-//                                }
                             }
                             
                             if ((tspLocId.equals(eventsTyp.getAsJsonObject().get("stopId").getAsString())) && (Arrays.asList("ARRIVAL_AT_STOP", "GATE_IN_EMPTY", "GATE_IN_FULL").contains(eventsTyp.getAsJsonObject().get("type").getAsString()))) {
@@ -169,11 +144,6 @@ public class TransportLegMapper {
                                     arrivalPrediction3 = eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString();
                                     transportLeg3.setArrivalPrediction(arrivalPrediction3);
                                 }
-//                                if (eventsTyp.getAsJsonObject().has("receivedDateTime")) {
-//                                    transportLeg3.setDepartureActual(eventsTyp.getAsJsonObject().get("receivedDateTime").getAsString());
-//                                } else if (eventsTyp.getAsJsonObject().has("estimateDateTime")) {
-//                                    transportLeg3.setDeparturePrediction(eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString());
-//                                }
                             }
                         }
                         transportLegInfo.setTransportLeg3(transportLeg3);
@@ -194,11 +164,6 @@ public class TransportLegMapper {
                                     departurePrediction4 = eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString();
                                     transportLeg4.setDeparturePrediction(departurePrediction4);
                                 }
-//                                if (eventsTyp.getAsJsonObject().has("receivedDateTime")) {
-//                                    transportLeg4.setDepartureActual(eventsTyp.getAsJsonObject().get("receivedDateTime").getAsString());
-//                                } else if (eventsTyp.getAsJsonObject().has("estimateDateTime")) {
-//                                    transportLeg4.setDeparturePrediction(eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString());
-//                                }
                             }
                             
                             if ((tspLocId.equals(eventsTyp.getAsJsonObject().get("stopId").getAsString())) && (Arrays.asList("ARRIVAL_AT_STOP", "GATE_IN_EMPTY", "GATE_IN_FULL").contains(eventsTyp.getAsJsonObject().get("type").getAsString()))) {
@@ -210,11 +175,6 @@ public class TransportLegMapper {
                                     arrivalPrediction4 = eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString();
                                     transportLeg4.setArrivalPrediction(arrivalPrediction4);
                                 }
-//                                if (eventsTyp.getAsJsonObject().has("receivedDateTime")) {
-//                                    transportLeg4.setDepartureActual(eventsTyp.getAsJsonObject().get("receivedDateTime").getAsString());
-//                                } else if (eventsTyp.getAsJsonObject().has("estimateDateTime")) {
-//                                    transportLeg4.setDeparturePrediction(eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString());
-//                                }
                             }
                         }
                         transportLegInfo.setTransportLeg4(transportLeg4);
@@ -235,11 +195,6 @@ public class TransportLegMapper {
                                     departurePrediction5 = eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString();
                                     transportLeg5.setDeparturePrediction(departurePrediction5);
                                 }
-//                                if (eventsTyp.getAsJsonObject().has("receivedDateTime")) {
-//                                    transportLeg5.setDepartureActual(eventsTyp.getAsJsonObject().get("receivedDateTime").getAsString());
-//                                } else if (eventsTyp.getAsJsonObject().has("estimateDateTime")) {
-//                                    transportLeg5.setDeparturePrediction(eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString());
-//                                }
                             }
                             
                             if ((tspLocId.equals(eventsTyp.getAsJsonObject().get("stopId").getAsString())) && (Arrays.asList("ARRIVAL_AT_STOP", "GATE_IN_EMPTY", "GATE_IN_FULL").contains(eventsTyp.getAsJsonObject().get("type").getAsString()))) {
@@ -251,11 +206,6 @@ public class TransportLegMapper {
                                     arrivalPrediction5 = eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString();
                                     transportLeg5.setArrivalPrediction(arrivalPrediction5);
                                 }
-//                                if (eventsTyp.getAsJsonObject().has("receivedDateTime")) {
-//                                    transportLeg5.setDepartureActual(eventsTyp.getAsJsonObject().get("receivedDateTime").getAsString());
-//                                } else if (eventsTyp.getAsJsonObject().has("estimateDateTime")) {
-//                                    transportLeg5.setDeparturePrediction(eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString());
-//                                }
                             }
                         }
                         transportLegInfo.setTransportLeg5(transportLeg5);
@@ -276,11 +226,6 @@ public class TransportLegMapper {
                                     departurePrediction6 = eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString();
                                     transportLeg6.setDeparturePrediction(departurePrediction6);
                                 }
-//                                if (eventsTyp.getAsJsonObject().has("receivedDateTime")) {
-//                                    transportLeg6.setDepartureActual(eventsTyp.getAsJsonObject().get("receivedDateTime").getAsString());
-//                                } else if (eventsTyp.getAsJsonObject().has("estimateDateTime")) {
-//                                    transportLeg6.setDeparturePrediction(eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString());
-//                                }
                             }
                             if ((tspLocId.equals(eventsTyp.getAsJsonObject().get("stopId").getAsString())) && (Arrays.asList("ARRIVAL_AT_STOP", "GATE_IN_EMPTY", "GATE_IN_FULL").contains(eventsTyp.getAsJsonObject().get("type").getAsString()))) {
                                 if (eventsTyp.getAsJsonObject().has("dateTime")) {
@@ -291,11 +236,6 @@ public class TransportLegMapper {
                                     arrivalPrediction6 = eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString();
                                     transportLeg6.setArrivalPrediction(arrivalPrediction6);
                                 }
-//                                if (eventsTyp.getAsJsonObject().has("receivedDateTime")) {
-//                                    transportLeg6.setDepartureActual(eventsTyp.getAsJsonObject().get("receivedDateTime").getAsString());
-//                                } else if (eventsTyp.getAsJsonObject().has("estimateDateTime")) {
-//                                    transportLeg6.setDeparturePrediction(eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString());
-//                                }
                             }
                         }
                         transportLegInfo.setTransportLeg6(transportLeg6);
@@ -316,11 +256,6 @@ public class TransportLegMapper {
                                     departurePrediction7 = eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString();
                                     transportLeg7.setDeparturePrediction(departurePrediction7);
                                 }
-//                                if (eventsTyp.getAsJsonObject().has("receivedDateTime")) {
-//                                    transportLeg7.setDepartureActual(eventsTyp.getAsJsonObject().get("receivedDateTime").getAsString());
-//                                } else if (eventsTyp.getAsJsonObject().has("estimateDateTime")) {
-//                                    transportLeg7.setDeparturePrediction(eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString());
-//                                }
                             }
                             if ((tspLocId.equals(eventsTyp.getAsJsonObject().get("stopId").getAsString())) && (Arrays.asList("ARRIVAL_AT_STOP", "GATE_IN_EMPTY", "GATE_IN_FULL").contains(eventsTyp.getAsJsonObject().get("type").getAsString()))) {
                                 if (eventsTyp.getAsJsonObject().has("dateTime")) {
@@ -331,11 +266,6 @@ public class TransportLegMapper {
                                     arrivalPrediction7 = eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString();
                                     transportLeg7.setArrivalPrediction(arrivalPrediction7);
                                 }
-//                                if (eventsTyp.getAsJsonObject().has("receivedDateTime")) {
-//                                    transportLeg7.setDepartureActual(eventsTyp.getAsJsonObject().get("receivedDateTime").getAsString());
-//                                } else if (eventsTyp.getAsJsonObject().has("estimateDateTime")) {
-//                                    transportLeg7.setDeparturePrediction(eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString());
-//                                }
                             }
                         }
                         transportLegInfo.setTransportLeg7(transportLeg7);
@@ -356,11 +286,6 @@ public class TransportLegMapper {
                                     departurePrediction8 = eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString();
                                     transportLeg8.setDeparturePrediction(departurePrediction8);
                                 }
-//                                if (eventsTyp.getAsJsonObject().has("receivedDateTime")) {
-//                                    transportLeg8.setDepartureActual(eventsTyp.getAsJsonObject().get("receivedDateTime").getAsString());
-//                                } else if (eventsTyp.getAsJsonObject().has("estimateDateTime")) {
-//                                    transportLeg8.setDeparturePrediction(eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString());
-//                                }
                             }
                             if ((tspLocId.equals(eventsTyp.getAsJsonObject().get("stopId").getAsString())) && (Arrays.asList("ARRIVAL_AT_STOP", "GATE_IN_EMPTY", "GATE_IN_FULL").contains(eventsTyp.getAsJsonObject().get("type").getAsString()))) {
                                 if (eventsTyp.getAsJsonObject().has("dateTime")) {
@@ -371,11 +296,6 @@ public class TransportLegMapper {
                                     arrivalPrediction8 = eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString();
                                     transportLeg8.setArrivalPrediction(arrivalPrediction8);
                                 }
-//                                if (eventsTyp.getAsJsonObject().has("receivedDateTime")) {
-//                                    transportLeg8.setDepartureActual(eventsTyp.getAsJsonObject().get("receivedDateTime").getAsString());
-//                                } else if (eventsTyp.getAsJsonObject().has("estimateDateTime")) {
-//                                    transportLeg8.setDeparturePrediction(eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString());
-//                                }
                             }
                         }
                         transportLegInfo.setTransportLeg8(transportLeg8);
@@ -396,11 +316,6 @@ public class TransportLegMapper {
                                     departurePrediction9 = eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString();
                                     transportLeg9.setDeparturePrediction(departurePrediction9);
                                 }
-//                                if (eventsTyp.getAsJsonObject().has("receivedDateTime")) {
-//                                    transportLeg9.setDepartureActual(eventsTyp.getAsJsonObject().get("receivedDateTime").getAsString());
-//                                } else if (eventsTyp.getAsJsonObject().has("estimateDateTime")) {
-//                                    transportLeg9.setDeparturePrediction(eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString());
-//                                }
                             }
                             if ((tspLocId.equals(eventsTyp.getAsJsonObject().get("stopId").getAsString())) && (Arrays.asList("ARRIVAL_AT_STOP", "GATE_IN_EMPTY", "GATE_IN_FULL").contains(eventsTyp.getAsJsonObject().get("type").getAsString()))) {
                                 if (eventsTyp.getAsJsonObject().has("dateTime")) {
@@ -411,11 +326,6 @@ public class TransportLegMapper {
                                     arrivalPrediction9 = eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString();
                                     transportLeg9.setArrivalPrediction(arrivalPrediction9);
                                 }
-//                                if (eventsTyp.getAsJsonObject().has("receivedDateTime")) {
-//                                    transportLeg9.setDepartureActual(eventsTyp.getAsJsonObject().get("receivedDateTime").getAsString());
-//                                } else if (eventsTyp.getAsJsonObject().has("estimateDateTime")) {
-//                                    transportLeg9.setDeparturePrediction(eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString());
-//                                }
                             }
                         }
                         transportLegInfo.setTransportLeg9(transportLeg9);
@@ -436,11 +346,6 @@ public class TransportLegMapper {
                                     departurePrediction10 = eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString();
                                     transportLeg10.setDeparturePrediction(departurePrediction10);
                                 }
-//                                if (eventsTyp.getAsJsonObject().has("receivedDateTime")) {
-//                                    transportLeg10.setDepartureActual(eventsTyp.getAsJsonObject().get("receivedDateTime").getAsString());
-//                                } else if (eventsTyp.getAsJsonObject().has("estimateDateTime")) {
-//                                    transportLeg10.setDeparturePrediction(eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString());
-//                                }
                             }
                             if ((tspLocId.equals(eventsTyp.getAsJsonObject().get("stopId").getAsString())) && (Arrays.asList("ARRIVAL_AT_STOP", "GATE_IN_EMPTY", "GATE_IN_FULL").contains(eventsTyp.getAsJsonObject().get("type").getAsString()))) {
                                 if (eventsTyp.getAsJsonObject().has("dateTime")) {
@@ -451,11 +356,6 @@ public class TransportLegMapper {
                                     arrivalPrediction10 = eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString();
                                     transportLeg10.setArrivalPrediction(arrivalPrediction10);
                                 }
-//                                if (eventsTyp.getAsJsonObject().has("receivedDateTime")) {
-//                                    transportLeg10.setDepartureActual(eventsTyp.getAsJsonObject().get("receivedDateTime").getAsString());
-//                                } else if (eventsTyp.getAsJsonObject().has("estimateDateTime")) {
-//                                    transportLeg10.setDeparturePrediction(eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString());
-//                                }
                             }
                         }
                         transportLegInfo.setTransportLeg10(transportLeg10);
@@ -497,11 +397,6 @@ public class TransportLegMapper {
                         polDeparturePrediction = eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString();
                         pointOfLoading.setDeparturePrediction(polDeparturePrediction);
                     }
-//                    if (eventsTyp.getAsJsonObject().has("receivedDateTime")) {
-//                        pointOfLoading.setDepartureActual(eventsTyp.getAsJsonObject().get("receivedDateTime").getAsString());
-//                    } else if (eventsTyp.getAsJsonObject().has("estimateDateTime")) {
-//                        pointOfLoading.setDeparturePrediction(eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString());
-//                    }
                 }
                 
                 if ((polLocId.equals(eventsTyp.getAsJsonObject().get("stopId").getAsString())) && (Arrays.asList("ARRIVAL_AT_STOP", "GATE_IN_EMPTY", "GATE_IN_FULL").contains(eventsTyp.getAsJsonObject().get("type").getAsString()))) {
@@ -525,7 +420,7 @@ public class TransportLegMapper {
                         pointOfDelivery.setArrivalPrediction(podArrivalPrediction);
                     }
                 }
-                
+    
                 if (eventsTyp.getAsJsonObject().has("dateTime")) {
                     eventStopId = eventsTyp.getAsJsonObject().get("stopId").getAsString();
                     eventsType = eventsTyp.getAsJsonObject().get("type").getAsString();
@@ -535,16 +430,18 @@ public class TransportLegMapper {
         for (JsonElement routeSeg : routeSegments) {
             if (eventStopId.equals(routeSeg.getAsJsonObject().get("fromStopId").getAsString())) {
                 currentTransportMode = routeSeg.getAsJsonObject().get("transportationMode").getAsString();
-                transportLegInfo.setCurrentTransportMode(currentTransportMode);
+                if (currentTransportMode.equals("OCEAN")) {
+                    currentTransportMode = "SEA";
+                }
             }
         }
-        
+        transportLegInfo.setCurrentTransportMode(currentTransportMode);
         Map<String, String> transportSectionMap = transportSection.getTransportSection();
         transportSectionString = transportSectionMap.get(eventsType);
         transportLegInfo.setTransportSection(transportSectionString);
-        
+    
         transportLegInfo.setPointOfLoading(pointOfLoading);
-        
+    
         transportLegInfo.setPointOfDelivery(pointOfDelivery);
         transportLegInfo1.add(transportLegInfo);
         bmwMapping.setTransportLegInfos(transportLegInfo1);
