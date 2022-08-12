@@ -1,6 +1,6 @@
 package com.camelot.p44camelotbmw.controller;
 
-import com.camelot.p44camelotbmw.jsonmapper.TechnicalDetailsMapper;
+import com.camelot.p44camelotbmw.constants.UuidGenerator;
 import com.camelot.p44camelotbmw.producer.KafkaProducer;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -33,7 +33,7 @@ public class SendEventController {
     public ResponseEntity<String> shipmentDetailsFromP44(@RequestBody String shipmentJson) {
         try {
             boolean trackingJson = false;
-            String jsonKey = String.valueOf(TechnicalDetailsMapper.get64MostSignificantBitsForVersion1());
+            String jsonKey = String.valueOf(UuidGenerator.get64MostSignificantBitsForVersion1());
             JsonObject ShipJSON = (JsonObject) JsonParser.parseString(shipmentJson);
             JsonArray events = (JsonArray) ShipJSON.get("events");
             for (JsonElement eventsTyp : events) {

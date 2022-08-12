@@ -1,7 +1,7 @@
 package com.camelot.p44camelotbmw.controller;
 
 
-import com.camelot.p44camelotbmw.jsonmapper.TechnicalDetailsMapper;
+import com.camelot.p44camelotbmw.constants.UuidGenerator;
 import com.camelot.p44camelotbmw.producer.KafkaProducer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,8 +21,7 @@ public class createShipmentController {
     
     @PostMapping(value = "/v1/createShipment", consumes = "application/json")
     public ResponseEntity<?> shipmentDetailsFromP44(@RequestBody String message) {
-        //message = message.trim().replaceAll("\r\n", "");
-        String jsonKey = String.valueOf(TechnicalDetailsMapper.get64MostSignificantBitsForVersion1());
+        String jsonKey = String.valueOf(UuidGenerator.get64MostSignificantBitsForVersion1());
         this.producer.writeBMWPushMessage(jsonKey, message);
         return ResponseEntity.ok().build();
     }

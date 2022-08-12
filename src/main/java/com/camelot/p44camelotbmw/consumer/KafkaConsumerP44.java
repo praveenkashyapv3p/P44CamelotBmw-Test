@@ -1,8 +1,9 @@
 package com.camelot.p44camelotbmw.consumer;
 
-import com.camelot.p44camelotbmw.bmwentity.BMWMapping;
-import com.camelot.p44camelotbmw.jsonmapper.*;
-import com.camelot.p44camelotbmw.p44entity.P44Shipment;
+import com.camelot.p44camelotbmw.constants.UuidGenerator;
+import com.camelot.p44camelotbmw.entity.fromP44Entity.P44Shipment;
+import com.camelot.p44camelotbmw.entity.toBmwEntity.BMWMapping;
+import com.camelot.p44camelotbmw.p44JsonMapper.*;
 import com.camelot.p44camelotbmw.producer.KafkaProducer;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -44,6 +45,7 @@ public class KafkaConsumerP44 {
         DeliveryInformationMapper deliveryInformationMapper = new DeliveryInformationMapper();
         ContainerDimensionsMapper containerDimensionsMapper = new ContainerDimensionsMapper();
         MaterialMapper materialMapper = new MaterialMapper();
+        String jsonKey = String.valueOf(UuidGenerator.get64MostSignificantBitsForVersion1());
         Gson gson = new Gson();
         String jsonStartingString = "{\"records\":[{\"key\":";
         String jsonStringValue = ",\"value\":";
@@ -59,9 +61,8 @@ public class KafkaConsumerP44 {
             transportLegMapper.mapTransportLegInfos(message, bmwMapping);
             containerDimensionsMapper.mapContainerDimensions(message, bmwMapping);
             materialMapper.mapMaterial(message, bmwMapping);
-            technicalDetailsMapper.mapTechnicalDetails(bmwMapping);
+            technicalDetailsMapper.mapTechnicalDetails(jsonKey, bmwMapping);
             deliveryInformationMapper.mapDeliveryInformation(message, bmwMapping);
-            String jsonKey = String.valueOf(TechnicalDetailsMapper.get64MostSignificantBitsForVersion1());
             String bmwJson = jsonStartingString + jsonKey + jsonStringValue + new Gson().toJson(bmwMapping) + jsonEndString;
             this.producer.writeBMWMessage(jsonKey, bmwJson);
             HttpHeaders headers = new HttpHeaders();
