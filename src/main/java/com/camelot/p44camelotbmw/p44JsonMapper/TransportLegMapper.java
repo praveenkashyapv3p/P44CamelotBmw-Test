@@ -5,7 +5,6 @@ import com.camelot.p44camelotbmw.entity.toBmwEntity.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +14,7 @@ import java.util.Map;
 public class TransportLegMapper {
     
     
-    public void mapTransportLegInfos(String shipmentJson, BMWMapping bmwMapping) {
+    public void mapTransportLegInfos(JsonObject shipmentJson, BMWMapping bmwMapping) {
         TransportSection transportSection = new TransportSection();
         TransportLegInfo transportLegInfo = new TransportLegInfo();
         TransportLeg1 transportLeg1 = new TransportLeg1();
@@ -45,11 +44,11 @@ public class TransportLegMapper {
         String arrivalPrediction9 = "", arrivalActual9 = "", departurePrediction9 = "", departureActual9 = "";
         String arrivalPrediction10 = "", arrivalActual10 = "", departurePrediction10 = "", departureActual10 = "";
         String tsp1Loc = "", tsp2Loc = "", tsp3Loc = "", tsp4Loc = "", tsp5Loc = "", tsp6Loc = "", tsp7Loc = "", tsp8Loc = "", tsp9Loc = "", tsp10Loc = "";
-        
-        JsonObject ShipJSON = (JsonObject) JsonParser.parseString(shipmentJson);
-        JsonArray events = (JsonArray) ShipJSON.get("events");
-        JsonArray routeSegments = (JsonArray) ShipJSON.get("shipment").getAsJsonObject().get("routeInfo").getAsJsonObject().get("routeSegments");
-        JsonArray stops = (JsonArray) ShipJSON.get("shipment").getAsJsonObject().get("routeInfo").getAsJsonObject().get("stops");
+    
+        //JsonObject ShipJSON = (JsonObject) JsonParser.parseString(shipmentJson);
+        JsonArray events = (JsonArray) shipmentJson.get("events");
+        JsonArray routeSegments = (JsonArray) shipmentJson.get("shipment").getAsJsonObject().get("routeInfo").getAsJsonObject().get("routeSegments");
+        JsonArray stops = (JsonArray) shipmentJson.get("shipment").getAsJsonObject().get("routeInfo").getAsJsonObject().get("stops");
         for (JsonElement position : stops) {
             count++;
             if (position.getAsJsonObject().has("location") && position.getAsJsonObject().get("location").getAsJsonObject().has("identifiers")) {
@@ -430,7 +429,7 @@ public class TransportLegMapper {
         for (JsonElement routeSeg : routeSegments) {
             if (eventStopId.equals(routeSeg.getAsJsonObject().get("fromStopId").getAsString())) {
                 currentTransportMode = routeSeg.getAsJsonObject().get("transportationMode").getAsString();
-                if (currentTransportMode.equals("OCEAN")) {
+                if (currentTransportMode.equalsIgnoreCase("OCEAN")) {
                     currentTransportMode = "SEA";
                 }
             }

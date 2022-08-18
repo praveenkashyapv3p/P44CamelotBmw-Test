@@ -6,22 +6,21 @@ import com.camelot.p44camelotbmw.entity.toBmwEntity.CurrentLocationInfos;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import java.util.Map;
 
 public class CurrentLocationInfoMapper {
     
     
-    public void mapCurrLocInfo(String shipmentJson, BMWMapping bmwMapping) {
+    public void mapCurrLocInfo(JsonObject shipmentJson, BMWMapping bmwMapping) {
         CurrentLocationInfos currentLocationInfos = new CurrentLocationInfos();
         StatusCodes statusCodes = new StatusCodes();
         String eventStopId = "", statusName = "", eventsType = "", timeStamp = "", longitude = "", latitude = "", geoDateTimeUTC = "", locationID = "", locationName = "", statusCode = "";
-        JsonObject ShipJSON = (JsonObject) JsonParser.parseString(shipmentJson);
-        JsonArray stops = (JsonArray) ShipJSON.get("shipment").getAsJsonObject().get("routeInfo").getAsJsonObject().get("stops");
-        JsonArray events = (JsonArray) ShipJSON.get("events");
-        JsonArray positions = (JsonArray) ShipJSON.get("positions");
-        JsonArray states = (JsonArray) ShipJSON.get("states");
+        //JsonObject ShipJSON = (JsonObject) JsonParser.parseString(shipmentJson);
+        JsonArray stops = (JsonArray) shipmentJson.get("shipment").getAsJsonObject().get("routeInfo").getAsJsonObject().get("stops");
+        JsonArray events = (JsonArray) shipmentJson.get("events");
+        JsonArray positions = (JsonArray) shipmentJson.get("positions");
+        JsonArray states = (JsonArray) shipmentJson.get("states");
         for (JsonElement eventsTyp : events) {
             if (eventsTyp.getAsJsonObject().has("dateTime")) {
                 currentLocationInfos.setTimeStamps(eventsTyp.getAsJsonObject().get("dateTime").getAsString());

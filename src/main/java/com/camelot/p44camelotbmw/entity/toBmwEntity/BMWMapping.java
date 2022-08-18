@@ -1,5 +1,6 @@
 package com.camelot.p44camelotbmw.entity.toBmwEntity;
 
+import com.google.gson.JsonArray;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -34,7 +35,7 @@ public class BMWMapping {
     private ContainerDimensions containerDimensions;
     @SerializedName("materials")
     @Expose
-    private List<Material> materials = null;
+    private List<JsonArray> materials = null;
     @SerializedName("technicalDetails")
     @Expose
     private List<TechnicalDetail> technicalDetails = null;
@@ -103,11 +104,11 @@ public class BMWMapping {
         this.containerDimensions = containerDimensions;
     }
     
-    public List<Material> getMaterials() {
+    public List<JsonArray> getMaterials() {
         return materials;
     }
     
-    public void setMaterials(List<Material> materials) {
+    public void setMaterials(List<JsonArray> materials) {
         this.materials = materials;
     }
     

@@ -1,12 +1,13 @@
 package com.camelot.p44camelotbmw.consumer;
 
 import com.camelot.p44camelotbmw.constants.UuidGenerator;
-import com.camelot.p44camelotbmw.entity.fromP44Entity.P44Shipment;
+import com.camelot.p44camelotbmw.db.CreateShipmentRepository;
 import com.camelot.p44camelotbmw.entity.toBmwEntity.BMWMapping;
 import com.camelot.p44camelotbmw.p44JsonMapper.*;
 import com.camelot.p44camelotbmw.producer.KafkaProducer;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,8 @@ public class KafkaConsumerP44 {
     
     private static final Logger logger = LogManager.getLogger(KafkaConsumerP44.class);
     private final KafkaProducer producer;
-    
+    @Autowired
+    CreateShipmentRepository createShipmentRepository;
     @Autowired
     private RestTemplate restTemplate;
     
@@ -36,33 +38,32 @@ public class KafkaConsumerP44 {
     /*Production Consumer*/
     @KafkaListener(topics = "p44Data", groupId = "bmwGroup")
     public void getP44Message(String message) {
-        BMWMapping bmwMapping = new BMWMapping();
-        IdentifiersMapper identifiersMapping = new IdentifiersMapper();
-        ContactInformationMapper contactInformationMapping = new ContactInformationMapper();
-        CurrentLocationInfoMapper currentLocationInfoMapper = new CurrentLocationInfoMapper();
-        TransportLegMapper transportLegMapper = new TransportLegMapper();
-        TechnicalDetailsMapper technicalDetailsMapper = new TechnicalDetailsMapper();
-        DeliveryInformationMapper deliveryInformationMapper = new DeliveryInformationMapper();
-        ContainerDimensionsMapper containerDimensionsMapper = new ContainerDimensionsMapper();
-        MaterialMapper materialMapper = new MaterialMapper();
-        String jsonKey = String.valueOf(UuidGenerator.get64MostSignificantBitsForVersion1());
-        Gson gson = new Gson();
-        String jsonStartingString = "{\"records\":[{\"key\":";
-        String jsonStringValue = ",\"value\":";
-        String jsonEndString = "}]}";
-        P44Shipment myObj = gson.fromJson(message, new TypeToken<P44Shipment>() {
-        }.getType());
         try {
-            identifiersMapping.mapIdentifiers(myObj, message, bmwMapping);
-            contactInformationMapping.mapContactInfo(message, bmwMapping);
-            currentLocationInfoMapper.mapCurrLocInfo(message, bmwMapping);
+            BMWMapping bmwMapping = new BMWMapping();
+            IdentifiersMapper identifiersMapping = new IdentifiersMapper();
+            ContactInformationMapper contactInformationMapping = new ContactInformationMapper();
+            CurrentLocationInfoMapper currentLocationInfoMapper = new CurrentLocationInfoMapper();
+            TransportLegMapper transportLegMapper = new TransportLegMapper();
+            TechnicalDetailsMapper technicalDetailsMapper = new TechnicalDetailsMapper();
+            DeliveryInformationMapper deliveryInformationMapper = new DeliveryInformationMapper();
+            ContainerDimensionsMapper containerDimensionsMapper = new ContainerDimensionsMapper();
+            MaterialMapper materialMapper = new MaterialMapper();
+            String jsonKey = String.valueOf(UuidGenerator.get64MostSignificantBitsForVersion1());
+            String jsonStartingString = "{\"records\":[{\"key\":";
+            String jsonStringValue = ",\"value\":";
+            String jsonEndString = "}]}";
+        
+            JsonObject shipment = (JsonObject) JsonParser.parseString(message);
+            identifiersMapping.mapIdentifiers(createShipmentRepository, shipment, bmwMapping);
+            contactInformationMapping.mapContactInfo(createShipmentRepository, shipment, bmwMapping);
+            currentLocationInfoMapper.mapCurrLocInfo(shipment, bmwMapping);
             bmwMapping.setTransportationNetwork("SHIP");
             bmwMapping.setMainTransportMode("SEA");
-            transportLegMapper.mapTransportLegInfos(message, bmwMapping);
-            containerDimensionsMapper.mapContainerDimensions(message, bmwMapping);
-            materialMapper.mapMaterial(message, bmwMapping);
+            transportLegMapper.mapTransportLegInfos(shipment, bmwMapping);
+            containerDimensionsMapper.mapContainerDimensions(createShipmentRepository, shipment, bmwMapping);
+            materialMapper.mapMaterial(createShipmentRepository, shipment, bmwMapping);
             technicalDetailsMapper.mapTechnicalDetails(jsonKey, bmwMapping);
-            deliveryInformationMapper.mapDeliveryInformation(message, bmwMapping);
+            deliveryInformationMapper.mapDeliveryInformation(shipment, bmwMapping);
             String bmwJson = jsonStartingString + jsonKey + jsonStringValue + new Gson().toJson(bmwMapping) + jsonEndString;
             this.producer.writeBMWMessage(jsonKey, bmwJson);
             HttpHeaders headers = new HttpHeaders();
