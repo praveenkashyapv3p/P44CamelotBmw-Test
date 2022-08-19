@@ -67,12 +67,12 @@ public class ConfigOAuth2 extends AuthorizationServerConfigurerAdapter {
         clients.inMemory()
                 .withClient("p44Prod").secret(passwordEncoder.encode("$2a$12$w42qnoiKWqs6PA3urxohX"))
                 .scopes("read").authorizedGrantTypes("client_credentials")
-//                .and()
-//                .withClient("bmwTest").secret(passwordEncoder.encode("$2a$12$pqzt83QlYx2eCIbGjyK9f"))
-//                .scopes("read").authorizedGrantTypes("client_credentials")
                 .and()
-                .withClient("bmwProd").secret(passwordEncoder.encode("$2a$12$TkvSnNaV4unYMCYJrwXbT"))
+                .withClient("bmwTest").secret(passwordEncoder.encode("$2a$12$pqzt83QlYx2eCIbGjyK9f"))
                 .scopes("read").authorizedGrantTypes("client_credentials")
+//                .and()
+//                .withClient("bmwProd").secret(passwordEncoder.encode("$2a$12$TkvSnNaV4unYMCYJrwXbT"))
+//                .scopes("read").authorizedGrantTypes("client_credentials")
                 .accessTokenValiditySeconds(2000).refreshTokenValiditySeconds(20000);
     }
     
