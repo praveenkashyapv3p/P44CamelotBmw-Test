@@ -3,7 +3,7 @@ package com.camelot.p44camelotbmw.db;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collation = "createShipment")
+@Document(collection = "createShipment")
 public class CreateShipment {
     @Id
     public String id;

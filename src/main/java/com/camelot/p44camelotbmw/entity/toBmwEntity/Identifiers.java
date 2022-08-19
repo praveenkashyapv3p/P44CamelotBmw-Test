@@ -6,21 +6,27 @@ import com.google.gson.annotations.SerializedName;
 
 public class Identifiers {
     
-    @SerializedName("internalP44Identifier")
+    @SerializedName("p44InternalContainerId")
     @Expose
     private String internalP44Identifier;
-    @SerializedName("containerID")
+    @SerializedName("containerId")
     @Expose
     private String containerID;
-    @SerializedName("bmwShipmentID")
+    @SerializedName("bmwShipmentId")
     @Expose
     private String bmwShipmentID;
-    @SerializedName("bookingNumberBOL")
+    @SerializedName("bookingNumberBol")
     @Expose
     private String bookingNumberBOL;
     @SerializedName("vesselName")
     @Expose
     private String vesselName;
+    @SerializedName("bmwBusinessUnit")
+    @Expose
+    private String bmwBusinessUnit;
+    @SerializedName("correlationId")
+    @Expose
+    private String correlationId;
     
     public String getInternalP44Identifier() {
         return internalP44Identifier;
@@ -62,6 +68,22 @@ public class Identifiers {
         this.vesselName = vesselName;
     }
     
+    public String getBmwBusinessUnit() {
+        return bmwBusinessUnit;
+    }
+    
+    public void setBmwBusinessUnit(String bmwBusinessUnit) {
+        this.bmwBusinessUnit = bmwBusinessUnit;
+    }
+    
+    public String getCorrelationId() {
+        return correlationId;
+    }
+    
+    public void setCorrelationId(String correlationId) {
+        this.correlationId = correlationId;
+    }
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -85,6 +107,14 @@ public class Identifiers {
         sb.append("vesselName");
         sb.append('=');
         sb.append(((this.vesselName == null) ? "<null>" : this.vesselName));
+        sb.append(',');
+        sb.append("bmwBusinessUnit");
+        sb.append('=');
+        sb.append(((this.bmwBusinessUnit == null) ? "<null>" : this.bmwBusinessUnit));
+        sb.append(',');
+        sb.append("correlationId");
+        sb.append('=');
+        sb.append(((this.correlationId == null) ? "<null>" : this.correlationId));
         sb.append(',');
         if (sb.charAt((sb.length() - 1)) == ',') {
             sb.setCharAt((sb.length() - 1), ']');

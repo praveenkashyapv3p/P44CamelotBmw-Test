@@ -14,34 +14,34 @@ public class TransportLegInfo {
     @SerializedName("pointOfLoading")
     @Expose
     private PointOfLoading pointOfLoading;
-    @SerializedName("TransportLeg1")
+    @SerializedName("leg1")
     @Expose
     private TransportLeg1 transportLeg1 = null;
-    @SerializedName("TransportLeg2")
+    @SerializedName("leg2")
     @Expose
     private TransportLeg2 transportLeg2 = null;
-    @SerializedName("TransportLeg3")
+    @SerializedName("leg3")
     @Expose
     private TransportLeg3 transportLeg3 = null;
-    @SerializedName("TransportLeg4")
+    @SerializedName("leg4")
     @Expose
     private TransportLeg4 transportLeg4 = null;
-    @SerializedName("TransportLeg5")
+    @SerializedName("leg5")
     @Expose
     private TransportLeg5 transportLeg5 = null;
-    @SerializedName("TransportLeg6")
+    @SerializedName("leg6")
     @Expose
     private TransportLeg6 transportLeg6 = null;
-    @SerializedName("TransportLeg7")
+    @SerializedName("leg7")
     @Expose
     private TransportLeg7 transportLeg7 = null;
-    @SerializedName("TransportLeg8")
+    @SerializedName("leg8")
     @Expose
     private TransportLeg8 transportLeg8 = null;
-    @SerializedName("TransportLeg9")
+    @SerializedName("leg9")
     @Expose
     private TransportLeg9 transportLeg9 = null;
-    @SerializedName("TransportLeg10")
+    @SerializedName("leg10")
     @Expose
     private TransportLeg10 transportLeg10 = null;
     @SerializedName("pointOfDelivery")

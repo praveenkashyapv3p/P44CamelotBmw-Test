@@ -12,19 +12,19 @@ public class DeliveryInformations {
     @SerializedName("planDeliveryDate")
     @Expose
     private String planDeliveryDate;
-    @SerializedName("etaDateTimeUTC")
+    @SerializedName("etaDateTimeUtc")
     @Expose
     private String etaDateTimeUTC;
-    @SerializedName("etaDateRoutePartUTC")
+    @SerializedName("etaDateRoutePartUtc")
     @Expose
     private String etaDateRoutePartUTC;
     @SerializedName("etdDateNextRoutePart")
     @Expose
     private String etdDateNextRoutePart;
-    @SerializedName("eventCreationDateTimeUTC")
+    @SerializedName("eventCreationDateTimeUtc")
     @Expose
     private String eventCreationDateTimeUTC;
-    @SerializedName("eventSendingDateTimeUTC")
+    @SerializedName("eventSendingDateTimeUtc")
     @Expose
     private String eventSendingDateTimeUTC;
     

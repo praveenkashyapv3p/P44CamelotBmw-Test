@@ -126,7 +126,7 @@
             </resources>
           </deployment>
           <deploymentSlot>
-            <name>test</name>
+            <name>dev</name>
             <configurationSource>api-camelot-itlab</configurationSource>
           </deploymentSlot>
         </configuration>

@@ -6,10 +6,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class ContainerDimensions {
     
-    @SerializedName("totalWeightKGS")
+    @SerializedName("totalWeight")
     @Expose
     private String totalWeightKGS;
-    @SerializedName("totalVolumeCBM")
+    @SerializedName("totalVolume")
     @Expose
     private String totalVolumeCBM;
     

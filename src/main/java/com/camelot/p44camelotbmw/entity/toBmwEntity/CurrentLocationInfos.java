@@ -11,10 +11,10 @@ public class CurrentLocationInfos {
     @SerializedName("latitude")
     @Expose
     private String latitude;
-    @SerializedName("geoDateTimeUTC")
+    @SerializedName("geoDateTimeUtc")
     @Expose
     private String geoDateTimeUTC;
-    @SerializedName("locationID")
+    @SerializedName("locationId")
     @Expose
     private String locationID;
     @SerializedName("locationName")
@@ -26,7 +26,7 @@ public class CurrentLocationInfos {
     @SerializedName("statusName")
     @Expose
     private String statusName;
-    @SerializedName("timeStamps")
+    @SerializedName("timeStamp")
     @Expose
     private String timeStamps;
     

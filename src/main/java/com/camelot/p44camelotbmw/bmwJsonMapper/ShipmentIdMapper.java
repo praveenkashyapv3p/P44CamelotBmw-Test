@@ -33,10 +33,10 @@ public class ShipmentIdMapper {
             JsonArray stops = (JsonArray) routeInfo.getAsJsonObject().get("stops");
             for (JsonElement stp : stops) {
                 originDest = stp.getAsJsonObject().get("type").getAsString();
-                if (originDest.equals("ORIGIN")) {
+                if (originDest.equalsIgnoreCase("ORIGIN")) {
                     origin = stp.getAsJsonObject().get("id").getAsString();
                 }
-                if (originDest.equals("DESTINATION")) {
+                if (originDest.equalsIgnoreCase("DESTINATION")) {
                     destination = stp.getAsJsonObject().get("id").getAsString();
                 }
             }

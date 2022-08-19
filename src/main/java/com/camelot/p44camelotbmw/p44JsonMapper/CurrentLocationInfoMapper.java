@@ -52,7 +52,7 @@ public class CurrentLocationInfoMapper {
             
                 currentLocationInfos.setStatusName(statusName);
             
-                if (!statusName.equals("IN_TRANSIT")) {
+                if (!statusName.equalsIgnoreCase("IN_TRANSIT")) {
                     locationName = position.getAsJsonObject().get("location").getAsJsonObject().get("name").getAsString();
                     JsonElement relShipIdentifiers = position.getAsJsonObject().get("location").getAsJsonObject().get("identifiers");
                     for (JsonElement relShipIdent : relShipIdentifiers.getAsJsonArray()) {

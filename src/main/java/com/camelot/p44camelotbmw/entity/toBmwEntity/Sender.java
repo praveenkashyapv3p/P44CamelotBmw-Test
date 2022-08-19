@@ -6,10 +6,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class Sender {
     
-    @SerializedName("senderID")
+    @SerializedName("senderId")
     @Expose
     private String senderID;
-    @SerializedName("name")
+    @SerializedName("senderName")
     @Expose
     private String name;
     

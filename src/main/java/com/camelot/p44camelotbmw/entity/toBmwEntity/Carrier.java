@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class Carrier {
     
-    @SerializedName("carrierID")
+    @SerializedName("carrierId")
     @Expose
     private String carrierID;
     @SerializedName("carrierName")

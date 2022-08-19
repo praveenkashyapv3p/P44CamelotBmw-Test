@@ -37,7 +37,7 @@ public class SendEventController {
             JsonObject ShipJSON = (JsonObject) JsonParser.parseString(shipmentJson);
             JsonArray events = (JsonArray) ShipJSON.get("events");
             for (JsonElement eventsTyp : events) {
-                if (eventsTyp.getAsJsonObject().get("type").getAsString().equals("TRACKING_START") || eventsTyp.getAsJsonObject().get("type").getAsString().equals("UNKNOWN")) {
+                if (eventsTyp.getAsJsonObject().get("type").getAsString().equalsIgnoreCase("TRACKING_START") || eventsTyp.getAsJsonObject().get("type").getAsString().equals("UNKNOWN")) {
                     trackingJson = true;
                 }
             }

@@ -9,13 +9,13 @@ import java.util.List;
 
 public class BMWMapping {
     
-    @SerializedName("identifiers")
+    @SerializedName("identifier")
     @Expose
     private Identifiers identifiers;
     @SerializedName("contactInformation")
     @Expose
     private List<ContactInformation> contactInformation = null;
-    @SerializedName("currentLocationInfos")
+    @SerializedName("currentLocationInfo")
     @Expose
     private CurrentLocationInfos currentLocationInfos;
     @SerializedName("transportationNetwork")
@@ -24,21 +24,27 @@ public class BMWMapping {
     @SerializedName("mainTransportMode")
     @Expose
     private String mainTransportMode;
-    @SerializedName("deliveryInformations")
+    @SerializedName("deliveryInformation")
     @Expose
     private DeliveryInformations deliveryInformations;
     @SerializedName("transportLegInfos")
     @Expose
     private List<TransportLegInfo> transportLegInfos = null;
-    @SerializedName("containerDimensions")
+    @SerializedName("containerDimension")
     @Expose
     private ContainerDimensions containerDimensions;
     @SerializedName("materials")
     @Expose
     private List<JsonArray> materials = null;
-    @SerializedName("technicalDetails")
+    @SerializedName("lifecycleStatus")
     @Expose
-    private List<TechnicalDetail> technicalDetails = null;
+    private String lifecycleStatus;
+    @SerializedName("lifecycleStatusVerbose")
+    @Expose
+    private String lifecycleStatusVerbose;
+//    @SerializedName("technicalDetails")
+//    @Expose
+//    private List<TechnicalDetail> technicalDetails = null;
     
     public Identifiers getIdentifiers() {
         return identifiers;
@@ -112,13 +118,29 @@ public class BMWMapping {
         this.materials = materials;
     }
     
-    public List<TechnicalDetail> getTechnicalDetails() {
-        return technicalDetails;
+    public String getLifecycleStatus() {
+        return lifecycleStatus;
     }
     
-    public void setTechnicalDetails(List<TechnicalDetail> technicalDetails) {
-        this.technicalDetails = technicalDetails;
+    public void setLifecycleStatus(String lifecycleStatus) {
+        this.lifecycleStatus = lifecycleStatus;
     }
+    
+    public String getLifecycleStatusVerbose() {
+        return lifecycleStatusVerbose;
+    }
+    
+    public void setLifecycleStatusVerbose(String lifecycleStatusVerbose) {
+        this.lifecycleStatusVerbose = lifecycleStatusVerbose;
+    }
+
+//    public List<TechnicalDetail> getTechnicalDetails() {
+//        return technicalDetails;
+//    }
+//
+//    public void setTechnicalDetails(List<TechnicalDetail> technicalDetails) {
+//        this.technicalDetails = technicalDetails;
+//    }
     
     @Override
     public String toString() {
@@ -160,9 +182,13 @@ public class BMWMapping {
         sb.append('=');
         sb.append(((this.materials == null) ? "<null>" : this.materials));
         sb.append(',');
-        sb.append("technicalDetails");
+        sb.append("lifecycleStatus");
         sb.append('=');
-        sb.append(((this.technicalDetails == null) ? "<null>" : this.technicalDetails));
+        sb.append(((this.lifecycleStatus == null) ? "<null>" : this.lifecycleStatus));
+        sb.append(',');
+        sb.append("lifecycleStatusVerbose");
+        sb.append('=');
+        sb.append(((this.lifecycleStatusVerbose == null) ? "<null>" : this.lifecycleStatusVerbose));
         sb.append(',');
         if (sb.charAt((sb.length() - 1)) == ',') {
             sb.setCharAt((sb.length() - 1), ']');

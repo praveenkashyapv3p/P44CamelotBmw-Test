@@ -21,7 +21,6 @@ public class CarrierMapping {
                 put("19403410", "CMDU");
                 put("98924710", "DAYU");
                 put("49705710", "HDMU");
-                put("21670710", "?");
             }
         };
     }

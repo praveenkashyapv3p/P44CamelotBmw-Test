@@ -19,6 +19,8 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
+
 @Service
 public class KafkaConsumerP44 {
     
@@ -44,7 +46,6 @@ public class KafkaConsumerP44 {
             ContactInformationMapper contactInformationMapping = new ContactInformationMapper();
             CurrentLocationInfoMapper currentLocationInfoMapper = new CurrentLocationInfoMapper();
             TransportLegMapper transportLegMapper = new TransportLegMapper();
-            TechnicalDetailsMapper technicalDetailsMapper = new TechnicalDetailsMapper();
             DeliveryInformationMapper deliveryInformationMapper = new DeliveryInformationMapper();
             ContainerDimensionsMapper containerDimensionsMapper = new ContainerDimensionsMapper();
             MaterialMapper materialMapper = new MaterialMapper();
@@ -52,9 +53,9 @@ public class KafkaConsumerP44 {
             String jsonStartingString = "{\"records\":[{\"key\":";
             String jsonStringValue = ",\"value\":";
             String jsonEndString = "}]}";
-        
+    
             JsonObject shipment = (JsonObject) JsonParser.parseString(message);
-            identifiersMapping.mapIdentifiers(createShipmentRepository, shipment, bmwMapping);
+            identifiersMapping.mapIdentifiers(createShipmentRepository, jsonKey, shipment, bmwMapping);
             contactInformationMapping.mapContactInfo(createShipmentRepository, shipment, bmwMapping);
             currentLocationInfoMapper.mapCurrLocInfo(shipment, bmwMapping);
             bmwMapping.setTransportationNetwork("SHIP");
@@ -62,9 +63,22 @@ public class KafkaConsumerP44 {
             transportLegMapper.mapTransportLegInfos(shipment, bmwMapping);
             containerDimensionsMapper.mapContainerDimensions(createShipmentRepository, shipment, bmwMapping);
             materialMapper.mapMaterial(createShipmentRepository, shipment, bmwMapping);
-            technicalDetailsMapper.mapTechnicalDetails(jsonKey, bmwMapping);
+            bmwMapping.setLifecycleStatus("");
+            bmwMapping.setLifecycleStatusVerbose("");
+            // technicalDetailsMapper.mapTechnicalDetails(jsonKey, bmwMapping);
             deliveryInformationMapper.mapDeliveryInformation(shipment, bmwMapping);
             String bmwJson = jsonStartingString + jsonKey + jsonStringValue + new Gson().toJson(bmwMapping) + jsonEndString;
+            String containerID = bmwMapping.getIdentifiers().getContainerID();
+            /*Temporary tracing of containers for Data validation*/
+            if ((Arrays.asList(
+                    "GAOU6076128", "BSIU9639751", "TRHU5337518", "MRSU3849066", "MRKU3692924", "TRHU7195840", "EGHU8487330",
+                    "MRSU4700966", "UETU5615695", "SUDU5493296", "MSKU0166189", "MSDU8759550", "MSMU6905667", "DRYU9607220",
+                    "BEAU5422048", "CBHU8932857", "TCKU6677710", "FCIU9157330", "HLBU3174042"
+            )).contains(containerID)) {
+                logger.traceEntry(bmwJson);
+            }
+            /*Delete above code after Temporary tracing of containers for Data validation is complete*/
+    
             this.producer.writeBMWMessage(jsonKey, bmwJson);
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
