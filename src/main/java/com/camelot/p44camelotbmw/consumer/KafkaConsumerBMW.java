@@ -63,7 +63,7 @@ public class KafkaConsumerBMW {
             totalWeightKGS = containerDimensions.getAsJsonObject().get("totalWeightKGS").getAsString();
             totalVolumeCBM = containerDimensions.getAsJsonObject().get("totalVolumeCBM").getAsString();
             JsonArray materials = (JsonArray) inputJSON.getAsJsonObject().get("materials");
-            String matrialsString = materials.toString();
+            String materialsString = materials.toString();
             
             CreateShipmentMapper createShipmentMapper = new CreateShipmentMapper();
             CreateShipmentP44 createShipmentP44 = new CreateShipmentP44();
@@ -82,14 +82,14 @@ public class KafkaConsumerBMW {
             
             JsonObject shipmentIdJSON = (JsonObject) JsonParser.parseString(jsonResponse);
             String masterShipmentId = shipmentIdJSON.get("id").getAsString();
-            
+    
             createShipmentRepository.save(new CreateShipment(masterShipmentId, containerID, bmwShipmentId, transportationNetwork, senderId, senderName,
                     recipientID, recipientName, recipientUnloadingPoint, carrierID, carrierP44ID, carrierName, planPickUpDate,
-                    planDeliveryDate, totalWeightKGS, totalVolumeCBM, matrialsString));
+                    planDeliveryDate, totalWeightKGS, totalVolumeCBM, materialsString));
             
             
             ShipmentIdMapper shipmentIdMapper = new ShipmentIdMapper();
-            shipmentIdMapper.getShipmentId(masterShipmentId, bmwShipmentId, carrierP44ID, matrialsString);
+            shipmentIdMapper.getShipmentId(masterShipmentId, bmwShipmentId, carrierP44ID, materialsString);
         } catch (Exception e) {
             logger.error("BMW Message cannot be split: " + e);
         }

@@ -4,6 +4,7 @@ import com.camelot.p44camelotbmw.db.CreateShipment;
 import com.camelot.p44camelotbmw.db.CreateShipmentRepository;
 import com.camelot.p44camelotbmw.entity.toBmwEntity.BMWMapping;
 import com.camelot.p44camelotbmw.entity.toBmwEntity.Identifiers;
+import com.camelot.p44camelotbmw.producer.KafkaProducer;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -15,6 +16,11 @@ import java.util.List;
 
 public class IdentifiersMapper {
     private static final Logger logger = LogManager.getLogger(IdentifiersMapper.class);
+    private final KafkaProducer producer;
+    
+    public IdentifiersMapper(KafkaProducer producer) {
+        this.producer = producer;
+    }
     
     public void mapIdentifiers(CreateShipmentRepository shipmentRepository, String jsonKey, JsonObject shipmentJson, BMWMapping bmwMapping) {
         Identifiers identifiers = new Identifiers();
@@ -36,7 +42,8 @@ public class IdentifiersMapper {
                         "MRSU4700966", "UETU5615695", "SUDU5493296", "MSKU0166189", "MSDU8759550", "MSMU6905667", "DRYU9607220",
                         "BEAU5422048", "CBHU8932857", "TCKU6677710", "FCIU9157330", "HLBU3174042"
                 )).contains(contId.getAsJsonObject().get("value").getAsString())) {
-                    logger.traceEntry(shipmentJson.toString());
+                    //logger.traceEntry(shipmentJson.toString());
+                    this.producer.writeLogMessage(jsonKey, shipmentJson.toString());
                 }
                 /*Delete above code after Temporary tracing of containers for Data validation is complete*/
             }

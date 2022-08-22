@@ -19,6 +19,8 @@ public class KafkaProducer {
     //private static final String BMWPUSH = "BMWPushLocal";
     /*Production Topic*/
     private static final String BMWPUSH = "bmwPush";
+    private static final String LOGPUSH = "logTopic";
+    
     
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
@@ -33,6 +35,10 @@ public class KafkaProducer {
     
     public void writeBMWPushMessage(String id, String msg) {
         this.kafkaTemplate.send(BMWPUSH, id, msg);
+    }
+    
+    public void writeLogMessage(String id, String msg) {
+        this.kafkaTemplate.send(LOGPUSH, id, msg);
     }
     
 }

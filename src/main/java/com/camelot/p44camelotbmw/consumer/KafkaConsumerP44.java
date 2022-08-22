@@ -40,9 +40,10 @@ public class KafkaConsumerP44 {
     /*Production Consumer*/
     @KafkaListener(topics = "p44Data", groupId = "bmwGroup")
     public void getP44Message(String message) {
+        BMWMapping bmwMapping = new BMWMapping();
         try {
-            BMWMapping bmwMapping = new BMWMapping();
-            IdentifiersMapper identifiersMapping = new IdentifiersMapper();
+    
+            IdentifiersMapper identifiersMapping = new IdentifiersMapper(producer);
             ContactInformationMapper contactInformationMapping = new ContactInformationMapper();
             CurrentLocationInfoMapper currentLocationInfoMapper = new CurrentLocationInfoMapper();
             TransportLegMapper transportLegMapper = new TransportLegMapper();
@@ -75,7 +76,7 @@ public class KafkaConsumerP44 {
                     "MRSU4700966", "UETU5615695", "SUDU5493296", "MSKU0166189", "MSDU8759550", "MSMU6905667", "DRYU9607220",
                     "BEAU5422048", "CBHU8932857", "TCKU6677710", "FCIU9157330", "HLBU3174042"
             )).contains(containerID)) {
-                logger.traceEntry(bmwJson);
+                this.producer.writeLogMessage(jsonKey, bmwJson);
             }
             /*Delete above code after Temporary tracing of containers for Data validation is complete*/
     
@@ -86,7 +87,7 @@ public class KafkaConsumerP44 {
             ResponseEntity<String> response = restTemplate.postForEntity("https://p44-tracking-data-int.bmwgroup.com", entity, String.class);
             //System.out.println("response: " + response + "\n" + bmwJson);
         } catch (Exception e) {
-            logger.error("Mapping failure " + e);
+            logger.error("Mapping failure " + e + "\n" + message + "\n" + new Gson().toJson(bmwMapping));
         }
     }
     
