@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -98,7 +99,7 @@ public class KafkaConsumerP44 {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<String> entity = new HttpEntity<>(bmwJson, headers);
-            //ResponseEntity<String> response = restTemplate.postForEntity("https://p44-tracking-data-dev.bmwgroup.com", entity, String.class);
+            ResponseEntity<String> response = restTemplate.postForEntity("https://p44-tracking-data-dev.bmwgroup.com", entity, String.class);
             //System.out.println("response: " + /*response + "\n" +*/ bmwJson);
         } catch (Exception e) {
             logger.error("Mapping failure " + e + "\n" + message + "\n" + new Gson().toJson(bmwMapping));
