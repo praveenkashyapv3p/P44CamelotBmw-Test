@@ -2,10 +2,13 @@ package com.camelot.p44camelotbmw.consumer;
 
 import com.camelot.p44camelotbmw.constants.UuidGenerator;
 import com.camelot.p44camelotbmw.db.CreateShipmentRepository;
+import com.camelot.p44camelotbmw.db.RecipientPlantCodeRepository;
+import com.camelot.p44camelotbmw.db.SenderPlantCodeRepository;
 import com.camelot.p44camelotbmw.entity.toBmwEntity.BMWMapping;
 import com.camelot.p44camelotbmw.p44JsonMapper.*;
 import com.camelot.p44camelotbmw.producer.KafkaProducer;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.apache.logging.log4j.LogManager;
@@ -14,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -28,6 +30,12 @@ public class KafkaConsumerP44 {
     private final KafkaProducer producer;
     @Autowired
     CreateShipmentRepository createShipmentRepository;
+    
+    @Autowired
+    SenderPlantCodeRepository senderPlantCodeRepository;
+    
+    @Autowired
+    RecipientPlantCodeRepository recipientPlantCodeRepository;
     @Autowired
     private RestTemplate restTemplate;
     
@@ -56,7 +64,7 @@ public class KafkaConsumerP44 {
             String jsonEndString = "}]}";
     
             JsonObject shipment = (JsonObject) JsonParser.parseString(message);
-            identifiersMapping.mapIdentifiers(createShipmentRepository, jsonKey, shipment, bmwMapping);
+            identifiersMapping.mapIdentifiers(createShipmentRepository, senderPlantCodeRepository, recipientPlantCodeRepository, jsonKey, shipment, bmwMapping);
             contactInformationMapping.mapContactInfo(createShipmentRepository, shipment, bmwMapping);
             currentLocationInfoMapper.mapCurrLocInfo(shipment, bmwMapping);
             bmwMapping.setTransportationNetwork("SHIP");
@@ -65,10 +73,16 @@ public class KafkaConsumerP44 {
             containerDimensionsMapper.mapContainerDimensions(createShipmentRepository, shipment, bmwMapping);
             materialMapper.mapMaterial(createShipmentRepository, shipment, bmwMapping);
             bmwMapping.setLifecycleStatus("");
-            bmwMapping.setLifecycleStatusVerbose("");
+    
             // technicalDetailsMapper.mapTechnicalDetails(jsonKey, bmwMapping);
-            deliveryInformationMapper.mapDeliveryInformation(shipment, bmwMapping);
-            String bmwJson = jsonStartingString + jsonKey + jsonStringValue + new Gson().toJson(bmwMapping) + jsonEndString;
+            deliveryInformationMapper.mapDeliveryInformation(createShipmentRepository, shipment, bmwMapping);
+    
+            Gson gson = new GsonBuilder()
+                    .setPrettyPrinting()
+                    .disableHtmlEscaping()
+                    .create();
+            //System.out.println(gson.toJson(bmwMapping));
+            String bmwJson = jsonStartingString + jsonKey + jsonStringValue + gson.toJson(bmwMapping) + jsonEndString;
             String containerID = bmwMapping.getIdentifiers().getContainerID();
             /*Temporary tracing of containers for Data validation*/
             if ((Arrays.asList(
@@ -84,11 +98,10 @@ public class KafkaConsumerP44 {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<String> entity = new HttpEntity<>(bmwJson, headers);
-            ResponseEntity<String> response = restTemplate.postForEntity("https://p44-tracking-data-int.bmwgroup.com", entity, String.class);
-            //System.out.println("response: " + response + "\n" + bmwJson);
+            //ResponseEntity<String> response = restTemplate.postForEntity("https://p44-tracking-data-dev.bmwgroup.com", entity, String.class);
+            //System.out.println("response: " + /*response + "\n" +*/ bmwJson);
         } catch (Exception e) {
             logger.error("Mapping failure " + e + "\n" + message + "\n" + new Gson().toJson(bmwMapping));
         }
     }
-    
 }

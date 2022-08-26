@@ -11,12 +11,13 @@ public class CreateShipment {
     public String masterShipmentId;
     public String containerId;
     public String bmwShipmentId;
+    public String bookingNumber;
+    public String billOfLading;
     public String transportationNetwork;
     public String senderId;
     public String senderName;
     public String recipientID;
     public String recipientName;
-    public String recipientUnloadingPoint;
     public String carrierID;
     public String carrierP44ID;
     public String carrierName;
@@ -29,16 +30,17 @@ public class CreateShipment {
     public CreateShipment() {
     }
     
-    public CreateShipment(String masterShipmentId, String containerId, String bmwShipmentId, String transportationNetwork, String senderId, String senderName, String recipientID, String recipientName, String recipientUnloadingPoint, String carrierID, String carrierP44ID, String carrierName, String planPickUpDate, String planDeliveryDate, String totalWeightKGS, String totalVolumeCBM, String materials) {
+    public CreateShipment(String masterShipmentId, String containerId, String bmwShipmentId, String bookingNumber, String billOfLading, String transportationNetwork, String senderId, String senderName, String recipientID, String recipientName, String carrierID, String carrierP44ID, String carrierName, String planPickUpDate, String planDeliveryDate, String totalWeightKGS, String totalVolumeCBM, String materials) {
         this.masterShipmentId = masterShipmentId;
         this.containerId = containerId;
         this.bmwShipmentId = bmwShipmentId;
+        this.bookingNumber = bookingNumber;
+        this.billOfLading = billOfLading;
         this.transportationNetwork = transportationNetwork;
         this.senderId = senderId;
         this.senderName = senderName;
         this.recipientID = recipientID;
         this.recipientName = recipientName;
-        this.recipientUnloadingPoint = recipientUnloadingPoint;
         this.carrierID = carrierID;
         this.carrierP44ID = carrierP44ID;
         this.carrierName = carrierName;
@@ -81,6 +83,22 @@ public class CreateShipment {
         this.bmwShipmentId = bmwShipmentId;
     }
     
+    public String getBookingNumber() {
+        return bookingNumber;
+    }
+    
+    public void setBookingNumber(String bookingNumber) {
+        this.bookingNumber = bookingNumber;
+    }
+    
+    public String getBillOfLading() {
+        return billOfLading;
+    }
+    
+    public void setBillOfLading(String billOfLading) {
+        this.billOfLading = billOfLading;
+    }
+    
     public String getTransportationNetwork() {
         return transportationNetwork;
     }
@@ -119,14 +137,6 @@ public class CreateShipment {
     
     public void setRecipientName(String recipientName) {
         this.recipientName = recipientName;
-    }
-    
-    public String getRecipientUnloadingPoint() {
-        return recipientUnloadingPoint;
-    }
-    
-    public void setRecipientUnloadingPoint(String recipientUnloadingPoint) {
-        this.recipientUnloadingPoint = recipientUnloadingPoint;
     }
     
     public String getCarrierID() {
@@ -195,6 +205,6 @@ public class CreateShipment {
     
     @Override
     public String toString() {
-        return "CreateShipment{" + "id='" + id + '\'' + ", masterShipmentId='" + masterShipmentId + '\'' + ", containerId='" + containerId + '\'' + ", bmwShipmentId='" + bmwShipmentId + '\'' + ", transportationNetwork='" + transportationNetwork + '\'' + ", senderId='" + senderId + '\'' + ", senderName='" + senderName + '\'' + ", recipientID='" + recipientID + '\'' + ", recipientName='" + recipientName + '\'' + ", recipientUnloadingPoint='" + recipientUnloadingPoint + '\'' + ", carrierID='" + carrierID + '\'' + ", carrierP44ID='" + carrierP44ID + '\'' + ", carrierName='" + carrierName + '\'' + ", planPickUpDate='" + planPickUpDate + '\'' + ", planDeliveryDate='" + planDeliveryDate + '\'' + ", totalWeightKGS='" + totalWeightKGS + '\'' + ", totalVolumeCBM='" + totalVolumeCBM + '\'' + ", materials='" + materials + '\'' + '}';
+        return "CreateShipment{" + "id='" + id + '\'' + ", masterShipmentId='" + masterShipmentId + '\'' + ", containerId='" + containerId + '\'' + ", bmwShipmentId='" + bmwShipmentId + '\'' + ", bookingNumber='" + bookingNumber + '\'' + ", billOfLading='" + billOfLading + '\'' + ", transportationNetwork='" + transportationNetwork + '\'' + ", senderId='" + senderId + '\'' + ", senderName='" + senderName + '\'' + ", recipientID='" + recipientID + '\'' + ", recipientName='" + recipientName + '\'' + ", carrierID='" + carrierID + '\'' + ", carrierP44ID='" + carrierP44ID + '\'' + ", carrierName='" + carrierName + '\'' + ", planPickUpDate='" + planPickUpDate + '\'' + ", planDeliveryDate='" + planDeliveryDate + '\'' + ", totalWeightKGS='" + totalWeightKGS + '\'' + ", totalVolumeCBM='" + totalVolumeCBM + '\'' + ", materials='" + materials + '\'' + '}';
     }
 }

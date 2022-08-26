@@ -3,8 +3,7 @@ package com.camelot.p44camelotbmw.consumer;
 import com.camelot.p44camelotbmw.bmwJsonMapper.CreateShipmentMapper;
 import com.camelot.p44camelotbmw.bmwJsonMapper.ShipmentIdMapper;
 import com.camelot.p44camelotbmw.constants.CarrierMapping;
-import com.camelot.p44camelotbmw.db.CreateShipment;
-import com.camelot.p44camelotbmw.db.CreateShipmentRepository;
+import com.camelot.p44camelotbmw.db.*;
 import com.camelot.p44camelotbmw.entity.createShipmentEntity.CreateShipmentP44;
 import com.google.gson.*;
 import org.apache.logging.log4j.LogManager;
@@ -18,6 +17,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -27,6 +27,12 @@ public class KafkaConsumerBMW {
     @Autowired
     CreateShipmentRepository createShipmentRepository;
     
+    @Autowired
+    SenderPlantCodeRepository senderPlantCodeRepository;
+    
+    @Autowired
+    RecipientPlantCodeRepository recipientPlantCodeRepository;
+    
     /*Development Consumer*/
     //@KafkaListener(topics = "BMWPushLocal", groupId = "BMWPushLocalGroup")
     /*Production Consumer*/
@@ -34,42 +40,50 @@ public class KafkaConsumerBMW {
     public void getBMWMessage(String message) {
         RestTemplate restTemplate = new RestTemplate();
         CarrierMapping carrierMapping = new CarrierMapping();
-        String bmwShipmentId = "", containerID = "", transportationNetwork = "", carrierID = "", carrierP44ID = "", carrierName = "",
-                senderId = "", senderName = "", recipientID = "", recipientName = "", recipientUnloadingPoint = "", planPickUpDate = "",
-                planDeliveryDate = "", totalWeightKGS = "", totalVolumeCBM = "";
+        String bmwShipmentId = "", containerID = "", transportationNetwork = "", carrierID = "", carrierP44ID = "", carrierName = "", senderId = "", senderName = "", recipientID = "", recipientName = "", planPickUpDate = "", planDeliveryDate = "", totalWeightKGS = "", totalVolumeCBM = "", bookingNumber = "", billOfLading = "";
+        List<SenderPlantCode> senderPlantCodeList;
+        List<RecipientPlantCode> recipientPlantCodeList;
         try {
             
             JsonObject inputJSON = (JsonObject) JsonParser.parseString(message);
-            JsonElement identifiers = inputJSON.getAsJsonObject().get("identifiers");
-            containerID = identifiers.getAsJsonObject().get("containerID").getAsString();
-            bmwShipmentId = identifiers.getAsJsonObject().get("shipmentID").getAsString();
+            JsonElement identifiers = inputJSON.getAsJsonObject().get("identifier");
+            containerID = identifiers.getAsJsonObject().get("containerId").getAsString();
+            bmwShipmentId = identifiers.getAsJsonObject().get("shipmentId").getAsString();
+            bookingNumber = identifiers.getAsJsonObject().get("bookingNumber").getAsString();
+            billOfLading = identifiers.getAsJsonObject().get("billOfLading").getAsString();
             transportationNetwork = inputJSON.getAsJsonObject().get("transportationNetwork").getAsString();
-            JsonArray contactInfo = (JsonArray) inputJSON.getAsJsonObject().get("contactInformation");
-            for (JsonElement contact : contactInfo) {
-                senderId = contact.getAsJsonObject().get("sender").getAsJsonObject().get("senderID").getAsString();
-                senderName = contact.getAsJsonObject().get("sender").getAsJsonObject().get("senderName").getAsString();
-                recipientID = contact.getAsJsonObject().get("recipient").getAsJsonObject().get("recipientID").getAsString();
-                recipientName = contact.getAsJsonObject().get("recipient").getAsJsonObject().get("recipientName").getAsString();
-                recipientUnloadingPoint = contact.getAsJsonObject().get("recipient").getAsJsonObject().get("recipientUnloadingPoint").getAsString();
-                carrierID = contact.getAsJsonObject().get("carrier").getAsJsonObject().get("carrierID").getAsString();
-                Map<String, String> stCod = carrierMapping.getCarrierId();
-                carrierP44ID = stCod.get(carrierID);
-                carrierName = contact.getAsJsonObject().get("carrier").getAsJsonObject().get("carrierName").getAsString();
+            JsonElement contactInfo = inputJSON.getAsJsonObject().get("contactInformation");
+            
+            senderId = contactInfo.getAsJsonObject().get("sender").getAsJsonObject().get("senderId").getAsString();
+            senderName = contactInfo.getAsJsonObject().get("sender").getAsJsonObject().get("senderName").getAsString();
+            senderPlantCodeList = senderPlantCodeRepository.findByPackingPlantCodeAndPackingPlantName(senderId, senderName);
+            for (SenderPlantCode senderPlantCodeFromDB : senderPlantCodeList) {
+                senderName = senderPlantCodeFromDB.getP44DisplayPackingPlant();
             }
-            JsonElement deliveryInformations = inputJSON.getAsJsonObject().get("deliveryInformations");
-            planPickUpDate = deliveryInformations.getAsJsonObject().get("planPickUpDate").getAsString();
-            planDeliveryDate = deliveryInformations.getAsJsonObject().get("planDeliveryDate").getAsString();
-            JsonElement containerDimensions = inputJSON.getAsJsonObject().get("containerDimensions");
-            totalWeightKGS = containerDimensions.getAsJsonObject().get("totalWeightKGS").getAsString();
-            totalVolumeCBM = containerDimensions.getAsJsonObject().get("totalVolumeCBM").getAsString();
+            recipientID = contactInfo.getAsJsonObject().get("recipient").getAsJsonObject().get("recipientId").getAsString();
+            recipientName = contactInfo.getAsJsonObject().get("recipient").getAsJsonObject().get("recipientName").getAsString();
+            recipientPlantCodeList = recipientPlantCodeRepository.findByPlantCodeAndPlantDescription(recipientID, recipientName);
+            for (RecipientPlantCode recipientPlantCodeFromDB : recipientPlantCodeList) {
+                recipientName = recipientPlantCodeFromDB.getP44DisplayPlant();
+            }
+            carrierID = contactInfo.getAsJsonObject().get("carrier").getAsJsonObject().get("carrierId").getAsString();
+            Map<String, String> stCod = carrierMapping.getCarrierId();
+            carrierP44ID = stCod.get(carrierID);
+            carrierName = contactInfo.getAsJsonObject().get("carrier").getAsJsonObject().get("carrierName").getAsString();
+            
+            
+            JsonElement deliveryInformation = inputJSON.getAsJsonObject().get("deliveryInformation");
+            planPickUpDate = deliveryInformation.getAsJsonObject().get("planPickUpDate").getAsString();
+            planDeliveryDate = deliveryInformation.getAsJsonObject().get("planDeliveryDate").getAsString();
+            JsonElement containerDimensions = inputJSON.getAsJsonObject().get("containerDimension");
+            totalWeightKGS = containerDimensions.getAsJsonObject().get("totalWeight").getAsString();
+            totalVolumeCBM = containerDimensions.getAsJsonObject().get("totalVolume").getAsString();
             JsonArray materials = (JsonArray) inputJSON.getAsJsonObject().get("materials");
             String materialsString = materials.toString();
             
             CreateShipmentMapper createShipmentMapper = new CreateShipmentMapper();
             CreateShipmentP44 createShipmentP44 = new CreateShipmentP44();
-            createShipmentP44 = createShipmentMapper.mapCreateShipment(createShipmentP44, containerID, bmwShipmentId, senderId, senderName,
-                    recipientID, recipientName, recipientUnloadingPoint, carrierP44ID, planPickUpDate,
-                    planDeliveryDate, totalWeightKGS, totalVolumeCBM);
+            createShipmentP44 = createShipmentMapper.mapCreateShipment(createShipmentP44, containerID, bmwShipmentId, bookingNumber, billOfLading, senderId, senderName, recipientID, recipientName, carrierP44ID, planPickUpDate, planDeliveryDate, totalWeightKGS, totalVolumeCBM);
             Gson gson = new Gson();
             String requestBody = gson.toJson(createShipmentP44);
             System.out.println(requestBody);
@@ -82,10 +96,8 @@ public class KafkaConsumerBMW {
             
             JsonObject shipmentIdJSON = (JsonObject) JsonParser.parseString(jsonResponse);
             String masterShipmentId = shipmentIdJSON.get("id").getAsString();
-    
-            createShipmentRepository.save(new CreateShipment(masterShipmentId, containerID, bmwShipmentId, transportationNetwork, senderId, senderName,
-                    recipientID, recipientName, recipientUnloadingPoint, carrierID, carrierP44ID, carrierName, planPickUpDate,
-                    planDeliveryDate, totalWeightKGS, totalVolumeCBM, materialsString));
+            
+            createShipmentRepository.save(new CreateShipment(masterShipmentId, containerID, bmwShipmentId, bookingNumber, billOfLading, transportationNetwork, senderId, senderName, recipientID, recipientName, carrierID, carrierP44ID, carrierName, planPickUpDate, planDeliveryDate, totalWeightKGS, totalVolumeCBM, materialsString));
             
             
             ShipmentIdMapper shipmentIdMapper = new ShipmentIdMapper();

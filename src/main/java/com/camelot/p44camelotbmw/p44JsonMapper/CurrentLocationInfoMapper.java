@@ -1,5 +1,6 @@
 package com.camelot.p44camelotbmw.p44JsonMapper;
 
+import com.camelot.p44camelotbmw.constants.LatLngConverter;
 import com.camelot.p44camelotbmw.constants.StatusCodes;
 import com.camelot.p44camelotbmw.entity.toBmwEntity.BMWMapping;
 import com.camelot.p44camelotbmw.entity.toBmwEntity.CurrentLocationInfos;
@@ -35,9 +36,7 @@ public class CurrentLocationInfoMapper {
             latitude = posArray.getAsJsonObject().get("latitude").getAsString();
             geoDateTimeUTC = posArray.getAsJsonObject().get("dateTime").getAsString();
         }
-        currentLocationInfos.setGeoDateTimeUTC(geoDateTimeUTC);
-        currentLocationInfos.setLongitude(longitude);
-        currentLocationInfos.setLatitude(latitude);
+    
     
         for (JsonElement position : stops) {
             assert eventStopId != null;
@@ -49,9 +48,9 @@ public class CurrentLocationInfoMapper {
                 Map<String, String> stCod = statusCodes.getStatusCodes();
                 statusCode = stCod.get(eventsType);
                 currentLocationInfos.setStatusCode(statusCode);
-            
+    
                 currentLocationInfos.setStatusName(statusName);
-            
+    
                 if (!statusName.equalsIgnoreCase("IN_TRANSIT")) {
                     locationName = position.getAsJsonObject().get("location").getAsJsonObject().get("name").getAsString();
                     JsonElement relShipIdentifiers = position.getAsJsonObject().get("location").getAsJsonObject().get("identifiers");
@@ -59,10 +58,34 @@ public class CurrentLocationInfoMapper {
                         locationID = relShipIdent.getAsJsonObject().get("value").getAsString();
                     }
                 }
+                if (statusName.equalsIgnoreCase("AT_STOP")) {
+                    JsonElement relShipIdentifiers = position.getAsJsonObject().get("location").getAsJsonObject().get("coordinates");
+                    for (JsonElement relShipIdent : relShipIdentifiers.getAsJsonArray()) {
+                        latitude = relShipIdent.getAsJsonObject().get("latitude").getAsString();
+                        longitude = relShipIdent.getAsJsonObject().get("longitude").getAsString();
+                        geoDateTimeUTC = timeStamp;
+                    }
+                }
+                currentLocationInfos.setGeoDateTimeUTC(geoDateTimeUTC);
+                if (!longitude.equals("") && !latitude.equals("")) {
+                    LatLngConverter latLngConverter = new LatLngConverter();
+                    float[] coordinates = {Float.parseFloat(longitude), Float.parseFloat(latitude)};
+                    String dmsResult = latLngConverter.processCoordinates(coordinates);
+                    final String coords_txt = coordinates[1] + "," + coordinates[0];
+                    System.out.println(coords_txt + " converted -> " + dmsResult);
+                    String[] coordinatesString = (dmsResult.split(","));
+                    longitude = coordinatesString[0];
+                    latitude = coordinatesString[1];
+                }
+    
+    
+                currentLocationInfos.setLongitude(longitude);
+                currentLocationInfos.setLatitude(latitude);
+    
                 currentLocationInfos.setLocationName(locationName);
-            
+    
                 currentLocationInfos.setLocationID(locationID);
-            
+    
                 currentLocationInfos.setTimeStamps(timeStamp);
             }
         }

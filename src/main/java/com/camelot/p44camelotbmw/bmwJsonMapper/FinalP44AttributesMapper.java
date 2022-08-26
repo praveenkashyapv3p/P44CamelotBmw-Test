@@ -1,6 +1,7 @@
 package com.camelot.p44camelotbmw.bmwJsonMapper;
 
 import com.camelot.p44camelotbmw.consumer.KafkaConsumerBMW;
+import com.camelot.p44camelotbmw.entity.createShipmentEntity.CreateShipmentP44;
 import com.camelot.p44camelotbmw.entity.loadEntity.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -31,31 +32,36 @@ public class FinalP44AttributesMapper {
         DeliveryStopReference deliveryStopReference = new DeliveryStopReference();
         deliveryStopReference.setStopId(destination);
         loadEntity.setDeliveryStopReference(deliveryStopReference);
-        List<Identifier> identifierList = new ArrayList<>();
+    
+        CreateShipmentP44 createShipmentP44 = new CreateShipmentP44();
+    
+    
+        List<Identifier> bmwIdentifiersList = new ArrayList<>();
         Identifier identifierBook = new Identifier();
         identifierBook.setType("BOOKING_NUMBER");
         identifierBook.setValue(bookingNum);
-        identifierList.add(identifierBook);
+        bmwIdentifiersList.add(identifierBook);
         Identifier identifierCarrier = new Identifier();
         identifierCarrier.setType("CARRIER_SCAC");
         identifierCarrier.setValue(carrierId);
-        identifierList.add(identifierCarrier);
-        loadEntity.setIdentifiers(identifierList);
+        bmwIdentifiersList.add(identifierCarrier);
+        loadEntity.setIdentifiers(bmwIdentifiersList);
+    
         loadEntity.setDescription("");
         List<Item> itemList = new ArrayList<>();
-        
+    
         JsonArray materialsJsonArray = JsonParser.parseString(materials).getAsJsonArray();
         for (JsonElement material : materialsJsonArray) {
             Item item = new Item();
             List<OrderIdentifierReference> orderIdentifierReferenceList = new ArrayList<>();
             OrderIdentifierReference orderIdentifierReference = new OrderIdentifierReference();
             orderIdentifierReference.setOrderType("PURCHASE_ORDER");
-            orderIdentifierReference.setOrderIdentifier(material.getAsJsonObject().get("purchaseOrder").getAsString());
+            orderIdentifierReference.setOrderIdentifier(material.getAsJsonObject().get("purchaseOrderNo").getAsString());
             orderIdentifierReferenceList.add(orderIdentifierReference);
             item.setOrderIdentifierReferences(orderIdentifierReferenceList);
             item.setUnitQuantity(material.getAsJsonObject().get("quantity").getAsString());
             item.setUnitType("EACH");
-            item.setDescription(material.getAsJsonObject().get("deliverNoteNumber").getAsString());
+            item.setDescription(material.getAsJsonObject().get("deliveryNumber").getAsString());
             List<Identifier_items> identifierItemsList = new ArrayList<>();
             Identifier_items identifier_items = new Identifier_items();
             identifier_items.setType("STOCK_KEEPING_UNIT");

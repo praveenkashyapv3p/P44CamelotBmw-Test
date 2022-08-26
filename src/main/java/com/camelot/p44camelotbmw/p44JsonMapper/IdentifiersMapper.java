@@ -2,6 +2,8 @@ package com.camelot.p44camelotbmw.p44JsonMapper;
 
 import com.camelot.p44camelotbmw.db.CreateShipment;
 import com.camelot.p44camelotbmw.db.CreateShipmentRepository;
+import com.camelot.p44camelotbmw.db.RecipientPlantCodeRepository;
+import com.camelot.p44camelotbmw.db.SenderPlantCodeRepository;
 import com.camelot.p44camelotbmw.entity.toBmwEntity.BMWMapping;
 import com.camelot.p44camelotbmw.entity.toBmwEntity.Identifiers;
 import com.camelot.p44camelotbmw.producer.KafkaProducer;
@@ -22,9 +24,9 @@ public class IdentifiersMapper {
         this.producer = producer;
     }
     
-    public void mapIdentifiers(CreateShipmentRepository shipmentRepository, String jsonKey, JsonObject shipmentJson, BMWMapping bmwMapping) {
+    public void mapIdentifiers(CreateShipmentRepository shipmentRepository, SenderPlantCodeRepository senderPlantCodeRepository, RecipientPlantCodeRepository recipientPlantCodeRepository, String jsonKey, JsonObject shipmentJson, BMWMapping bmwMapping) {
         Identifiers identifiers = new Identifiers();
-        String internalP44Identifier = "", containerID = "", bmwShipmentID = "", billOfLading = "", bookingNumber = "", bookingNumberBOL = "", vesselName = "";
+        String internalP44Identifier = "", containerID = "", bmwShipmentID = "", billOfLading = "", bookingNumber = "", bookingNumberBOL = "", vesselName = "", bmwBusinessUnit = "";
         
         identifiers.setCorrelationId(jsonKey);
         
@@ -85,19 +87,24 @@ public class IdentifiersMapper {
                                 if (vesselName.equalsIgnoreCase("TBN Vessel")) {
                                     vesselName = "";
                                 }
-                        
+    
                             }
                         }
                     }
                 }
             }
         }
-        if (!billOfLading.equals("")) {
-            bookingNumberBOL = billOfLading;
-        } else if (!bookingNumber.equals("")) {
-            bookingNumberBOL = bookingNumber;
-        }
-        identifiers.setBookingNumberBOL(bookingNumberBOL);
+
+//        if (!billOfLading.equals("")) {
+//            bookingNumberBOL = billOfLading;
+//        } else if (!bookingNumber.equals("")) {
+//            bookingNumberBOL = bookingNumber;
+//        }
+        
+        
+        identifiers.setBmwBusinessUnit(bmwBusinessUnit);
+        identifiers.setBookingNumber(bookingNumber);
+        identifiers.setBillOfLading(billOfLading);
         identifiers.setVesselName(vesselName);
         identifiers.setBmwShipmentID(bmwShipmentID);
         bmwMapping.setIdentifiers(identifiers);

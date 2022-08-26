@@ -6,16 +6,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TransportLegMapper {
     
     
     public void mapTransportLegInfos(JsonObject shipmentJson, BMWMapping bmwMapping) {
         TransportSection transportSection = new TransportSection();
+        DeliveryInformations deliveryInformations = new DeliveryInformations();
         TransportLegInfo transportLegInfo = new TransportLegInfo();
         TransportLeg1 transportLeg1 = new TransportLeg1();
         TransportLeg2 transportLeg2 = new TransportLeg2();
@@ -31,7 +29,7 @@ public class TransportLegMapper {
         PointOfDelivery pointOfDelivery = new PointOfDelivery();
         List<TransportLegInfo> transportLegInfo1 = new ArrayList<>();
         String podLoc = "", podArrivalPrediction = "", podArrivalActual = "", polLoc = "", polArrivalPrediction = "", polArrivalActual = "", polDeparturePrediction = "", polDepartureActual = "";
-        String eventStopId = "", eventsType = "", polLocId = "", podLocId = "", tspLocId = "", currentTransportMode = "", transportSectionString = "";
+        String eventStopId = "", etaDateTimeUTC = "", eventsType = "", polLocId = "", podLocId = "", tspLocId = "", currentTransportMode = "", transportSectionString = "", lifeCycleStatusVerbose = "active";
         int count = 0;
         String arrivalPrediction1 = "", arrivalActual1 = "", departurePrediction1 = "", departureActual1 = "";
         String arrivalPrediction2 = "", arrivalActual2 = "", departurePrediction2 = "", departureActual2 = "";
@@ -413,10 +411,17 @@ public class TransportLegMapper {
                     if (eventsTyp.getAsJsonObject().has("dateTime")) {
                         podArrivalActual = eventsTyp.getAsJsonObject().get("dateTime").getAsString();
                         pointOfDelivery.setArrivalActual(podArrivalActual);
+                        lifeCycleStatusVerbose = "completed";
                     }
                     if (eventsTyp.getAsJsonObject().has("estimateDateTime")) {
                         podArrivalPrediction = eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString();
                         pointOfDelivery.setArrivalPrediction(podArrivalPrediction);
+                    }
+                }
+    
+                if ((podLocId.equals(eventsTyp.getAsJsonObject().get("stopId").getAsString())) && (Objects.equals("ARRIVAL_AT_STOP", eventsTyp.getAsJsonObject().get("type").getAsString()))) {
+                    if (eventsTyp.getAsJsonObject().has("estimateDateTime")) {
+                        deliveryInformations.setEtaDateTimeUTC(etaDateTimeUTC);
                     }
                 }
     
@@ -444,5 +449,11 @@ public class TransportLegMapper {
         transportLegInfo.setPointOfDelivery(pointOfDelivery);
         transportLegInfo1.add(transportLegInfo);
         bmwMapping.setTransportLegInfos(transportLegInfo1);
+    
+        bmwMapping.setDeliveryInformations(deliveryInformations);
+    
+    
+        bmwMapping.setLifecycleStatusVerbose(lifeCycleStatusVerbose);
+    
     }
 }

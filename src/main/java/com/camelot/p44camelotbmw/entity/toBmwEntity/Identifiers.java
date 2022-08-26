@@ -15,9 +15,12 @@ public class Identifiers {
     @SerializedName("bmwShipmentId")
     @Expose
     private String bmwShipmentID;
-    @SerializedName("bookingNumberBol")
+    @SerializedName("bookingNumber")
     @Expose
-    private String bookingNumberBOL;
+    private String bookingNumber;
+    @SerializedName("billOfLading")
+    @Expose
+    private String billOfLading;
     @SerializedName("vesselName")
     @Expose
     private String vesselName;
@@ -52,12 +55,20 @@ public class Identifiers {
         this.bmwShipmentID = bmwShipmentID;
     }
     
-    public String getBookingNumberBOL() {
-        return bookingNumberBOL;
+    public String getBookingNumber() {
+        return bookingNumber;
     }
     
-    public void setBookingNumberBOL(String bookingNumberBOL) {
-        this.bookingNumberBOL = bookingNumberBOL;
+    public void setBookingNumber(String bookingNumber) {
+        this.bookingNumber = bookingNumber;
+    }
+    
+    public String getBillOfLading() {
+        return billOfLading;
+    }
+    
+    public void setBillOfLading(String billOfLading) {
+        this.billOfLading = billOfLading;
     }
     
     public String getVesselName() {
@@ -100,9 +111,13 @@ public class Identifiers {
         sb.append('=');
         sb.append(((this.bmwShipmentID == null) ? "<null>" : this.bmwShipmentID));
         sb.append(',');
-        sb.append("bookingNumberBOL");
+        sb.append("bookingNumber");
         sb.append('=');
-        sb.append(((this.bookingNumberBOL == null) ? "<null>" : this.bookingNumberBOL));
+        sb.append(((this.bookingNumber == null) ? "<null>" : this.bookingNumber));
+        sb.append(',');
+        sb.append("billOfLading");
+        sb.append('=');
+        sb.append(((this.billOfLading == null) ? "<null>" : this.billOfLading));
         sb.append(',');
         sb.append("vesselName");
         sb.append('=');

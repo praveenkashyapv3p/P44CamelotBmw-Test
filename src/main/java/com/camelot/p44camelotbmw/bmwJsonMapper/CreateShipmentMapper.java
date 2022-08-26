@@ -9,16 +9,18 @@ public class CreateShipmentMapper {
     /*
      * Mapping for Request body of Step 1 in create shipment process from BMW to Project44
      */
-    public CreateShipmentP44 mapCreateShipment(CreateShipmentP44 createShipmentP44, String containerID, String bmwShipmentId,
-                                               String senderId, String senderName, String recipientID,
-                                               String recipientName, String recipientUnloadingPoint,
-                                               String carrierP44ID, String planPickUpDate, String planDeliveryDate,
-                                               String totalWeightKGS, String totalVolumeCBM) {
-        
+    public CreateShipmentP44 mapCreateShipment(CreateShipmentP44 createShipmentP44, String containerID, String bmwShipmentId, String bookingNumber, String billOfLading, String senderId, String senderName, String recipientID, String recipientName, String carrierP44ID, String planPickUpDate, String planDeliveryDate, String totalWeightKGS, String totalVolumeCBM) {
+    
         List<Identifier> identifierList = new ArrayList<>();
         Identifier identifierBook = new Identifier();
+        if (!billOfLading.equals("")) {
+            bmwShipmentId = billOfLading;
+        } else if (!bookingNumber.equals("")) {
+            bmwShipmentId = bookingNumber;
+        }
         identifierBook.setType("BOOKING_NUMBER");
         identifierBook.setValue(bmwShipmentId);
+    
         identifierList.add(identifierBook);
         Identifier identifierCarrier = new Identifier();
         identifierCarrier.setType("CARRIER_SCAC");
@@ -27,10 +29,6 @@ public class CreateShipmentMapper {
         createShipmentP44.setIdentifiers(identifierList);
         
         List<Attribute> attributeList = new ArrayList<>();
-        Attribute attributeRecUnloadPnt = new Attribute();
-        attributeRecUnloadPnt.setName("recipientUnloadingPoint");
-        attributeRecUnloadPnt.setValue(recipientUnloadingPoint);
-        attributeList.add(attributeRecUnloadPnt);
         Attribute attributeRecName = new Attribute();
         attributeRecName.setName("recipientName");
         attributeRecName.setValue(recipientName);
