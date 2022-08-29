@@ -125,10 +125,6 @@
               </resource>
             </resources>
           </deployment>
-          <deploymentSlot>
-            <name>dev</name>
-            <configurationSource>api-camelot-itlab</configurationSource>
-          </deploymentSlot>
         </configuration>
       </plugin>
     </plugins>
