@@ -34,9 +34,9 @@ public class KafkaConsumerBMW {
     RecipientPlantCodeRepository recipientPlantCodeRepository;
     
     /*Development Consumer*/
-    //@KafkaListener(topics = "BMWPushLocal", groupId = "BMWPushLocalGroup")
+    @KafkaListener(topics = "BMWPushLocal", groupId = "BMWPushLocalGroup")
     /*Production Consumer*/
-    @KafkaListener(topics = "bmwPush", groupId = "BMWPushGroup")
+    //@KafkaListener(topics = "bmwPush", groupId = "BMWPushGroup")
     public void getBMWMessage(String message) {
         RestTemplate restTemplate = new RestTemplate();
         CarrierMapping carrierMapping = new CarrierMapping();

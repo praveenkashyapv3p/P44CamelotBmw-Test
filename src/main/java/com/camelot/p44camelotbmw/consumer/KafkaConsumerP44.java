@@ -45,9 +45,9 @@ public class KafkaConsumerP44 {
     }
     
     /*Development Consumer*/
-    //@KafkaListener(topics = "p44DataLocal", groupId = "p44DataLocalGroup")
+    @KafkaListener(topics = "p44DataLocal", groupId = "p44DataLocalGroup")
     /*Production Consumer*/
-    @KafkaListener(topics = "p44Data", groupId = "bmwGroup")
+    //@KafkaListener(topics = "p44Data", groupId = "bmwGroup")
     public void getP44Message(String message) {
         BMWMapping bmwMapping = new BMWMapping();
         try {

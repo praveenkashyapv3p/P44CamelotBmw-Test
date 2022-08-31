@@ -60,11 +60,11 @@ public class CurrentLocationInfoMapper {
                 }
                 if (statusName.equalsIgnoreCase("AT_STOP")) {
                     JsonElement relShipIdentifiers = position.getAsJsonObject().get("location").getAsJsonObject().get("coordinates");
-                    for (JsonElement relShipIdent : relShipIdentifiers.getAsJsonArray()) {
-                        latitude = relShipIdent.getAsJsonObject().get("latitude").getAsString();
-                        longitude = relShipIdent.getAsJsonObject().get("longitude").getAsString();
-                        geoDateTimeUTC = timeStamp;
-                    }
+                    //for (JsonElement relShipIdent : relShipIdentifiers) {
+                    latitude = relShipIdentifiers.getAsJsonObject().get("latitude").getAsString();
+                    longitude = relShipIdentifiers.getAsJsonObject().get("longitude").getAsString();
+                    geoDateTimeUTC = timeStamp;
+                    //}
                 }
                 currentLocationInfos.setGeoDateTimeUTC(geoDateTimeUTC);
                 if (!longitude.equals("") && !latitude.equals("")) {
