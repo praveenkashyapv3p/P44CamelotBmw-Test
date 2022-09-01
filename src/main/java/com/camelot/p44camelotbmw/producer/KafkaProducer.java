@@ -8,17 +8,17 @@ import org.springframework.stereotype.Service;
 public class KafkaProducer {
     
     /*Development Topic*/
-    private static final String P44TOPIC = "p44DataLocal";
+    //private static final String P44TOPIC = "p44DataLocal";
     /*Production Topic*/
-    //private static final String P44TOPIC = "p44Data";
+    private static final String P44TOPIC = "p44Data";
     /*Development Topic*/
-    private static final String BMWTOPIC = "bmwDataLocal";
+    //private static final String BMWTOPIC = "bmwDataLocal";
     /*Production Topic*/
-    //private static final String BMWTOPIC = "bmwData";
+    private static final String BMWTOPIC = "bmwData";
     /*Development Topic*/
-    private static final String BMWPUSH = "BMWPushLocal";
+    //private static final String BMWPUSH = "BMWPushLocal";
     /*Production Topic*/
-    //private static final String BMWPUSH = "bmwPush";
+    private static final String BMWPUSH = "bmwPush";
     private static final String LOGPUSH = "logTopic";
     
     
