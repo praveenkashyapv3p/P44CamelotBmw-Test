@@ -99,7 +99,7 @@ public class KafkaConsumerP44 {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<String> entity = new HttpEntity<>(bmwJson, headers);
-            ResponseEntity<String> response = restTemplate.postForEntity("https://p44-tracking-data-int.bmwgroup.com", entity, String.class);
+            ResponseEntity<String> response = restTemplate.postForEntity("https://p44-tracking-data-dev.bmwgroup.com", entity, String.class);
             //System.out.println("response: " + /*response + "\n" +*/ bmwJson);
         } catch (Exception e) {
             logger.error("Mapping failure " + e + "\n" + message + "\n" + new Gson().toJson(bmwMapping));

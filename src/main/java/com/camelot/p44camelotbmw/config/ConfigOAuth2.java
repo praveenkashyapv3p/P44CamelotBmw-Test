@@ -82,7 +82,7 @@ public class ConfigOAuth2 extends AuthorizationServerConfigurerAdapter {
     public RestTemplate restTemplate(RestTemplateBuilder builder) throws Exception {
         char[] password = "praveen".toCharArray();
         ResourceLoader resourceLoader = new DefaultResourceLoader();
-        Resource resource = resourceLoader.getResource("classpath:bmw-int.jks");
+        Resource resource = resourceLoader.getResource("classpath:bmw-dev.jks");
         SSLContext sslContext = SSLContextBuilder.create().loadKeyMaterial(keyStore(resource, password), password).loadTrustMaterial(null, new TrustSelfSignedStrategy()).build();
         HttpClient client = HttpClients.custom().setSSLContext(sslContext).build();
         return builder.requestFactory(() -> new HttpComponentsClientHttpRequestFactory(client)).build();
