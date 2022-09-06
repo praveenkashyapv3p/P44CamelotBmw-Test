@@ -40,6 +40,11 @@ public class SendEventController {
                 if (eventsTyp.getAsJsonObject().get("type").getAsString().equalsIgnoreCase("TRACKING_START") || eventsTyp.getAsJsonObject().get("type").getAsString().equals("UNKNOWN")) {
                     trackingJson = true;
                 }
+                if (eventsTyp.getAsJsonObject().has("description")) {
+                    String description = eventsTyp.getAsJsonObject().get("description").getAsString();
+                    if (description.contains("Shipment tracking all containers completed") || description.equalsIgnoreCase("Shipment tracking all containers completed"))
+                        trackingJson = true;
+                }
             }
             if (!trackingJson) {
                 this.producer.writeP44Message(jsonKey, shipmentJson);

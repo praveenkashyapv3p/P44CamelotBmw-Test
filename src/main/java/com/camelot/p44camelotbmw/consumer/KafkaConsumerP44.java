@@ -75,22 +75,13 @@ public class KafkaConsumerP44 {
             materialMapper.mapMaterial(createShipmentRepository, shipment, bmwMapping);
             bmwMapping.setLifecycleStatus("");
     
-            // technicalDetailsMapper.mapTechnicalDetails(jsonKey, bmwMapping);
             deliveryInformationMapper.mapDeliveryInformation(createShipmentRepository, shipment, bmwMapping);
     
-            Gson gson = new GsonBuilder()
-                    .setPrettyPrinting()
-                    .disableHtmlEscaping()
-                    .create();
-            //System.out.println(gson.toJson(bmwMapping));
+            Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
             String bmwJson = jsonStartingString + jsonKey + jsonStringValue + gson.toJson(bmwMapping) + jsonEndString;
             String containerID = bmwMapping.getIdentifiers().getContainerID();
             /*Temporary tracing of containers for Data validation*/
-            if ((Arrays.asList(
-                    "GAOU6076128", "BSIU9639751", "TRHU5337518", "MRSU3849066", "MRKU3692924", "TRHU7195840", "EGHU8487330",
-                    "MRSU4700966", "UETU5615695", "SUDU5493296", "MSKU0166189", "MSDU8759550", "MSMU6905667", "DRYU9607220",
-                    "BEAU5422048", "CBHU8932857", "TCKU6677710", "FCIU9157330", "HLBU3174042"
-            )).contains(containerID)) {
+            if ((Arrays.asList("GAOU6076128", "BSIU9639751", "TRHU5337518", "MRSU3849066", "MRKU3692924", "TRHU7195840", "EGHU8487330", "MRSU4700966", "UETU5615695", "SUDU5493296", "MSKU0166189", "MSDU8759550", "MSMU6905667", "DRYU9607220", "BEAU5422048", "CBHU8932857", "TCKU6677710", "FCIU9157330", "HLBU3174042")).contains(containerID)) {
                 this.producer.writeLogMessage(jsonKey, bmwJson);
             }
             /*Delete above code after Temporary tracing of containers for Data validation is complete*/
@@ -100,7 +91,7 @@ public class KafkaConsumerP44 {
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<String> entity = new HttpEntity<>(bmwJson, headers);
             ResponseEntity<String> response = restTemplate.postForEntity("https://p44-tracking-data-dev.bmwgroup.com", entity, String.class);
-            //System.out.println("response: " + /*response + "\n" +*/ bmwJson);
+            //System.out.println("response: " + response + "\n" + bmwJson);
         } catch (Exception e) {
             logger.error("Mapping failure " + e + "\n" + message + "\n" + new Gson().toJson(bmwMapping));
         }

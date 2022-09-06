@@ -27,13 +27,13 @@ public class IdentifiersMapper {
     public void mapIdentifiers(CreateShipmentRepository shipmentRepository, SenderPlantCodeRepository senderPlantCodeRepository, RecipientPlantCodeRepository recipientPlantCodeRepository, String jsonKey, JsonObject shipmentJson, BMWMapping bmwMapping) {
         Identifiers identifiers = new Identifiers();
         String internalP44Identifier = "", containerID = "", bmwShipmentID = "", billOfLading = "", bookingNumber = "", bookingNumberBOL = "", vesselName = "", bmwBusinessUnit = "";
-        
+    
         identifiers.setCorrelationId(jsonKey);
-        
+    
         //JsonObject relShipJSON = (JsonObject) JsonParser.parseString(shipmentJson);
         internalP44Identifier = shipmentJson.get("shipment").getAsJsonObject().get("id").getAsString();
         identifiers.setInternalP44Identifier(internalP44Identifier);
-        
+    
         JsonArray containerId = (JsonArray) shipmentJson.get("shipment").getAsJsonObject().get("identifiers");
         for (JsonElement contId : containerId) {
             if ("CONTAINER_ID".equalsIgnoreCase(contId.getAsJsonObject().get("type").getAsString())) {
@@ -49,12 +49,12 @@ public class IdentifiersMapper {
                 billOfLading = contId.getAsJsonObject().get("value").getAsString();
             }
         }
-        
+    
         List<CreateShipment> shipmentIds = shipmentRepository.findByMasterShipmentId(internalP44Identifier);
         for (CreateShipment bmwIdFromDB : shipmentIds) {
             bmwShipmentID = bmwIdFromDB.getBmwShipmentId();
         }
-        
+    
         JsonArray relShipIdent = (JsonArray) shipmentJson.get("shipment").getAsJsonObject().get("relatedShipments");
         for (JsonElement relIden : relShipIdent) {
             JsonElement relShipIdentifiers = relIden.getAsJsonObject().get("identifiers");
@@ -65,26 +65,27 @@ public class IdentifiersMapper {
                 }
             }
         }
-        
-        JsonArray routeInfo = (JsonArray) shipmentJson.get("shipment").getAsJsonObject().get("routeInfo").getAsJsonObject().get("routeSegments");
-        JsonArray eventsTypeDepFrmStp = (JsonArray) shipmentJson.get("events");
-        String eventStopId;
-        for (JsonElement routSegIden : routeInfo) {
-            if (routSegIden.getAsJsonObject().has("identifiers")) {
-                JsonElement routSegIdentifiers = routSegIden.getAsJsonObject().get("identifiers");
-                JsonArray routSegIndent = routSegIdentifiers.getAsJsonArray();
-                String fromStopId = routSegIden.getAsJsonObject().get("fromStopId").getAsString();
-                for (JsonElement eventsTyp : eventsTypeDepFrmStp) {
-                    if (eventsTyp.getAsJsonObject().has("stopId")) {
-                        eventStopId = eventsTyp.getAsJsonObject().get("stopId").getAsString();
-                        if (eventStopId.equals(fromStopId) && (eventsTyp.getAsJsonObject().has("dateTime"))) {
-                            for (JsonElement relShipmentIdent : routSegIndent) {
-                                if (relShipmentIdent.getAsJsonObject().get("type").getAsString().equalsIgnoreCase("VESSEL_NAME")) {
-                                    vesselName = relShipmentIdent.getAsJsonObject().get("value").getAsString();
-                                    if (vesselName.equalsIgnoreCase("TBN Vessel")) {
-                                        vesselName = "";
+        if (shipmentJson.get("shipment").getAsJsonObject().get("routeInfo").getAsJsonObject().has("routeSegments")) {
+            JsonArray routeInfo = (JsonArray) shipmentJson.get("shipment").getAsJsonObject().get("routeInfo").getAsJsonObject().get("routeSegments");
+            JsonArray eventsTypeDepFrmStp = (JsonArray) shipmentJson.get("events");
+            String eventStopId;
+            for (JsonElement routSegIden : routeInfo) {
+                if (routSegIden.getAsJsonObject().has("identifiers")) {
+                    JsonElement routSegIdentifiers = routSegIden.getAsJsonObject().get("identifiers");
+                    JsonArray routSegIndent = routSegIdentifiers.getAsJsonArray();
+                    String fromStopId = routSegIden.getAsJsonObject().get("fromStopId").getAsString();
+                    for (JsonElement eventsTyp : eventsTypeDepFrmStp) {
+                        if (eventsTyp.getAsJsonObject().has("stopId")) {
+                            eventStopId = eventsTyp.getAsJsonObject().get("stopId").getAsString();
+                            if (eventStopId.equals(fromStopId) && (eventsTyp.getAsJsonObject().has("dateTime"))) {
+                                for (JsonElement relShipmentIdent : routSegIndent) {
+                                    if (relShipmentIdent.getAsJsonObject().get("type").getAsString().equalsIgnoreCase("VESSEL_NAME")) {
+                                        vesselName = relShipmentIdent.getAsJsonObject().get("value").getAsString();
+                                        if (vesselName.equalsIgnoreCase("TBN Vessel")) {
+                                            vesselName = "";
+                                        }
+                                    
                                     }
-                            
                                 }
                             }
                         }

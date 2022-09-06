@@ -54,12 +54,14 @@ public class CurrentLocationInfoMapper {
     
                 if (!statusName.equalsIgnoreCase("IN_TRANSIT")) {
                     locationName = position.getAsJsonObject().get("location").getAsJsonObject().get("name").getAsString();
-                    JsonElement relShipIdentifiers = position.getAsJsonObject().get("location").getAsJsonObject().get("identifiers");
-                    for (JsonElement relShipIdent : relShipIdentifiers.getAsJsonArray()) {
-                        locationID = relShipIdent.getAsJsonObject().get("value").getAsString();
+                    if (position.getAsJsonObject().get("location").getAsJsonObject().has("identifiers")) {
+                        JsonElement relShipIdentifiers = position.getAsJsonObject().get("location").getAsJsonObject().get("identifiers");
+                        for (JsonElement relShipIdent : relShipIdentifiers.getAsJsonArray()) {
+                            locationID = relShipIdent.getAsJsonObject().get("value").getAsString();
+                        }
                     }
                 }
-                if (statusName.equalsIgnoreCase("AT_STOP")) {
+                if (statusName.equalsIgnoreCase("AT_STOP") && position.getAsJsonObject().get("location").getAsJsonObject().has("coordinates")) {
                     JsonElement relShipIdentifiers = position.getAsJsonObject().get("location").getAsJsonObject().get("coordinates");
                     latitude = relShipIdentifiers.getAsJsonObject().get("latitude").getAsString();
                     longitude = relShipIdentifiers.getAsJsonObject().get("longitude").getAsString();

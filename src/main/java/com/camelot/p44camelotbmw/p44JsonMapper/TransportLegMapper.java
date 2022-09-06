@@ -6,14 +6,16 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 public class TransportLegMapper {
     
     
     public void mapTransportLegInfos(JsonObject shipmentJson, BMWMapping bmwMapping) {
         TransportSection transportSection = new TransportSection();
-        DeliveryInformations deliveryInformations = new DeliveryInformations();
         TransportLegInfo transportLegInfo = new TransportLegInfo();
         TransportLeg1 transportLeg1 = new TransportLeg1();
         TransportLeg2 transportLeg2 = new TransportLeg2();
@@ -28,24 +30,16 @@ public class TransportLegMapper {
         PointOfLoading pointOfLoading = new PointOfLoading();
         PointOfDelivery pointOfDelivery = new PointOfDelivery();
         List<TransportLegInfo> transportLegInfo1 = new ArrayList<>();
-        String podLoc = "", podArrivalPrediction = "", podArrivalActual = "", polLoc = "", polArrivalPrediction = "", polArrivalActual = "", polDeparturePrediction = "", polDepartureActual = "";
-        String eventStopId = "", etaDateTimeUTC = "", eventsType = "", polLocId = "", podLocId = "", tspLocId = "", currentTransportMode = "", transportSectionString = "", lifeCycleStatusVerbose = "active";
+        String podLoc = "", podArrivalPrediction = "", podArrivalActual = "", polLoc = "", polArrivalPrediction = "", polArrivalActual = "", polDeparturePrediction = "", polDepartureActual = "", eventStopId = "", eventsType = "", polLocId = "", podLocId = "",
+                tspLocId = "", currentTransportMode = "", transportSectionString = "", lifeCycleStatusVerbose = "active", arrivalPrediction1 = "", arrivalActual1 = "", departurePrediction1 = "", departureActual1 = "", arrivalPrediction2 = "",
+                arrivalActual2 = "", departurePrediction2 = "", departureActual2 = "", arrivalPrediction3 = "", arrivalActual3 = "", departurePrediction3 = "", departureActual3 = "", arrivalPrediction4 = "", arrivalActual4 = "", departurePrediction4 = "",
+                departureActual4 = "", arrivalPrediction5 = "", arrivalActual5 = "", departurePrediction5 = "", departureActual5 = "", arrivalPrediction6 = "", arrivalActual6 = "", departurePrediction6 = "", departureActual6 = "", arrivalPrediction7 = "",
+                arrivalActual7 = "", departurePrediction7 = "", departureActual7 = "", arrivalPrediction8 = "", arrivalActual8 = "", departurePrediction8 = "", departureActual8 = "", arrivalPrediction9 = "", arrivalActual9 = "", departurePrediction9 = "",
+                departureActual9 = "", arrivalPrediction10 = "", arrivalActual10 = "", departurePrediction10 = "", departureActual10 = "", tsp1Loc = "", tsp2Loc = "", tsp3Loc = "", tsp4Loc = "", tsp5Loc = "", tsp6Loc = "", tsp7Loc = "", tsp8Loc = "",
+                tsp9Loc = "", tsp10Loc = "";
         int count = 0;
-        String arrivalPrediction1 = "", arrivalActual1 = "", departurePrediction1 = "", departureActual1 = "";
-        String arrivalPrediction2 = "", arrivalActual2 = "", departurePrediction2 = "", departureActual2 = "";
-        String arrivalPrediction3 = "", arrivalActual3 = "", departurePrediction3 = "", departureActual3 = "";
-        String arrivalPrediction4 = "", arrivalActual4 = "", departurePrediction4 = "", departureActual4 = "";
-        String arrivalPrediction5 = "", arrivalActual5 = "", departurePrediction5 = "", departureActual5 = "";
-        String arrivalPrediction6 = "", arrivalActual6 = "", departurePrediction6 = "", departureActual6 = "";
-        String arrivalPrediction7 = "", arrivalActual7 = "", departurePrediction7 = "", departureActual7 = "";
-        String arrivalPrediction8 = "", arrivalActual8 = "", departurePrediction8 = "", departureActual8 = "";
-        String arrivalPrediction9 = "", arrivalActual9 = "", departurePrediction9 = "", departureActual9 = "";
-        String arrivalPrediction10 = "", arrivalActual10 = "", departurePrediction10 = "", departureActual10 = "";
-        String tsp1Loc = "", tsp2Loc = "", tsp3Loc = "", tsp4Loc = "", tsp5Loc = "", tsp6Loc = "", tsp7Loc = "", tsp8Loc = "", tsp9Loc = "", tsp10Loc = "";
     
-        //JsonObject ShipJSON = (JsonObject) JsonParser.parseString(shipmentJson);
         JsonArray events = (JsonArray) shipmentJson.get("events");
-        JsonArray routeSegments = (JsonArray) shipmentJson.get("shipment").getAsJsonObject().get("routeInfo").getAsJsonObject().get("routeSegments");
         JsonArray stops = (JsonArray) shipmentJson.get("shipment").getAsJsonObject().get("routeInfo").getAsJsonObject().get("stops");
         for (JsonElement position : stops) {
             count++;
@@ -419,26 +413,24 @@ public class TransportLegMapper {
                     }
                 }
     
-                if ((podLocId.equals(eventsTyp.getAsJsonObject().get("stopId").getAsString())) && (Objects.equals("ARRIVAL_AT_STOP", eventsTyp.getAsJsonObject().get("type").getAsString()))) {
-                    if (eventsTyp.getAsJsonObject().has("estimateDateTime")) {
-                        deliveryInformations.setEtaDateTimeUTC(etaDateTimeUTC);
-                    }
-                }
-    
                 if (eventsTyp.getAsJsonObject().has("dateTime")) {
                     eventStopId = eventsTyp.getAsJsonObject().get("stopId").getAsString();
                     eventsType = eventsTyp.getAsJsonObject().get("type").getAsString();
                 }
             }
         }
-        for (JsonElement routeSeg : routeSegments) {
-            if (eventStopId.equals(routeSeg.getAsJsonObject().get("fromStopId").getAsString())) {
-                currentTransportMode = routeSeg.getAsJsonObject().get("transportationMode").getAsString();
-                if (currentTransportMode.equalsIgnoreCase("OCEAN")) {
-                    currentTransportMode = "SEA";
+        if (shipmentJson.get("shipment").getAsJsonObject().get("routeInfo").getAsJsonObject().has("routeSegments")) {
+            JsonArray routeSegments = (JsonArray) shipmentJson.get("shipment").getAsJsonObject().get("routeInfo").getAsJsonObject().get("routeSegments");
+            for (JsonElement routeSeg : routeSegments) {
+                if (eventStopId.equals(routeSeg.getAsJsonObject().get("fromStopId").getAsString())) {
+                    currentTransportMode = routeSeg.getAsJsonObject().get("transportationMode").getAsString();
+                    if (currentTransportMode.equalsIgnoreCase("OCEAN")) {
+                        currentTransportMode = "SEA";
+                    }
                 }
             }
         }
+    
         transportLegInfo.setCurrentTransportMode(currentTransportMode);
         Map<String, String> transportSectionMap = transportSection.getTransportSection();
         transportSectionString = transportSectionMap.get(eventsType);
@@ -449,9 +441,6 @@ public class TransportLegMapper {
         transportLegInfo.setPointOfDelivery(pointOfDelivery);
         transportLegInfo1.add(transportLegInfo);
         bmwMapping.setTransportLegInfos(transportLegInfo1);
-    
-        bmwMapping.setDeliveryInformations(deliveryInformations);
-    
     
         bmwMapping.setLifecycleStatusVerbose(lifeCycleStatusVerbose);
     
