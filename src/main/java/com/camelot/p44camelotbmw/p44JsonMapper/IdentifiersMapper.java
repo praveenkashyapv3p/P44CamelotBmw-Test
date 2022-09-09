@@ -2,8 +2,6 @@ package com.camelot.p44camelotbmw.p44JsonMapper;
 
 import com.camelot.p44camelotbmw.db.CreateShipment;
 import com.camelot.p44camelotbmw.db.CreateShipmentRepository;
-import com.camelot.p44camelotbmw.db.RecipientPlantCodeRepository;
-import com.camelot.p44camelotbmw.db.SenderPlantCodeRepository;
 import com.camelot.p44camelotbmw.entity.toBmwEntity.BMWMapping;
 import com.camelot.p44camelotbmw.entity.toBmwEntity.Identifiers;
 import com.camelot.p44camelotbmw.producer.KafkaProducer;
@@ -24,13 +22,12 @@ public class IdentifiersMapper {
         this.producer = producer;
     }
     
-    public void mapIdentifiers(CreateShipmentRepository shipmentRepository, SenderPlantCodeRepository senderPlantCodeRepository, RecipientPlantCodeRepository recipientPlantCodeRepository, String jsonKey, JsonObject shipmentJson, BMWMapping bmwMapping) {
+    public void mapIdentifiers(CreateShipmentRepository shipmentRepository, String jsonKey, JsonObject shipmentJson, BMWMapping bmwMapping) {
         Identifiers identifiers = new Identifiers();
-        String internalP44Identifier = "", containerID = "", bmwShipmentID = "", billOfLading = "", bookingNumber = "", bookingNumberBOL = "", vesselName = "", bmwBusinessUnit = "";
+        String internalP44Identifier = "", bmwShipmentID = "", billOfLading = "", bookingNumber = "", vesselName = "", bmwBusinessUnit = "";
     
         identifiers.setCorrelationId(jsonKey);
     
-        //JsonObject relShipJSON = (JsonObject) JsonParser.parseString(shipmentJson);
         internalP44Identifier = shipmentJson.get("shipment").getAsJsonObject().get("id").getAsString();
         identifiers.setInternalP44Identifier(internalP44Identifier);
     
@@ -66,25 +63,17 @@ public class IdentifiersMapper {
             }
         }
         if (shipmentJson.get("shipment").getAsJsonObject().get("routeInfo").getAsJsonObject().has("routeSegments")) {
-            JsonArray routeInfo = (JsonArray) shipmentJson.get("shipment").getAsJsonObject().get("routeInfo").getAsJsonObject().get("routeSegments");
-            JsonArray eventsTypeDepFrmStp = (JsonArray) shipmentJson.get("events");
-            String eventStopId;
-            for (JsonElement routSegIden : routeInfo) {
+            for (JsonElement routSegIden : (JsonArray) shipmentJson.get("shipment").getAsJsonObject().get("routeInfo").getAsJsonObject().get("routeSegments")) {
                 if (routSegIden.getAsJsonObject().has("identifiers")) {
-                    JsonElement routSegIdentifiers = routSegIden.getAsJsonObject().get("identifiers");
-                    JsonArray routSegIndent = routSegIdentifiers.getAsJsonArray();
-                    String fromStopId = routSegIden.getAsJsonObject().get("fromStopId").getAsString();
-                    for (JsonElement eventsTyp : eventsTypeDepFrmStp) {
+                    for (JsonElement eventsTyp : (JsonArray) shipmentJson.get("events")) {
                         if (eventsTyp.getAsJsonObject().has("stopId")) {
-                            eventStopId = eventsTyp.getAsJsonObject().get("stopId").getAsString();
-                            if (eventStopId.equals(fromStopId) && (eventsTyp.getAsJsonObject().has("dateTime"))) {
-                                for (JsonElement relShipmentIdent : routSegIndent) {
+                            if (eventsTyp.getAsJsonObject().get("stopId").getAsString().equals(routSegIden.getAsJsonObject().get("fromStopId").getAsString()) && (eventsTyp.getAsJsonObject().has("dateTime"))) {
+                                for (JsonElement relShipmentIdent : routSegIden.getAsJsonObject().get("identifiers").getAsJsonArray()) {
                                     if (relShipmentIdent.getAsJsonObject().get("type").getAsString().equalsIgnoreCase("VESSEL_NAME")) {
                                         vesselName = relShipmentIdent.getAsJsonObject().get("value").getAsString();
                                         if (vesselName.equalsIgnoreCase("TBN Vessel")) {
                                             vesselName = "";
                                         }
-                                    
                                     }
                                 }
                             }
@@ -93,13 +82,6 @@ public class IdentifiersMapper {
                 }
             }
         }
-
-//        if (!billOfLading.equals("")) {
-//            bookingNumberBOL = billOfLading;
-//        } else if (!bookingNumber.equals("")) {
-//            bookingNumberBOL = bookingNumber;
-//        }
-        
         
         identifiers.setBmwBusinessUnit(bmwBusinessUnit);
         identifiers.setBookingNumber(bookingNumber);

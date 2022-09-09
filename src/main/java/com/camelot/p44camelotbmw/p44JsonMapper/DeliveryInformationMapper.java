@@ -37,7 +37,7 @@ public class DeliveryInformationMapper {
                 routeSegId = posArray.getAsJsonObject().get("routeSegmentId").getAsString();
             }
         }
-        JsonArray events = (JsonArray) shipmentJson.get("events");
+    
         if (shipmentJson.get("shipment").getAsJsonObject().get("routeInfo").getAsJsonObject().has("routeSegments")) {
             JsonArray routeSegments = (JsonArray) shipmentJson.get("shipment").getAsJsonObject().get("routeInfo").getAsJsonObject().get("routeSegments");
             for (JsonElement routeSeg : routeSegments) {
@@ -49,6 +49,8 @@ public class DeliveryInformationMapper {
                 }
             }
         }
+    
+        JsonArray events = (JsonArray) shipmentJson.get("events");
         for (JsonElement eventsTyp : events) {
             if (eventsTyp.getAsJsonObject().has("routeSegmentId")) {
                 if ((eventsTyp.getAsJsonObject().get("routeSegmentId").getAsString().equalsIgnoreCase(routeSegId)) && eventsTyp.getAsJsonObject().has("estimateDateTime") && (Arrays.asList("ARRIVAL_AT_STOP", "GATE_IN_EMPTY", "GATE_IN_FULL").contains(eventsTyp.getAsJsonObject().get("type").getAsString()))) {

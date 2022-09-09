@@ -2,8 +2,6 @@ package com.camelot.p44camelotbmw.consumer;
 
 import com.camelot.p44camelotbmw.constants.UuidGenerator;
 import com.camelot.p44camelotbmw.db.CreateShipmentRepository;
-import com.camelot.p44camelotbmw.db.RecipientPlantCodeRepository;
-import com.camelot.p44camelotbmw.db.SenderPlantCodeRepository;
 import com.camelot.p44camelotbmw.entity.toBmwEntity.BMWMapping;
 import com.camelot.p44camelotbmw.p44JsonMapper.*;
 import com.camelot.p44camelotbmw.producer.KafkaProducer;
@@ -31,12 +29,6 @@ public class KafkaConsumerP44 {
     private final KafkaProducer producer;
     @Autowired
     CreateShipmentRepository createShipmentRepository;
-    
-    @Autowired
-    SenderPlantCodeRepository senderPlantCodeRepository;
-    
-    @Autowired
-    RecipientPlantCodeRepository recipientPlantCodeRepository;
     @Autowired
     private RestTemplate restTemplate;
     
@@ -65,7 +57,7 @@ public class KafkaConsumerP44 {
             String jsonEndString = "}]}";
     
             JsonObject shipment = (JsonObject) JsonParser.parseString(message);
-            identifiersMapping.mapIdentifiers(createShipmentRepository, senderPlantCodeRepository, recipientPlantCodeRepository, jsonKey, shipment, bmwMapping);
+            identifiersMapping.mapIdentifiers(createShipmentRepository, jsonKey, shipment, bmwMapping);
             contactInformationMapping.mapContactInfo(createShipmentRepository, shipment, bmwMapping);
             currentLocationInfoMapper.mapCurrLocInfo(shipment, bmwMapping);
             bmwMapping.setTransportationNetwork("SHIP");
