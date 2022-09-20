@@ -3,30 +3,47 @@ package com.camelot.p44camelotbmw.entity.toBmwEntity;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class TransportLeg6 {
+public class Leg {
     
-    @SerializedName("tsp6Loc")
+    @SerializedName("tspLoc")
     @Expose
-    private String tsp6Loc;
+    private String tspLoc;
+    @SerializedName("legNumber")
+    @Expose
+    private String legNumber;
     @SerializedName("arrivalPrediction")
     @Expose
     private String arrivalPrediction;
+    @SerializedName("arrivalPlanned")
+    @Expose
+    private String arrivalPlanned;
     @SerializedName("arrivalActual")
     @Expose
     private String arrivalActual;
     @SerializedName("departurePrediction")
     @Expose
     private String departurePrediction;
+    @SerializedName("departurePlanned")
+    @Expose
+    private String departurePlanned;
     @SerializedName("departureActual")
     @Expose
     private String departureActual;
     
-    public String getTsp6Loc() {
-        return tsp6Loc;
+    public String getTspLoc() {
+        return tspLoc;
     }
     
-    public void setTsp6Loc(String tsp6Loc) {
-        this.tsp6Loc = tsp6Loc;
+    public void setTspLoc(String tspLoc) {
+        this.tspLoc = tspLoc;
+    }
+    
+    public String getLegNumber() {
+        return legNumber;
+    }
+    
+    public void setLegNumber(String legNumber) {
+        this.legNumber = legNumber;
     }
     
     public String getArrivalPrediction() {
@@ -35,6 +52,14 @@ public class TransportLeg6 {
     
     public void setArrivalPrediction(String arrivalPrediction) {
         this.arrivalPrediction = arrivalPrediction;
+    }
+    
+    public String getArrivalPlanned() {
+        return arrivalPlanned;
+    }
+    
+    public void setArrivalPlanned(String arrivalPlanned) {
+        this.arrivalPlanned = arrivalPlanned;
     }
     
     public String getArrivalActual() {
@@ -53,6 +78,14 @@ public class TransportLeg6 {
         this.departurePrediction = departurePrediction;
     }
     
+    public String getDeparturePlanned() {
+        return departurePlanned;
+    }
+    
+    public void setDeparturePlanned(String departurePlanned) {
+        this.departurePlanned = departurePlanned;
+    }
+    
     public String getDepartureActual() {
         return departureActual;
     }
@@ -64,14 +97,22 @@ public class TransportLeg6 {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(TransportLeg6.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
+        sb.append(Leg.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
         sb.append("tspLoc");
         sb.append('=');
-        sb.append(((this.tsp6Loc == null) ? "<null>" : this.tsp6Loc));
+        sb.append(((this.tspLoc == null) ? "<null>" : this.tspLoc));
+        sb.append(',');
+        sb.append("legNumber");
+        sb.append('=');
+        sb.append(((this.legNumber == null) ? "<null>" : this.legNumber));
         sb.append(',');
         sb.append("arrivalPrediction");
         sb.append('=');
         sb.append(((this.arrivalPrediction == null) ? "<null>" : this.arrivalPrediction));
+        sb.append(',');
+        sb.append("arrivalPlanned");
+        sb.append('=');
+        sb.append(((this.arrivalPlanned == null) ? "<null>" : this.arrivalPlanned));
         sb.append(',');
         sb.append("arrivalActual");
         sb.append('=');
@@ -81,12 +122,16 @@ public class TransportLeg6 {
         sb.append('=');
         sb.append(((this.departurePrediction == null) ? "<null>" : this.departurePrediction));
         sb.append(',');
+        sb.append("departurePlanned");
+        sb.append('=');
+        sb.append(((this.departurePlanned == null) ? "<null>" : this.departurePlanned));
+        sb.append(',');
         sb.append("departureActual");
         sb.append('=');
         sb.append(((this.departureActual == null) ? "<null>" : this.departureActual));
         sb.append(',');
-        if (sb.charAt((sb.length() - 6)) == ',') {
-            sb.setCharAt((sb.length() - 6), ']');
+        if (sb.charAt((sb.length() - 1)) == ',') {
+            sb.setCharAt((sb.length() - 1), ']');
         } else {
             sb.append(']');
         }

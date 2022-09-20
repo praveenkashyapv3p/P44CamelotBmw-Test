@@ -37,6 +37,13 @@
       <artifactId>spring-boot-starter-security</artifactId>
       <version>2.7.1</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.mongodb/mongo-java-driver -->
+    <dependency>
+      <groupId>org.mongodb</groupId>
+      <artifactId>mongo-java-driver</artifactId>
+      <version>3.12.11</version>
+    </dependency>
+
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-validation</artifactId>
@@ -96,36 +103,6 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <version>2.7.0</version>
-      </plugin>
-      <plugin>
-        <groupId>com.microsoft.azure</groupId>
-        <artifactId>azure-webapp-maven-plugin</artifactId>
-        <version>2.5.0</version>
-        <configuration>
-          <schemaVersion>v2</schemaVersion>
-          <subscriptionId>8e79556e-be9a-41bf-917a-ef29839a4282</subscriptionId>
-          <resourceGroup>project44</resourceGroup>
-          <appName>api-camelot-itlab</appName>
-          <pricingTier>P1v2</pricingTier>
-          <region>westeurope</region>
-          <appServicePlanName>asp-P44BMW</appServicePlanName>
-          <appServicePlanResourceGroup>project44</appServicePlanResourceGroup>
-          <runtime>
-            <os>Windows</os>
-            <javaVersion>Java 11</javaVersion>
-            <webContainer>Java SE</webContainer>
-          </runtime>
-          <deployment>
-            <resources>
-              <resource>
-                <directory>${project.basedir}/target</directory>
-                <includes>
-                  <include>*.jar</include>
-                </includes>
-              </resource>
-            </resources>
-          </deployment>
-        </configuration>
       </plugin>
     </plugins>
   </build>

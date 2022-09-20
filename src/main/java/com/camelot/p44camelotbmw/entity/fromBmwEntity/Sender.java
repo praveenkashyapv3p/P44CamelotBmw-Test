@@ -5,40 +5,40 @@ import com.google.gson.annotations.SerializedName;
 
 public class Sender {
     
-    @SerializedName("senderID")
+    @SerializedName("id")
     @Expose
-    private String senderID;
-    @SerializedName("senderName")
+    private String id;
+    @SerializedName("name")
     @Expose
-    private String senderName;
+    private String name;
     
-    public String getSenderID() {
-        return senderID;
+    public String getId() {
+        return id;
     }
     
-    public void setSenderID(String senderID) {
-        this.senderID = senderID;
+    public void setId(String id) {
+        this.id = id;
     }
     
-    public String getSenderName() {
-        return senderName;
+    public String getName() {
+        return name;
     }
     
-    public void setSenderName(String senderName) {
-        this.senderName = senderName;
+    public void setName(String name) {
+        this.name = name;
     }
     
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(Sender.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
-        sb.append("senderID");
+        sb.append("id");
         sb.append('=');
-        sb.append(((this.senderID == null) ? "<null>" : this.senderID));
+        sb.append(((this.id == null) ? "<null>" : this.id));
         sb.append(',');
-        sb.append("senderName");
+        sb.append("name");
         sb.append('=');
-        sb.append(((this.senderName == null) ? "<null>" : this.senderName));
+        sb.append(((this.name == null) ? "<null>" : this.name));
         sb.append(',');
         if (sb.charAt((sb.length() - 1)) == ',') {
             sb.setCharAt((sb.length() - 1), ']');

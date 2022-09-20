@@ -5,55 +5,55 @@ import com.google.gson.annotations.SerializedName;
 
 public class Recipient {
     
-    @SerializedName("recipientID")
+    @SerializedName("id")
     @Expose
-    private String recipientID;
-    @SerializedName("recipientName")
+    private String id;
+    @SerializedName("name")
     @Expose
-    private String recipientName;
-    @SerializedName("recipientUnloadingPoint")
+    private String name;
+    @SerializedName("unloadingPoint")
     @Expose
-    private String recipientUnloadingPoint;
+    private String unloadingPoint;
     
-    public String getRecipientID() {
-        return recipientID;
+    public String getId() {
+        return id;
     }
     
-    public void setRecipientID(String recipientID) {
-        this.recipientID = recipientID;
+    public void setId(String id) {
+        this.id = id;
     }
     
-    public String getRecipientName() {
-        return recipientName;
+    public String getName() {
+        return name;
     }
     
-    public void setRecipientName(String recipientName) {
-        this.recipientName = recipientName;
+    public void setName(String name) {
+        this.name = name;
     }
     
-    public String getRecipientUnloadingPoint() {
-        return recipientUnloadingPoint;
+    public String getUnloadingPoint() {
+        return unloadingPoint;
     }
     
-    public void setRecipientUnloadingPoint(String recipientUnloadingPoint) {
-        this.recipientUnloadingPoint = recipientUnloadingPoint;
+    public void setUnloadingPoint(String unloadingPoint) {
+        this.unloadingPoint = unloadingPoint;
     }
     
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(Recipient.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
-        sb.append("recipientID");
+        sb.append("id");
         sb.append('=');
-        sb.append(((this.recipientID == null) ? "<null>" : this.recipientID));
+        sb.append(((this.id == null) ? "<null>" : this.id));
         sb.append(',');
-        sb.append("recipientName");
+        sb.append("name");
         sb.append('=');
-        sb.append(((this.recipientName == null) ? "<null>" : this.recipientName));
+        sb.append(((this.name == null) ? "<null>" : this.name));
         sb.append(',');
-        sb.append("recipientUnloadingPoint");
+        sb.append("unloadingPoint");
         sb.append('=');
-        sb.append(((this.recipientUnloadingPoint == null) ? "<null>" : this.recipientUnloadingPoint));
+        sb.append(((this.unloadingPoint == null) ? "<null>" : this.unloadingPoint));
         sb.append(',');
         if (sb.charAt((sb.length() - 1)) == ',') {
             sb.setCharAt((sb.length() - 1), ']');

@@ -1,40 +1,52 @@
 package com.camelot.p44camelotbmw.p44JsonMapper;
 
-import com.camelot.p44camelotbmw.db.CreateShipment;
-import com.camelot.p44camelotbmw.db.CreateShipmentRepository;
-import com.camelot.p44camelotbmw.entity.toBmwEntity.BMWMapping;
-import com.camelot.p44camelotbmw.entity.toBmwEntity.DeliveryInformations;
+import com.camelot.p44camelotbmw.entity.toBmwEntity.DeliveryInformation;
+import com.camelot.p44camelotbmw.entity.toBmwEntity.P44ToBmw;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.time.Instant;
 import java.util.Arrays;
-import java.util.List;
 
 public class DeliveryInformationMapper {
     
     
-    public void mapDeliveryInformation(CreateShipmentRepository createShipmentRepository, JsonObject shipmentJson, BMWMapping bmwMapping) {
-        DeliveryInformations deliveryInformations = new DeliveryInformations();
-        String internalP44Identifier = "", planPickUpDate = "", planDeliveryDate = "", etaDateTimeUTC = "", etaDateRoutePartUTC = "", etdDateNextRoutePart = "", eventCreationDateTimeUTC = "", eventSendingDateTimeUTC = "", routeSegId = "", nextRouteSeg = "", toStpId = "", frmStpId = "";
-    
-    
+    public void mapDeliveryInformation(JsonObject shipmentJson, P44ToBmw bmwMapping) {
+        DeliveryInformation deliveryInformation = new DeliveryInformation();
+        String planPickUpDate = "", planDeliveryDate = "", etaDateTimeUTC = "", etaDateRoutePartUTC = "", etdDateNextRoutePart = "", eventCreationDateTimeUTC = "", eventSendingDateTimeUTC = "", routeSegId = "", nextRouteSeg = "", toStpId = "";
+        
+        
         eventSendingDateTimeUTC = Instant.now().toString();
-        deliveryInformations.setEventSendingDateTimeUTC(eventSendingDateTimeUTC);
-        deliveryInformations.setEventCreationDateTimeUTC(eventSendingDateTimeUTC);
-        internalP44Identifier = shipmentJson.get("shipment").getAsJsonObject().get("id").getAsString();
-        List<CreateShipment> shipmentIds = createShipmentRepository.findByMasterShipmentId(internalP44Identifier);
-        for (CreateShipment bmwIdFromDB : shipmentIds) {
-            planPickUpDate = bmwIdFromDB.getPlanPickUpDate();
-            planDeliveryDate = bmwIdFromDB.getPlanDeliveryDate();
+        deliveryInformation.setEventSendingDateTimeUtc(eventSendingDateTimeUTC);
+        //Temporary fix. Logic unknown
+        eventCreationDateTimeUTC = eventSendingDateTimeUTC;
+        deliveryInformation.setEventCreationDateTimeUtc(eventCreationDateTimeUTC);
+        if (shipmentJson.get("shipment").getAsJsonObject().has("attributes")) {
+            JsonArray attributesList = (JsonArray) shipmentJson.get("shipment").getAsJsonObject().get("attributes");
+            for (JsonElement attributes : attributesList) {
+                if ("Main haulage planned start".equalsIgnoreCase(attributes.getAsJsonObject().get("name").getAsString())) {
+                    JsonElement value = attributes.getAsJsonObject().get("values");
+                    planDeliveryDate = value.getAsJsonArray().get(0).getAsString();
+                }
+                if ("Main haulage planned end".equalsIgnoreCase(attributes.getAsJsonObject().get("name").getAsString())) {
+                    JsonElement value = attributes.getAsJsonObject().get("values");
+                    planPickUpDate = value.getAsJsonArray().get(0).getAsString();
+                }
+            }
         }
-    
+        JsonArray events = (JsonArray) shipmentJson.get("events");
         if (shipmentJson.has("positions")) {
             JsonArray positions = (JsonArray) shipmentJson.get("positions");
             if (positions.size() > 0) {
                 JsonElement posArray = positions.get(positions.size() - 1);
                 routeSegId = posArray.getAsJsonObject().get("routeSegmentId").getAsString();
+            }
+        } else {
+            for (JsonElement eventsTyp : events) {
+                if (eventsTyp.getAsJsonObject().has("dateTime") && eventsTyp.getAsJsonObject().has("routeSegmentId")) {
+                    routeSegId = eventsTyp.getAsJsonObject().get("routeSegmentId").getAsString();
+                }
             }
         }
     
@@ -49,8 +61,8 @@ public class DeliveryInformationMapper {
                 }
             }
         }
-    
-        JsonArray events = (JsonArray) shipmentJson.get("events");
+        
+        
         for (JsonElement eventsTyp : events) {
             if (eventsTyp.getAsJsonObject().has("routeSegmentId")) {
                 if ((eventsTyp.getAsJsonObject().get("routeSegmentId").getAsString().equalsIgnoreCase(routeSegId)) && eventsTyp.getAsJsonObject().has("estimateDateTime") && (Arrays.asList("ARRIVAL_AT_STOP", "GATE_IN_EMPTY", "GATE_IN_FULL").contains(eventsTyp.getAsJsonObject().get("type").getAsString()))) {
@@ -61,7 +73,7 @@ public class DeliveryInformationMapper {
                 }
             }
         }
-    
+        
         JsonArray stops = (JsonArray) shipmentJson.get("shipment").getAsJsonObject().get("routeInfo").getAsJsonObject().get("stops");
         for (JsonElement position : stops) {
             if (position.getAsJsonObject().get("type").getAsString().equals("PORT_OF_DISCHARGE")) {
@@ -72,13 +84,13 @@ public class DeliveryInformationMapper {
                 }
             }
         }
-    
-        deliveryInformations.setPlanPickUpDate(planPickUpDate);
-        deliveryInformations.setPlanDeliveryDate(planDeliveryDate);
-        deliveryInformations.setEtaDateTimeUTC(etaDateTimeUTC);
-        deliveryInformations.setEtaDateRoutePartUTC(etaDateRoutePartUTC);
-        deliveryInformations.setEtdDateNextRoutePart(etdDateNextRoutePart);
-    
-        bmwMapping.setDeliveryInformations(deliveryInformations);
+        
+        deliveryInformation.setPlanPickUpDate(planPickUpDate);
+        deliveryInformation.setPlanDeliveryDate(planDeliveryDate);
+        deliveryInformation.setEtaDateTimeUtc(etaDateTimeUTC);
+        deliveryInformation.setEtaDateRoutePartUtc(etaDateRoutePartUTC);
+        deliveryInformation.setEtdDateNextRoutePart(etdDateNextRoutePart);
+        
+        bmwMapping.setDeliveryInformation(deliveryInformation);
     }
 }

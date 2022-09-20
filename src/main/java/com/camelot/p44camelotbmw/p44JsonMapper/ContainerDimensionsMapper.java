@@ -1,28 +1,22 @@
 package com.camelot.p44camelotbmw.p44JsonMapper;
 
-import com.camelot.p44camelotbmw.db.CreateShipment;
-import com.camelot.p44camelotbmw.db.CreateShipmentRepository;
-import com.camelot.p44camelotbmw.entity.toBmwEntity.BMWMapping;
-import com.camelot.p44camelotbmw.entity.toBmwEntity.ContainerDimensions;
+import com.camelot.p44camelotbmw.entity.toBmwEntity.ContainerDimension;
+import com.camelot.p44camelotbmw.entity.toBmwEntity.P44ToBmw;
 import com.google.gson.JsonObject;
 
-import java.util.List;
-
 public class ContainerDimensionsMapper {
-    public void mapContainerDimensions(CreateShipmentRepository createShipmentRepository, JsonObject shipmentJson, BMWMapping bmwMapping) {
-        ContainerDimensions containerDimensions = new ContainerDimensions();
-        String totalWeightKGS = "", totalVolumeCBM = "";
+    public void mapContainerDimension(JsonObject shipmentJson, P44ToBmw bmwMapping) {
+        ContainerDimension containerDimension = new ContainerDimension();
+        String totalWeight = "", totalVolume = "", totalVolumeUnit = "", totalWeightUnit = "";
         
         String ShipIdent = shipmentJson.get("shipment").getAsJsonObject().get("id").getAsString();
-        List<CreateShipment> containerDimensionsList = createShipmentRepository.findByMasterShipmentId(ShipIdent);
-        for (CreateShipment carrierIdFromDB : containerDimensionsList) {
-            totalWeightKGS = carrierIdFromDB.getTotalWeightKGS();
-            totalVolumeCBM = carrierIdFromDB.getTotalVolumeCBM();
-        }
         
-        containerDimensions.setTotalVolumeCBM(totalVolumeCBM);
-        containerDimensions.setTotalWeightKGS(totalWeightKGS);
         
-        bmwMapping.setContainerDimensions(containerDimensions);
+        containerDimension.setTotalVolume(totalVolume);
+        containerDimension.setTotalVolumeUnit(totalVolumeUnit);
+        containerDimension.setTotalWeight(totalWeight);
+        containerDimension.setTotalWeightUnit(totalWeightUnit);
+        
+        bmwMapping.setContainerDimension(containerDimension);
     }
 }

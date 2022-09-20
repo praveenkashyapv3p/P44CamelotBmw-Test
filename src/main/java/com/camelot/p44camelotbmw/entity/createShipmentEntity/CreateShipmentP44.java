@@ -1,6 +1,5 @@
 package com.camelot.p44camelotbmw.entity.createShipmentEntity;
 
-import com.camelot.p44camelotbmw.db.CreateShipment;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -45,7 +44,7 @@ public class CreateShipmentP44 {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(CreateShipment.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
+        sb.append(CreateShipmentP44.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
         sb.append("identifiers");
         sb.append('=');
         sb.append(((this.identifiers == null) ? "<null>" : this.identifiers));

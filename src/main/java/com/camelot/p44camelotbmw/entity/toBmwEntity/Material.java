@@ -3,7 +3,6 @@ package com.camelot.p44camelotbmw.entity.toBmwEntity;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-
 public class Material {
     
     @SerializedName("materialNumber")
@@ -12,12 +11,18 @@ public class Material {
     @SerializedName("purchaseOrder")
     @Expose
     private String purchaseOrder;
-    @SerializedName("quantity")
+    @SerializedName("deliveryNoteNumber")
     @Expose
-    private String quantity;
-    @SerializedName("deliverNoteNumber")
+    private String deliveryNoteNumber;
+    @SerializedName("p44Quantity")
     @Expose
-    private String deliverNoteNumber;
+    private String p44Quantity;
+    @SerializedName("bmwQuantity")
+    @Expose
+    private String bmwQuantity;
+    @SerializedName("quantityUnit")
+    @Expose
+    private String quantityUnit;
     
     public String getMaterialNumber() {
         return materialNumber;
@@ -35,20 +40,36 @@ public class Material {
         this.purchaseOrder = purchaseOrder;
     }
     
-    public String getQuantity() {
-        return quantity;
+    public String getDeliveryNoteNumber() {
+        return deliveryNoteNumber;
     }
     
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
+    public void setDeliveryNoteNumber(String deliveryNoteNumber) {
+        this.deliveryNoteNumber = deliveryNoteNumber;
     }
     
-    public String getDeliverNoteNumber() {
-        return deliverNoteNumber;
+    public String getP44Quantity() {
+        return p44Quantity;
     }
     
-    public void setDeliverNoteNumber(String deliverNoteNumber) {
-        this.deliverNoteNumber = deliverNoteNumber;
+    public void setP44Quantity(String p44Quantity) {
+        this.p44Quantity = p44Quantity;
+    }
+    
+    public String getBmwQuantity() {
+        return bmwQuantity;
+    }
+    
+    public void setBmwQuantity(String bmwQuantity) {
+        this.bmwQuantity = bmwQuantity;
+    }
+    
+    public String getQuantityUnit() {
+        return quantityUnit;
+    }
+    
+    public void setQuantityUnit(String quantityUnit) {
+        this.quantityUnit = quantityUnit;
     }
     
     @Override
@@ -63,13 +84,21 @@ public class Material {
         sb.append('=');
         sb.append(((this.purchaseOrder == null) ? "<null>" : this.purchaseOrder));
         sb.append(',');
-        sb.append("quantity");
+        sb.append("deliveryNoteNumber");
         sb.append('=');
-        sb.append(((this.quantity == null) ? "<null>" : this.quantity));
+        sb.append(((this.deliveryNoteNumber == null) ? "<null>" : this.deliveryNoteNumber));
         sb.append(',');
-        sb.append("deliverNoteNumber");
+        sb.append("p44Quantity");
         sb.append('=');
-        sb.append(((this.deliverNoteNumber == null) ? "<null>" : this.deliverNoteNumber));
+        sb.append(((this.p44Quantity == null) ? "<null>" : this.p44Quantity));
+        sb.append(',');
+        sb.append("bmwQuantity");
+        sb.append('=');
+        sb.append(((this.bmwQuantity == null) ? "<null>" : this.bmwQuantity));
+        sb.append(',');
+        sb.append("quantityUnit");
+        sb.append('=');
+        sb.append(((this.quantityUnit == null) ? "<null>" : this.quantityUnit));
         sb.append(',');
         if (sb.charAt((sb.length() - 1)) == ',') {
             sb.setCharAt((sb.length() - 1), ']');

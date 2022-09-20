@@ -5,40 +5,40 @@ import com.google.gson.annotations.SerializedName;
 
 public class Carrier {
     
-    @SerializedName("carrierID")
+    @SerializedName("id")
     @Expose
-    private String carrierID;
-    @SerializedName("carrierName")
+    private String id;
+    @SerializedName("name")
     @Expose
-    private String carrierName;
+    private String name;
     
-    public String getCarrierID() {
-        return carrierID;
+    public String getId() {
+        return id;
     }
     
-    public void setCarrierID(String carrierID) {
-        this.carrierID = carrierID;
+    public void setId(String id) {
+        this.id = id;
     }
     
-    public String getCarrierName() {
-        return carrierName;
+    public String getName() {
+        return name;
     }
     
-    public void setCarrierName(String carrierName) {
-        this.carrierName = carrierName;
+    public void setName(String name) {
+        this.name = name;
     }
     
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(Carrier.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
-        sb.append("carrierID");
+        sb.append("id");
         sb.append('=');
-        sb.append(((this.carrierID == null) ? "<null>" : this.carrierID));
+        sb.append(((this.id == null) ? "<null>" : this.id));
         sb.append(',');
-        sb.append("carrierName");
+        sb.append("name");
         sb.append('=');
-        sb.append(((this.carrierName == null) ? "<null>" : this.carrierName));
+        sb.append(((this.name == null) ? "<null>" : this.name));
         sb.append(',');
         if (sb.charAt((sb.length() - 1)) == ',') {
             sb.setCharAt((sb.length() - 1), ']');

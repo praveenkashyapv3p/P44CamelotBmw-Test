@@ -7,32 +7,30 @@ import java.util.List;
 
 public class BmwToP44 {
     
-    @SerializedName("identifiers")
-    @Expose
-    private Identifiers identifiers;
     @SerializedName("transportationNetwork")
     @Expose
     private String transportationNetwork;
-    @SerializedName("contactInformation")
+    @SerializedName("recipient")
     @Expose
-    private List<ContactInformation> contactInformation = null;
-    @SerializedName("deliveryInformations")
+    private Recipient recipient;
+    @SerializedName("sender")
     @Expose
-    private DeliveryInformations deliveryInformations;
-    @SerializedName("containerDimensions")
+    private Sender sender;
+    @SerializedName("carrier")
     @Expose
-    private ContainerDimensions containerDimensions;
+    private Carrier carrier;
+    @SerializedName("deliveryInformation")
+    @Expose
+    private DeliveryInformation deliveryInformation;
+    @SerializedName("identifier")
+    @Expose
+    private Identifier identifier;
+    @SerializedName("containerDimension")
+    @Expose
+    private ContainerDimension containerDimension;
     @SerializedName("materials")
     @Expose
     private List<Material> materials = null;
-    
-    public Identifiers getIdentifiers() {
-        return identifiers;
-    }
-    
-    public void setIdentifiers(Identifiers identifiers) {
-        this.identifiers = identifiers;
-    }
     
     public String getTransportationNetwork() {
         return transportationNetwork;
@@ -42,28 +40,52 @@ public class BmwToP44 {
         this.transportationNetwork = transportationNetwork;
     }
     
-    public List<ContactInformation> getContactInformation() {
-        return contactInformation;
+    public Recipient getRecipient() {
+        return recipient;
     }
     
-    public void setContactInformation(List<ContactInformation> contactInformation) {
-        this.contactInformation = contactInformation;
+    public void setRecipient(Recipient recipient) {
+        this.recipient = recipient;
     }
     
-    public DeliveryInformations getDeliveryInformations() {
-        return deliveryInformations;
+    public Sender getSender() {
+        return sender;
     }
     
-    public void setDeliveryInformations(DeliveryInformations deliveryInformations) {
-        this.deliveryInformations = deliveryInformations;
+    public void setSender(Sender sender) {
+        this.sender = sender;
     }
     
-    public ContainerDimensions getContainerDimensions() {
-        return containerDimensions;
+    public Carrier getCarrier() {
+        return carrier;
     }
     
-    public void setContainerDimensions(ContainerDimensions containerDimensions) {
-        this.containerDimensions = containerDimensions;
+    public void setCarrier(Carrier carrier) {
+        this.carrier = carrier;
+    }
+    
+    public DeliveryInformation getDeliveryInformation() {
+        return deliveryInformation;
+    }
+    
+    public void setDeliveryInformation(DeliveryInformation deliveryInformation) {
+        this.deliveryInformation = deliveryInformation;
+    }
+    
+    public Identifier getIdentifier() {
+        return identifier;
+    }
+    
+    public void setIdentifier(Identifier identifier) {
+        this.identifier = identifier;
+    }
+    
+    public ContainerDimension getContainerDimension() {
+        return containerDimension;
+    }
+    
+    public void setContainerDimension(ContainerDimension containerDimension) {
+        this.containerDimension = containerDimension;
     }
     
     public List<Material> getMaterials() {
@@ -78,25 +100,33 @@ public class BmwToP44 {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(BmwToP44.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
-        sb.append("identifiers");
-        sb.append('=');
-        sb.append(((this.identifiers == null) ? "<null>" : this.identifiers));
-        sb.append(',');
         sb.append("transportationNetwork");
         sb.append('=');
         sb.append(((this.transportationNetwork == null) ? "<null>" : this.transportationNetwork));
         sb.append(',');
-        sb.append("contactInformation");
+        sb.append("recipient");
         sb.append('=');
-        sb.append(((this.contactInformation == null) ? "<null>" : this.contactInformation));
+        sb.append(((this.recipient == null) ? "<null>" : this.recipient));
         sb.append(',');
-        sb.append("deliveryInformations");
+        sb.append("sender");
         sb.append('=');
-        sb.append(((this.deliveryInformations == null) ? "<null>" : this.deliveryInformations));
+        sb.append(((this.sender == null) ? "<null>" : this.sender));
         sb.append(',');
-        sb.append("containerDimensions");
+        sb.append("carrier");
         sb.append('=');
-        sb.append(((this.containerDimensions == null) ? "<null>" : this.containerDimensions));
+        sb.append(((this.carrier == null) ? "<null>" : this.carrier));
+        sb.append(',');
+        sb.append("deliveryInformation");
+        sb.append('=');
+        sb.append(((this.deliveryInformation == null) ? "<null>" : this.deliveryInformation));
+        sb.append(',');
+        sb.append("identifier");
+        sb.append('=');
+        sb.append(((this.identifier == null) ? "<null>" : this.identifier));
+        sb.append(',');
+        sb.append("containerDimension");
+        sb.append('=');
+        sb.append(((this.containerDimension == null) ? "<null>" : this.containerDimension));
         sb.append(',');
         sb.append("materials");
         sb.append('=');

@@ -15,7 +15,7 @@ import java.util.Collections;
 public class ShipmentIdMapper {
     private static final Logger logger = LogManager.getLogger(KafkaConsumerBMW.class);
     
-    public void getShipmentId(String shipmentId, String bmwShipmentId, String carrierP44ID, String materials) {
+    public void getShipmentId(String shipmentId, String p44BookingNumber, String carrierP44ID, String materials) {
         RestTemplate restTemplate = new RestTemplate();
         FinalP44AttributesMapper finalP44AttributesMapper = new FinalP44AttributesMapper();
         String originDest = "", origin = "", destination = "";
@@ -40,8 +40,8 @@ public class ShipmentIdMapper {
                     destination = stp.getAsJsonObject().get("id").getAsString();
                 }
             }
-            
-            finalP44AttributesMapper.getAllAttributes(shipmentId, origin, destination, bmwShipmentId, carrierP44ID, materials);
+        
+            finalP44AttributesMapper.getAllAttributes(shipmentId, origin, destination, p44BookingNumber, carrierP44ID, materials);
         } catch (Exception e) {
             logger.error("BMW Message cannot be split: " + e);
         }
