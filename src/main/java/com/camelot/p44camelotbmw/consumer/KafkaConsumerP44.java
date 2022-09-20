@@ -32,9 +32,6 @@ public class KafkaConsumerP44 {
         this.producer = producer;
     }
     
-    /*Development Consumer*/
-    //@KafkaListener(topics = "p44DataLocal", groupId = "p44DataLocalGroup")
-    /*Production Consumer*/
     @KafkaListener(topics = "p44Data", groupId = "bmwGroup")
     public void getP44Message(String message) {
         P44ToBmw bmwMapping = new P44ToBmw();
