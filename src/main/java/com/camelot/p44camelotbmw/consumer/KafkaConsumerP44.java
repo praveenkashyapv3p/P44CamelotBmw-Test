@@ -32,11 +32,14 @@ public class KafkaConsumerP44 {
         this.producer = producer;
     }
     
+    /*Development Consumer*/
+    //@KafkaListener(topics = "p44DataLocal", groupId = "p44DataLocalGroup")
+    /*Production Consumer*/
     @KafkaListener(topics = "p44Data", groupId = "bmwGroup")
     public void getP44Message(String message) {
         P44ToBmw bmwMapping = new P44ToBmw();
         try {
-    
+            
             RecipientMapper recipientMapper = new RecipientMapper();
             SenderMapper senderMapper = new SenderMapper();
             CarrierMapper carrierMapper = new CarrierMapper();
@@ -46,12 +49,12 @@ public class KafkaConsumerP44 {
             TransportLegInfoMapper transportLegInfoMapper = new TransportLegInfoMapper();
             ContainerDimensionsMapper containerDimensionsMapper = new ContainerDimensionsMapper();
             MaterialMapper materialMapper = new MaterialMapper();
-    
+            
             String jsonKey = String.valueOf(UuidGenerator.get64MostSignificantBitsForVersion1());
             String jsonStartingString = "{\"records\":[{\"key\":";
             String jsonStringValue = ",\"value\":";
             String jsonEndString = "}]}";
-    
+            
             bmwMapping.setLifecycleStatus("");
             bmwMapping.setLifecycleStatusVerbose("");
             bmwMapping.setMainTransportMode("SEA");
@@ -61,9 +64,9 @@ public class KafkaConsumerP44 {
             bmwMapping.setCurrentLeadTimePickUpUntilCurrentTimestamp("");
             bmwMapping.setCurrentLeadTimePickUpUntilDelivery("");
             bmwMapping.setCurrentLeadTimePickUpUntilEta("");
-    
+            
             JsonObject shipment = (JsonObject) JsonParser.parseString(message);
-    
+            
             recipientMapper.mapRecipient(shipment, bmwMapping);
             senderMapper.mapSender(shipment, bmwMapping);
             carrierMapper.mapCarrier(shipment, bmwMapping);
@@ -73,10 +76,10 @@ public class KafkaConsumerP44 {
             transportLegInfoMapper.mapTransportLegInfo(shipment, bmwMapping);
             containerDimensionsMapper.mapContainerDimension(shipment, bmwMapping);
             materialMapper.mapMaterial(shipment, bmwMapping);
-    
+            
             String bmwJson = jsonStartingString + jsonKey + jsonStringValue + new Gson().toJson(bmwMapping) + jsonEndString;
             String containerID = bmwMapping.getIdentifier().getContainerId();
-    
+            
             /*Temporary tracing of containers for Data validation*/
             if ((Arrays.asList("CAIU7053452", "CMAU7681240", "FSCU8704094", "CSNU6428681", "MSKU8538003", "TLLU6848274", "EITU9074179",
                     "TGBU8621308", "HASU4670368", "MSKU9718864", "FANU1740651", "TEMU1608650", "KOCU4488754", "MSKU6889462",
@@ -85,13 +88,13 @@ public class KafkaConsumerP44 {
                 this.producer.writeLogMessage(jsonKey, bmwJson);
             }
             /*Delete above code after Temporary tracing of containers for Data validation is complete*/
-    
+            
             this.producer.writeBMWMessage(jsonKey, bmwJson);
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<String> entity = new HttpEntity<>(bmwJson, headers);
-            ResponseEntity<String> response = restTemplate.postForEntity("https://p44-tracking-data-dev.bmwgroup.com", entity, String.class);
-//            System.out.println("response: " + response + "\n" + bmwJson);
+            ResponseEntity<String> response = restTemplate.postForEntity("https://p44-tracking-data-int.bmwgroup.com", entity, String.class);
+            System.out.println("response: " + response + "\n" + bmwJson);
         } catch (Exception e) {
             logger.error("Mapping failure " + e + "\n" + message + "\n" + new Gson().toJson(bmwMapping));
         }

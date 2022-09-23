@@ -21,6 +21,9 @@ import java.util.Map;
 public class KafkaConsumerBMW {
     private static final Logger logger = LogManager.getLogger(KafkaConsumerBMW.class);
     
+    /*Development Consumer*/
+    //@KafkaListener(topics = "BMWPushLocal", groupId = "BMWPushLocalGroup")
+    /*Production Consumer*/
     @KafkaListener(topics = "bmwPush", groupId = "BMWPushGroup")
     public void getBMWMessage(String message) {
         RestTemplate restTemplate = new RestTemplate();
@@ -29,14 +32,14 @@ public class KafkaConsumerBMW {
                 senderId = "", senderName = "", recipientID = "", recipientName = "", recipientUnloadingPoint = "", planPickUpDate = "", planDeliveryDate = "",
                 totalWeight = "", totalWeightUnit = "", totalVolume = "", totalVolumeUnit = "", bookingNumber = "", billOfLading = "",
                 bmwBusinessRelation = "";
-    
+        
         try {
             JsonObject inputJSON = (JsonObject) JsonParser.parseString(message);
             /*
              * transportationNetwork(Not mapped. Fixed value SHIP is returned to BMW)
              */
             transportationNetwork = inputJSON.getAsJsonObject().get("transportationNetwork").getAsString();
-        
+            
             /*
              * recipient
              * UnloadingPoint is ignored for now
@@ -45,14 +48,14 @@ public class KafkaConsumerBMW {
             recipientID = recipient.getAsJsonObject().get("id").getAsString();
             recipientName = recipient.getAsJsonObject().get("name").getAsString();
             recipientUnloadingPoint = recipient.getAsJsonObject().get("unloadingPoint").getAsString();
-        
+            
             /*
              * Sender
              */
             JsonElement sender = inputJSON.getAsJsonObject().get("sender");
             senderId = sender.getAsJsonObject().get("id").getAsString();
             senderName = sender.getAsJsonObject().get("name").getAsString();
-        
+            
             /*
              * carrier
              */
@@ -61,14 +64,14 @@ public class KafkaConsumerBMW {
             Map<String, String> stCod = carrierMapping.getCarrierId();
             carrierP44ID = stCod.get(carrierID);
             carrierName = carrier.getAsJsonObject().get("name").getAsString();
-        
+            
             /*
              * deliveryInformation
              */
             JsonElement deliveryInformation = inputJSON.getAsJsonObject().get("deliveryInformation");
             planPickUpDate = deliveryInformation.getAsJsonObject().get("planPickUpDate").getAsString();
             planDeliveryDate = deliveryInformation.getAsJsonObject().get("planDeliveryDate").getAsString();
-        
+            
             /*
              * identifier
              */
@@ -78,7 +81,7 @@ public class KafkaConsumerBMW {
             bmwShipmentId = identifiers.getAsJsonObject().get("bmwShipmentId").getAsString();
             bookingNumber = identifiers.getAsJsonObject().get("bookingNumber").getAsString();
             bmwBusinessRelation = identifiers.getAsJsonObject().get("bmwBusinessRelation").getAsString();
-        
+            
             /*
              * containerDimension
              * totalVolumeUnit and totalWeightUnit are ignored for now
@@ -88,17 +91,17 @@ public class KafkaConsumerBMW {
             totalVolumeUnit = containerDimensions.getAsJsonObject().get("totalVolumeUnit").getAsString();
             totalWeight = containerDimensions.getAsJsonObject().get("totalWeight").getAsString();
             totalWeightUnit = containerDimensions.getAsJsonObject().get("totalWeightUnit").getAsString();
-        
+            
             /*
              * materials
              */
             JsonArray materials = (JsonArray) inputJSON.getAsJsonObject().get("materials");
             String materialsString = materials.toString();
-        
-        
+            
+            
             CreateShipmentMapper createShipmentMapper = new CreateShipmentMapper();
             CreateShipmentP44 createShipmentP44 = new CreateShipmentP44();
-        
+            
             createShipmentP44 = createShipmentMapper.mapCreateShipment(createShipmentP44, containerID, bmwShipmentId, bookingNumber,
                     billOfLading, bmwBusinessRelation, senderId, senderName, recipientID, recipientName, recipientUnloadingPoint,
                     carrierID, carrierP44ID, carrierName, planPickUpDate, planDeliveryDate, totalWeight, totalVolume);
@@ -110,10 +113,10 @@ public class KafkaConsumerBMW {
             HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
             ResponseEntity<String> response = restTemplate.postForEntity("https://na12.api.project44.com/api/v4/shipments/tracking", entity, String.class);
             String jsonResponse = response.getBody();
-        
+            
             JsonObject shipmentIdJSON = (JsonObject) JsonParser.parseString(jsonResponse);
             String masterShipmentId = shipmentIdJSON.get("id").getAsString();
-        
+            
             String p44BookingNumber = "";
             if (!billOfLading.equals("")) {
                 p44BookingNumber = billOfLading;
