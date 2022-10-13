@@ -10,8 +10,8 @@
     <relativePath/>
   </parent>
   <groupId>com.camelot</groupId>
-  <artifactId>P44CamelotBMW</artifactId>
-  <version>1.0</version>
+  <artifactId>app</artifactId>
+  <!--  <version>1.0</version>-->
   <name>P44CamelotBMW</name>
   <description>P44CamelotBMW</description>
   <properties>

@@ -7,12 +7,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.text.ParseException;
 import java.util.Map;
 
 public class CurrentLocationInfoMapper {
     
     
-    public void mapCurrLocInfo(JsonObject shipmentJson, P44ToBmw bmwMapping) {
+    public void mapCurrLocInfo(JsonObject shipmentJson, P44ToBmw bmwMapping) throws ParseException {
         
         CurrentLocationInfo currentLocationInfos = new CurrentLocationInfo();
         StatusCodes statusCodes = new StatusCodes();

@@ -6,21 +6,25 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import java.time.Instant;
+import java.text.ParseException;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 public class DeliveryInformationMapper {
     
     
-    public void mapDeliveryInformation(JsonObject shipmentJson, P44ToBmw bmwMapping) {
+    public void mapDeliveryInformation(JsonObject shipmentJson, P44ToBmw bmwMapping) throws ParseException {
         DeliveryInformation deliveryInformation = new DeliveryInformation();
         String planPickUpDate = "", planDeliveryDate = "", etaDateTimeUTC = "", etaDateRoutePartUTC = "", etdDateNextRoutePart = "", eventCreationDateTimeUTC = "", eventSendingDateTimeUTC = "", routeSegId = "", nextRouteSeg = "", toStpId = "";
         
+        DateTimeFormatter f = DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ss.SSSZZZ");
+        String output = OffsetDateTime.now(ZoneOffset.UTC).format(f);
         
-        eventSendingDateTimeUTC = Instant.now().toString();
+        eventSendingDateTimeUTC = output;
         deliveryInformation.setEventSendingDateTimeUtc(eventSendingDateTimeUTC);
-        //Temporary fix. Logic unknown
-        eventCreationDateTimeUTC = eventSendingDateTimeUTC;
+        eventCreationDateTimeUTC = output;
         deliveryInformation.setEventCreationDateTimeUtc(eventCreationDateTimeUTC);
         if (shipmentJson.get("shipment").getAsJsonObject().has("attributes")) {
             JsonArray attributesList = (JsonArray) shipmentJson.get("shipment").getAsJsonObject().get("attributes");

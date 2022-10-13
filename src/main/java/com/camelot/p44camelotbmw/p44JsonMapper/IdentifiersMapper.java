@@ -42,7 +42,7 @@ public class IdentifiersMapper {
                 billOfLading = contId.getAsJsonObject().get("value").getAsString();
             }
         }
-        
+    
         if (shipmentJson.get("shipment").getAsJsonObject().has("attributes")) {
             JsonArray attributesList = (JsonArray) shipmentJson.get("shipment").getAsJsonObject().get("attributes");
             for (JsonElement attributes : attributesList) {

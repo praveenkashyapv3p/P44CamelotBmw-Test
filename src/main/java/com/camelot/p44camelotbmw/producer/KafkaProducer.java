@@ -15,11 +15,10 @@ public class KafkaProducer {
     //private static final String BMWTOPIC = "bmwDataLocal";
     /*Production Topic*/
     private static final String BMWTOPIC = "bmwData";
-    /*Development Topic*/
-    //private static final String BMWPUSH = "BMWPushLocal";
-    /*Production Topic*/
+    private static final String BMWMAP = "BMWPushLocal";
     private static final String BMWPUSH = "bmwPush";
     private static final String LOGPUSH = "logTopic";
+    private static final String BMWERRORTOPIC = "bmwError";
     
     
     @Autowired
@@ -33,8 +32,16 @@ public class KafkaProducer {
         this.kafkaTemplate.send(BMWTOPIC, id, msg);
     }
     
+    public void writeBMWErrorMessage(String id, String msg) {
+        this.kafkaTemplate.send(BMWERRORTOPIC, id, msg);
+    }
+    
     public void writeBMWPushMessage(String id, String msg) {
         this.kafkaTemplate.send(BMWPUSH, id, msg);
+    }
+    
+    public void writeBMWMapError(String msg) {
+        this.kafkaTemplate.send(BMWMAP, msg);
     }
     
     public void writeLogMessage(String id, String msg) {

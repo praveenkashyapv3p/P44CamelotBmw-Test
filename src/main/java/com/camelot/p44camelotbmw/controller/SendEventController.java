@@ -53,7 +53,7 @@ public class SendEventController {
             }
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            logger.error("Invalid JSON or JSON Structure mismatch from Project44 message " + e);
+            logger.error("Invalid JSON or JSON Structure mismatch from Project44 message " + e + shipmentJson);
             return ResponseEntity.badRequest().build();
         }
     }

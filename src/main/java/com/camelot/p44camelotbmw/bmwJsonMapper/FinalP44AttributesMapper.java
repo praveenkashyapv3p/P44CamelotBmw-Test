@@ -1,13 +1,10 @@
 package com.camelot.p44camelotbmw.bmwJsonMapper;
 
-import com.camelot.p44camelotbmw.consumer.KafkaConsumerBMW;
 import com.camelot.p44camelotbmw.entity.loadEntity.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -18,8 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FinalP44AttributesMapper {
-    
-    private static final Logger logger = LogManager.getLogger(KafkaConsumerBMW.class);
     
     public void getAllAttributes(String shipmentId, String origin, String destination, String bookingNum, String carrierId, String materials) {
         RestTemplate restTemplate = new RestTemplate();
@@ -49,29 +44,30 @@ public class FinalP44AttributesMapper {
         loadEntity.setDescription("");
     
         List<Item> itemList = new ArrayList<>();
-        JsonArray materialsJsonArray = JsonParser.parseString(materials).getAsJsonArray();
-        for (JsonElement material : materialsJsonArray) {
-            Item item = new Item();
-            List<OrderIdentifierReference> orderIdentifierReferenceList = new ArrayList<>();
-            OrderIdentifierReference orderIdentifierReference = new OrderIdentifierReference();
-            orderIdentifierReference.setOrderType("PURCHASE_ORDER");
-            orderIdentifierReference.setOrderIdentifier(material.getAsJsonObject().get("purchaseOrder").getAsString());
-            orderIdentifierReferenceList.add(orderIdentifierReference);
-            item.setOrderIdentifierReferences(orderIdentifierReferenceList);
-            //item.setUnitQuantity(material.getAsJsonObject().get("quantity").getAsString());
-            item.setUnitQuantity("");
-            item.setUnitType("EACH");
-            item.setDescription(material.getAsJsonObject().get("deliveryNoteNumber").getAsString());
-            List<Identifier_items> identifierItemsList = new ArrayList<>();
-            Identifier_items identifier_items = new Identifier_items();
-            identifier_items.setType("STOCK_KEEPING_UNIT");
-            identifier_items.setValue(material.getAsJsonObject().get("materialNumber").getAsString());
-            identifierItemsList.add(identifier_items);
-            item.setIdentifiers(identifierItemsList);
-            itemList.add(item);
+        if (!materials.equalsIgnoreCase("")) {
+            JsonArray materialsJsonArray = JsonParser.parseString(materials).getAsJsonArray();
+            for (JsonElement material : materialsJsonArray) {
+                Item item = new Item();
+                List<OrderIdentifierReference> orderIdentifierReferenceList = new ArrayList<>();
+                OrderIdentifierReference orderIdentifierReference = new OrderIdentifierReference();
+                orderIdentifierReference.setOrderType("PURCHASE_ORDER");
+                orderIdentifierReference.setOrderIdentifier(material.getAsJsonObject().get("purchaseOrder").getAsString());
+                orderIdentifierReferenceList.add(orderIdentifierReference);
+                item.setOrderIdentifierReferences(orderIdentifierReferenceList);
+                item.setUnitQuantity("");
+                item.setUnitType("EACH");
+                item.setDescription(material.getAsJsonObject().get("deliveryNoteNumber").getAsString());
+                List<Identifier_items> identifierItemsList = new ArrayList<>();
+                Identifier_items identifier_items = new Identifier_items();
+                identifier_items.setType("STOCK_KEEPING_UNIT");
+                identifier_items.setValue(material.getAsJsonObject().get("materialNumber").getAsString());
+                identifierItemsList.add(identifier_items);
+                item.setIdentifiers(identifierItemsList);
+                itemList.add(item);
+            }
+            loadEntity.setItems(itemList);
         }
-        loadEntity.setItems(itemList);
-        
+    
         Gson gson = new Gson();
         String requestBody = gson.toJson(loadEntity);
         HttpHeaders headers = new HttpHeaders();

@@ -9,12 +9,7 @@ public class CreateShipmentMapper {
     /*
      * Mapping for Request body of Step 1 in create shipment process from BMW to Project44
      */
-    public CreateShipmentP44 mapCreateShipment(CreateShipmentP44 createShipmentP44, String containerID, String bmwShipmentId,
-                                               String bookingNumber, String billOfLading, String bmwBusinessRelation, String senderId,
-                                               String senderName, String recipientID, String recipientName,
-                                               String recipientUnloadingPoint, String carrierId, String carrierP44ID,
-                                               String carrierName, String planPickUpDate, String planDeliveryDate, String totalWeight,
-                                               String totalVolume) {
+    public CreateShipmentP44 mapCreateShipment(CreateShipmentP44 createShipmentP44, String containerID, String bmwShipmentId, String bookingNumber, String billOfLading, String bmwBusinessRelation, String senderId, String senderName, String recipientID, String recipientName, String recipientUnloadingPoint, String carrierId, String carrierP44ID, String carrierName, String planPickUpDate, String planDeliveryDate, String totalWeight, String totalVolume) {
     
         String p44BookingNumber = "";
         List<Identifier> identifierList = new ArrayList<>();
@@ -42,10 +37,12 @@ public class CreateShipmentMapper {
          * Attributes
          */
         List<Attribute> attributeList = new ArrayList<>();
-        Attribute attributeRecUnloadingPnt = new Attribute();
-        attributeRecUnloadingPnt.setName("recipientUnloadingPoint");
-        attributeRecUnloadingPnt.setValue(recipientUnloadingPoint);
-        attributeList.add(attributeRecUnloadingPnt);
+        if (!recipientUnloadingPoint.equalsIgnoreCase("")) {
+            Attribute attributeRecUnloadingPnt = new Attribute();
+            attributeRecUnloadingPnt.setName("recipientUnloadingPoint");
+            attributeRecUnloadingPnt.setValue(recipientUnloadingPoint);
+            attributeList.add(attributeRecUnloadingPnt);
+        }
     
         Attribute attributeRecName = new Attribute();
         attributeRecName.setName("recipientName");
@@ -67,15 +64,19 @@ public class CreateShipmentMapper {
         attributeSenderId.setValue(senderId);
         attributeList.add(attributeSenderId);
     
-        Attribute attributeBmwShipmentId = new Attribute();
-        attributeBmwShipmentId.setName("SAP Carrier details");
-        attributeBmwShipmentId.setValue(bmwShipmentId);
-        attributeList.add(attributeBmwShipmentId);
+        if (!bmwShipmentId.equalsIgnoreCase("")) {
+            Attribute attributeBmwShipmentId = new Attribute();
+            attributeBmwShipmentId.setName("SAP Carrier details");
+            attributeBmwShipmentId.setValue(bmwShipmentId);
+            attributeList.add(attributeBmwShipmentId);
+        }
     
-        Attribute attributeBusinessUnit = new Attribute();
-        attributeBusinessUnit.setName("Business unit");
-        attributeBusinessUnit.setValue(bmwBusinessRelation);
-        attributeList.add(attributeBusinessUnit);
+        if (!bmwBusinessRelation.equalsIgnoreCase("")) {
+            Attribute attributeBusinessUnit = new Attribute();
+            attributeBusinessUnit.setName("Business unit");
+            attributeBusinessUnit.setValue(bmwBusinessRelation);
+            attributeList.add(attributeBusinessUnit);
+        }
     
         Attribute attributeCarrierName = new Attribute();
         attributeCarrierName.setName("Main haulage carrier name");

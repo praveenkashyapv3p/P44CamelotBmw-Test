@@ -11,7 +11,7 @@ public class DeliveryInformation {
     @SerializedName("etaDateRoutePartUtc")
     @Expose
     private String etaDateRoutePartUtc;
-    @SerializedName("etdDateNextRoutePart")
+    @SerializedName("etdDateNextRoutePartUtc")
     @Expose
     private String etdDateNextRoutePart;
     @SerializedName("eventCreationDateTimeUtc")
