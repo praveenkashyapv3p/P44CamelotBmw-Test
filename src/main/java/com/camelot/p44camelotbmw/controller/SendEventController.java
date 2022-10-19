@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 public class SendEventController {
     private static final Logger logger = LogManager.getLogger(SendEventController.class);
@@ -30,7 +32,13 @@ public class SendEventController {
     }
     
     @PostMapping(value = "/v1/sendEvent", consumes = "application/json")
-    public ResponseEntity<String> shipmentDetailsFromP44(@RequestBody String shipmentJson) {
+    public ResponseEntity<String> shipmentDetailsFromP44(@RequestBody String shipmentJson, HttpServletRequest request) {
+        String ipAddress = request.getHeader("X-Forward-For");
+        if (ipAddress == null) {
+            ipAddress = request.getRemoteAddr();
+        }
+        System.out.println("ipAddress: " + ipAddress);
+        
         try {
             boolean trackingJson = false;
             String jsonKey = String.valueOf(UuidGenerator.get64MostSignificantBitsForVersion1());

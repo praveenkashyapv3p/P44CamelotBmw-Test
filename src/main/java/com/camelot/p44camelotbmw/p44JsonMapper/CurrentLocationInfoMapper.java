@@ -8,33 +8,39 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.text.ParseException;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 public class CurrentLocationInfoMapper {
     
     
     public void mapCurrLocInfo(JsonObject shipmentJson, P44ToBmw bmwMapping) throws ParseException {
-        
+    
         CurrentLocationInfo currentLocationInfos = new CurrentLocationInfo();
         StatusCodes statusCodes = new StatusCodes();
         String eventStopId = "", statusName = "", eventsType = "", timeStamp = "", longitude = "", latitude = "", geoDateTimeUTC = "",
                 locationID = "", locationName = "", statusCode = "", sourceofPositionData = "";
+    
+        DateTimeFormatter inF = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssX");
+        DateTimeFormatter outF = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSSX");
         JsonArray events = (JsonArray) shipmentJson.get("events");
-        
+    
         for (JsonElement eventsTyp : events) {
             if (eventsTyp.getAsJsonObject().has("dateTime")) {
                 eventStopId = eventsTyp.getAsJsonObject().get("stopId").getAsString();
                 eventsType = eventsTyp.getAsJsonObject().get("type").getAsString();
             }
         }
-        
+    
         if (shipmentJson.has("positions")) {
             JsonArray positions = (JsonArray) shipmentJson.get("positions");
             if (positions.size() > 0) {
                 JsonElement posArray = positions.get(positions.size() - 1);
                 longitude = posArray.getAsJsonObject().get("longitude").getAsString();
                 latitude = posArray.getAsJsonObject().get("latitude").getAsString();
-                geoDateTimeUTC = posArray.getAsJsonObject().get("dateTime").getAsString();
+                ZonedDateTime result = ZonedDateTime.parse(posArray.getAsJsonObject().get("dateTime").getAsString(), inF);
+                geoDateTimeUTC = result.format(outF);
             }
         }
         
@@ -48,7 +54,8 @@ public class CurrentLocationInfoMapper {
                  */
                 for (JsonElement statesTyp : states) {
                     statusName = statesTyp.getAsJsonObject().get("type").getAsString();
-                    timeStamp = statesTyp.getAsJsonObject().get("startDateTime").getAsString();
+                    ZonedDateTime result = ZonedDateTime.parse(statesTyp.getAsJsonObject().get("startDateTime").getAsString(), inF);
+                    timeStamp = result.format(outF);
                 }
     
                 /*

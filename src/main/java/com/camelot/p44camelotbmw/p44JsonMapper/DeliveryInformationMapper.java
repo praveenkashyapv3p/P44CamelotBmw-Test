@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import java.text.ParseException;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
@@ -18,10 +19,11 @@ public class DeliveryInformationMapper {
     public void mapDeliveryInformation(JsonObject shipmentJson, P44ToBmw bmwMapping) throws ParseException {
         DeliveryInformation deliveryInformation = new DeliveryInformation();
         String planPickUpDate = "", planDeliveryDate = "", etaDateTimeUTC = "", etaDateRoutePartUTC = "", etdDateNextRoutePart = "", eventCreationDateTimeUTC = "", eventSendingDateTimeUTC = "", routeSegId = "", nextRouteSeg = "", toStpId = "";
-        
-        DateTimeFormatter f = DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ss.SSSZZZ");
-        String output = OffsetDateTime.now(ZoneOffset.UTC).format(f);
-        
+    
+        DateTimeFormatter inF = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssX");
+        DateTimeFormatter outF = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSSX");
+        String output = OffsetDateTime.now(ZoneOffset.UTC).format(outF);
+    
         eventSendingDateTimeUTC = output;
         deliveryInformation.setEventSendingDateTimeUtc(eventSendingDateTimeUTC);
         eventCreationDateTimeUTC = output;
@@ -31,11 +33,13 @@ public class DeliveryInformationMapper {
             for (JsonElement attributes : attributesList) {
                 if ("Main haulage planned start".equalsIgnoreCase(attributes.getAsJsonObject().get("name").getAsString())) {
                     JsonElement value = attributes.getAsJsonObject().get("values");
-                    planDeliveryDate = value.getAsJsonArray().get(0).getAsString();
+                    ZonedDateTime result = ZonedDateTime.parse(value.getAsJsonArray().get(0).getAsString(), inF);
+                    planDeliveryDate = result.format(outF);
                 }
                 if ("Main haulage planned end".equalsIgnoreCase(attributes.getAsJsonObject().get("name").getAsString())) {
                     JsonElement value = attributes.getAsJsonObject().get("values");
-                    planPickUpDate = value.getAsJsonArray().get(0).getAsString();
+                    ZonedDateTime result = ZonedDateTime.parse(value.getAsJsonArray().get(0).getAsString(), inF);
+                    planPickUpDate = result.format(outF);
                 }
             }
         }
@@ -70,10 +74,12 @@ public class DeliveryInformationMapper {
         for (JsonElement eventsTyp : events) {
             if (eventsTyp.getAsJsonObject().has("routeSegmentId")) {
                 if ((eventsTyp.getAsJsonObject().get("routeSegmentId").getAsString().equalsIgnoreCase(routeSegId)) && eventsTyp.getAsJsonObject().has("estimateDateTime") && (Arrays.asList("ARRIVAL_AT_STOP", "GATE_IN_EMPTY", "GATE_IN_FULL").contains(eventsTyp.getAsJsonObject().get("type").getAsString()))) {
-                    etaDateRoutePartUTC = eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString();
+                    ZonedDateTime result = ZonedDateTime.parse(eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString(), inF);
+                    etaDateRoutePartUTC = result.format(outF);
                 }
                 if ((eventsTyp.getAsJsonObject().get("routeSegmentId").getAsString().equalsIgnoreCase(nextRouteSeg)) && eventsTyp.getAsJsonObject().has("estimateDateTime") && (Arrays.asList("ARRIVAL_AT_STOP", "GATE_IN_EMPTY", "GATE_IN_FULL").contains(eventsTyp.getAsJsonObject().get("type").getAsString()))) {
-                    etdDateNextRoutePart = eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString();
+                    ZonedDateTime result = ZonedDateTime.parse(eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString(), inF);
+                    etdDateNextRoutePart = result.format(outF);
                 }
             }
         }
@@ -83,18 +89,19 @@ public class DeliveryInformationMapper {
             if (position.getAsJsonObject().get("type").getAsString().equals("PORT_OF_DISCHARGE")) {
                 for (JsonElement eventsTyp : events) {
                     if ((position.getAsJsonObject().get("id").getAsString().equals(eventsTyp.getAsJsonObject().get("stopId").getAsString())) && eventsTyp.getAsJsonObject().has("estimateDateTime") && (Arrays.asList("ARRIVAL_AT_STOP", "GATE_IN_EMPTY", "GATE_IN_FULL").contains(eventsTyp.getAsJsonObject().get("type").getAsString()))) {
-                        etaDateTimeUTC = eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString();
+                        ZonedDateTime result = ZonedDateTime.parse(eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString(), inF);
+                        etaDateTimeUTC = result.format(outF);
                     }
                 }
             }
         }
-        
+    
         deliveryInformation.setPlanPickUpDate(planPickUpDate);
         deliveryInformation.setPlanDeliveryDate(planDeliveryDate);
         deliveryInformation.setEtaDateTimeUtc(etaDateTimeUTC);
         deliveryInformation.setEtaDateRoutePartUtc(etaDateRoutePartUTC);
         deliveryInformation.setEtdDateNextRoutePart(etdDateNextRoutePart);
-        
+    
         bmwMapping.setDeliveryInformation(deliveryInformation);
     }
 }

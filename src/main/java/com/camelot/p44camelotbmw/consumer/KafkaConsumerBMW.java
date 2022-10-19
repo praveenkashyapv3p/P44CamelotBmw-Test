@@ -4,6 +4,7 @@ import com.camelot.p44camelotbmw.bmwJsonMapper.CreateShipmentMapper;
 import com.camelot.p44camelotbmw.bmwJsonMapper.ShipmentIdMapper;
 import com.camelot.p44camelotbmw.constants.CarrierMapping;
 import com.camelot.p44camelotbmw.entity.createShipmentEntity.CreateShipmentP44;
+import com.camelot.p44camelotbmw.producer.KafkaProducer;
 import com.google.gson.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,7 +21,11 @@ import java.util.Map;
 @Service
 public class KafkaConsumerBMW {
     private static final Logger logger = LogManager.getLogger(KafkaConsumerBMW.class);
+    private final KafkaProducer producer;
     
+    public KafkaConsumerBMW(KafkaProducer producer) {
+        this.producer = producer;
+    }
     
     /*Development Consumer*/
     //@KafkaListener(topics = "BMWPushLocal", groupId = "BMWPushLocalGroup")
@@ -135,6 +140,7 @@ public class KafkaConsumerBMW {
             shipmentIdMapper.getShipmentId(masterShipmentId, p44BookingNumber, carrierP44ID, materialsString);
         } catch (Exception e) {
             logger.error("BMW Message cannot be split: " + e);
+            this.producer.writeLogMessage("bmw-message", message);
         }
     }
 }
