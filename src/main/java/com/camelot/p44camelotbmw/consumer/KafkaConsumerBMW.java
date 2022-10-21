@@ -34,7 +34,7 @@ public class KafkaConsumerBMW {
     public void getBMWMessage(String message) {
         RestTemplate restTemplate = new RestTemplate();
         CarrierMapping carrierMapping = new CarrierMapping();
-        String bmwShipmentId = "", containerID = "", transportationNetwork = "", carrierID = "", carrierP44ID = "", carrierName = "", senderId = "", senderName = "", recipientID = "", recipientName = "", recipientUnloadingPoint = "", planPickUpDate = "", planDeliveryDate = "", totalWeight = "", totalWeightUnit = "", totalVolume = "", totalVolumeUnit = "", bookingNumber = "", billOfLading = "", bmwBusinessRelation = "", materialsString = "";
+        String bmwShipmentId = "", containerID = "", transportationNetwork = "", carrierID = "", carrierP44ID = "", carrierName = "", senderId = "", senderName = "", recipientID = "", recipientName = "", recipientUnloadingPoint = "", planPickUpDate = "", planDeliveryDate = "", totalWeight = "", totalWeightUnit = "", totalVolume = "", totalVolumeUnit = "", bookingNumber = "", billOfLading = "", bmwBusinessRelation = "", materialsString = "", masterShipmentId = "";
     
         try {
             JsonObject inputJSON = (JsonObject) JsonParser.parseString(message);
@@ -126,10 +126,13 @@ public class KafkaConsumerBMW {
             HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
             ResponseEntity<String> response = restTemplate.postForEntity("https://na12.api.project44.com/api/v4/shipments/tracking", entity, String.class);
             String jsonResponse = response.getBody();
-        
+    
             JsonObject shipmentIdJSON = (JsonObject) JsonParser.parseString(jsonResponse);
-            String masterShipmentId = shipmentIdJSON.get("id").getAsString();
-        
+            JsonArray relatedShipments = (JsonArray) shipmentIdJSON.get("relatedShipments");
+            for (JsonElement ShipmentId : relatedShipments) {
+                masterShipmentId = ShipmentId.getAsJsonObject().get("id").getAsString();
+            }
+    
             String p44BookingNumber = "";
             if (!billOfLading.equals("")) {
                 p44BookingNumber = billOfLading;

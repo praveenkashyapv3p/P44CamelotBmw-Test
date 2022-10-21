@@ -54,9 +54,9 @@ public class FinalP44AttributesMapper {
                 orderIdentifierReference.setOrderIdentifier(material.getAsJsonObject().get("purchaseOrder").getAsString());
                 orderIdentifierReferenceList.add(orderIdentifierReference);
                 item.setOrderIdentifierReferences(orderIdentifierReferenceList);
-                item.setUnitQuantity("");
+                item.setUnitQuantity(material.getAsJsonObject().get("p44Quantity").getAsString());
                 item.setUnitType("EACH");
-                item.setDescription(material.getAsJsonObject().get("deliveryNoteNumber").getAsString());
+                item.setDescription("deliveryNoteNumber: " + material.getAsJsonObject().get("deliveryNoteNumber").getAsString());
                 List<Identifier_items> identifierItemsList = new ArrayList<>();
                 Identifier_items identifier_items = new Identifier_items();
                 identifier_items.setType("STOCK_KEEPING_UNIT");

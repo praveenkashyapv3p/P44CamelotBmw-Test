@@ -38,7 +38,7 @@ public class KafkaConsumerP44 {
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.APPLICATION_JSON);
                 HttpEntity<String> entity = new HttpEntity<>(bmwMessage, headers);
-                ResponseEntity<String> response = restTemplate.postForEntity("https://p44-tracking-data-dev.bmwgroup.com", entity, String.class);
+                ResponseEntity<String> response = restTemplate.postForEntity("https://p44-tracking-data-int.bmwgroup.com", entity, String.class);
             } catch (Exception exception) {
                 logger.error("Unable to push to BMW: " + exception);
                 producer.writeBMWErrorMessage(exception.getMessage(), bmwMessage);
