@@ -30,7 +30,7 @@ public class KafkaConsumerBMW {
     /*Development Consumer*/
     //@KafkaListener(topics = "BMWPushLocal", groupId = "BMWPushLocalGroup")
     /*Production Consumer*/
-    @KafkaListener(topics = "bmwPush", groupId = "BMWPushGroup")
+    @KafkaListener(topics = "bmwPush", groupId = "BMWPushGroupTest")
     public void getBMWMessage(String message) {
         RestTemplate restTemplate = new RestTemplate();
         CarrierMapping carrierMapping = new CarrierMapping();
@@ -143,7 +143,7 @@ public class KafkaConsumerBMW {
             shipmentIdMapper.getShipmentId(masterShipmentId, p44BookingNumber, carrierP44ID, materialsString);
         } catch (Exception e) {
             logger.error("BMW Message cannot be split: " + e);
-            this.producer.writeLogMessage("bmw-message", message);
+            this.producer.writeLogMessage("test-bmw-message", message);
         }
     }
 }

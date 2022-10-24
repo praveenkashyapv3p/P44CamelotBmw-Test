@@ -100,7 +100,7 @@
         <configuration>
           <schemaVersion>v2</schemaVersion>
           <subscriptionId>8e79556e-be9a-41bf-917a-ef29839a4282</subscriptionId>
-          <resourceGroup>project44</resourceGroup>
+          <resourceGroup>project44-test</resourceGroup>
           <appName>api-camelot-itlab-test</appName>
           <pricingTier>P1v2</pricingTier>
           <region>westeurope</region>

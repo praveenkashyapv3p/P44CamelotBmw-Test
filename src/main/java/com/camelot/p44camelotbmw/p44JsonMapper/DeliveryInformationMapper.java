@@ -39,7 +39,7 @@ public class DeliveryInformationMapper {
                         ZonedDateTime result = ZonedDateTime.parse(value.getAsJsonArray().get(0).getAsString(), inF);
                         planDeliveryDate = result.format(outF);
                     } catch (Exception exception) {
-                        logger.error("Main haulage planned start format error" + exception);
+                        logger.error("Main haulage planned start format error" + exception + "\n" + shipmentJson);
                     }
                 }
                 if ("Main haulage planned end".equalsIgnoreCase(attributes.getAsJsonObject().get("name").getAsString())) {
@@ -48,7 +48,7 @@ public class DeliveryInformationMapper {
                         ZonedDateTime result = ZonedDateTime.parse(value.getAsJsonArray().get(0).getAsString(), inF);
                         planPickUpDate = result.format(outF);
                     } catch (Exception exception) {
-                        logger.error("Main haulage planned end format error" + exception);
+                        logger.error("Main haulage planned end format error" + exception + "\n" + shipmentJson);
                     }
                 }
             }

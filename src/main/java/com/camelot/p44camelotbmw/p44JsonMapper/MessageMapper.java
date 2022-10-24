@@ -10,13 +10,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MessageMapper {
     
     private static final Logger logger = LogManager.getLogger(MessageMapper.class);
     
-    public String mapMessage(String message, KafkaProducer producer) {
-    
+    public Map<String, String> mapMessage(String message, KafkaProducer producer) {
+        
         P44ToBmw bmwMapping = new P44ToBmw();
         RecipientMapper recipientMapper = new RecipientMapper();
         SenderMapper senderMapper = new SenderMapper();
@@ -46,12 +48,12 @@ public class MessageMapper {
         try {
             JsonObject shipment = (JsonObject) JsonParser.parseString(message);
     
+            identifiersMapper.mapIdentifier(String.valueOf(UuidGenerator.get64MostSignificantBitsForVersion1()), shipment, bmwMapping);
             recipientMapper.mapRecipient(shipment, bmwMapping);
             senderMapper.mapSender(shipment, bmwMapping);
             carrierMapper.mapCarrier(shipment, bmwMapping);
             currentLocationInfoMapper.mapCurrLocInfo(shipment, bmwMapping);
             deliveryInformationMapper.mapDeliveryInformation(shipment, bmwMapping);
-            identifiersMapper.mapIdentifier(String.valueOf(UuidGenerator.get64MostSignificantBitsForVersion1()), shipment, bmwMapping);
             transportLegInfoMapper.mapTransportLegInfo(shipment, bmwMapping);
             containerDimensionsMapper.mapContainerDimension(shipment, bmwMapping);
             materialMapper.mapMaterial(shipment, bmwMapping);
@@ -63,11 +65,15 @@ public class MessageMapper {
                 producer.writeLogMessage("test", bmwJson);
             }
             /*Delete above code after Temporary tracing of containers for Data validation is complete*/
-            producer.writeBMWMessage(String.valueOf(UuidGenerator.get64MostSignificantBitsForVersion1()), bmwJson);
-            return bmwJson;
+            producer.writeBMWMessage("test" + (UuidGenerator.get64MostSignificantBitsForVersion1()), bmwJson);
+            Map<String, String> successMessage = new HashMap<>();
+            successMessage.put("success", bmwJson);
+            return successMessage;
         } catch (Exception exception) {
-            logger.error("Mapping Exception" + exception + "\n" + message);
-            return bmwJson;
+            logger.error("Test-Mapping Exception" + exception + "\n" + message);
+            Map<String, String> failureMessage = new HashMap<>();
+            failureMessage.put(exception.getMessage(), message);
+            return failureMessage;
         }
     }
 }

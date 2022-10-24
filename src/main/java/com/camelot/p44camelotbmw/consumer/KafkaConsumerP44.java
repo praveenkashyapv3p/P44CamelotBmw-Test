@@ -13,6 +13,8 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Map;
+
 @Service
 public class KafkaConsumerP44 {
     
@@ -29,11 +31,13 @@ public class KafkaConsumerP44 {
     /*Development Consumer*/
     //@KafkaListener(topics = "p44DataLocal", groupId = "p44DataLocalGroup")
     /*Production Consumer*/
-    @KafkaListener(topics = "p44Data", groupId = "bmwGroup")
+    @KafkaListener(topics = "p44DataTest", groupId = "bmwGroupTest")
     public void getP44Message(String message) {
+        logger.info(message);
         MessageMapper messageMapper = new MessageMapper();
-        String bmwMessage = messageMapper.mapMessage(message, producer);
-        if (!(bmwMessage.equals(""))) {
+        Map<String, String> bmwMessageStatus = messageMapper.mapMessage(message, producer);
+        if (bmwMessageStatus.containsKey("success")) {
+            String bmwMessage = bmwMessageStatus.get("success");
             try {
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.APPLICATION_JSON);
@@ -41,10 +45,12 @@ public class KafkaConsumerP44 {
                 ResponseEntity<String> response = restTemplate.postForEntity("https://p44-tracking-data-int.bmwgroup.com", entity, String.class);
             } catch (Exception exception) {
                 logger.error("Unable to push to BMW: " + exception);
-                producer.writeBMWErrorMessage(exception.getMessage(), bmwMessage);
+                producer.writeBMWErrorMessage("test" + exception.getMessage(), bmwMessage);
             }
         } else {
-            producer.writeBMWMapError(message);
+            String bmwMessage = bmwMessageStatus.values().toString();
+            String key = bmwMessageStatus.keySet().toString();
+            producer.writeLogMessage("test" + key, bmwMessage);
         }
     }
     

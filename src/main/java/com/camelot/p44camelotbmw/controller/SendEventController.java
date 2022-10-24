@@ -37,7 +37,7 @@ public class SendEventController {
         if (ipAddress == null) {
             ipAddress = request.getRemoteAddr();
         }
-        System.out.println("ipAddress: " + ipAddress);
+        logger.info("ipAddress: " + ipAddress);
         
         try {
             boolean trackingJson = false;
@@ -57,7 +57,7 @@ public class SendEventController {
                 }
             }
             if (!trackingJson) {
-                this.producer.writeP44Message(jsonKey, shipmentJson);
+                this.producer.writeP44Message("test" + jsonKey, shipmentJson);
             }
             return ResponseEntity.ok().build();
         } catch (Exception e) {
