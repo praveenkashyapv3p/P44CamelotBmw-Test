@@ -5,6 +5,8 @@ import com.camelot.p44camelotbmw.entity.toBmwEntity.P44ToBmw;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.text.ParseException;
 import java.time.OffsetDateTime;
@@ -14,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 public class DeliveryInformationMapper {
-    
+    private static final Logger logger = LogManager.getLogger(DeliveryInformationMapper.class);
     
     public void mapDeliveryInformation(JsonObject shipmentJson, P44ToBmw bmwMapping) throws ParseException {
         DeliveryInformation deliveryInformation = new DeliveryInformation();
@@ -33,13 +35,21 @@ public class DeliveryInformationMapper {
             for (JsonElement attributes : attributesList) {
                 if ("Main haulage planned start".equalsIgnoreCase(attributes.getAsJsonObject().get("name").getAsString())) {
                     JsonElement value = attributes.getAsJsonObject().get("values");
-                    ZonedDateTime result = ZonedDateTime.parse(value.getAsJsonArray().get(0).getAsString(), inF);
-                    planDeliveryDate = result.format(outF);
+                    try {
+                        ZonedDateTime result = ZonedDateTime.parse(value.getAsJsonArray().get(0).getAsString(), inF);
+                        planDeliveryDate = result.format(outF);
+                    } catch (Exception exception) {
+                        logger.error("Main haulage planned start format error" + exception);
+                    }
                 }
                 if ("Main haulage planned end".equalsIgnoreCase(attributes.getAsJsonObject().get("name").getAsString())) {
                     JsonElement value = attributes.getAsJsonObject().get("values");
-                    ZonedDateTime result = ZonedDateTime.parse(value.getAsJsonArray().get(0).getAsString(), inF);
-                    planPickUpDate = result.format(outF);
+                    try {
+                        ZonedDateTime result = ZonedDateTime.parse(value.getAsJsonArray().get(0).getAsString(), inF);
+                        planPickUpDate = result.format(outF);
+                    } catch (Exception exception) {
+                        logger.error("Main haulage planned end format error" + exception);
+                    }
                 }
             }
         }
