@@ -69,10 +69,10 @@ public class KafkaConsumerP44 {
                 bmwResponseRepository.save(bmwResponseModel);
             } catch (Exception exception) {
                 logger.error("Unable to push to BMW: " + exception);
-                producer.writeBMWErrorMessage("prod-" + exception.getMessage(), bmwMessage);
+                producer.writeBMWErrorMessage("test-" + exception.getMessage(), bmwMessage);
             }
         } else {
-            producer.writeLogMessage("prod-" + "Mapping Failed", record.value());
+            producer.writeLogMessage("test-" + "Mapping Failed", record.value());
             P44IncomingModel p44IncomingModel = new P44IncomingModel();
             JsonObject shipment = (JsonObject) JsonParser.parseString(record.value());
             p44IncomingModel.setInternalP44Identifier(shipment.get("shipment").getAsJsonObject().get("id").getAsString());
@@ -111,10 +111,10 @@ public class KafkaConsumerP44 {
                 bmwResponseRepository.save(bmwResponseModel);
             } catch (Exception exception) {
                 logger.error("Unable to push to BMW: " + exception);
-                producer.writeBMWErrorMessage("prod-" + exception.getMessage(), bmwMessage);
+                producer.writeBMWErrorMessage("test-" + exception.getMessage(), bmwMessage);
             }
         } else {
-            producer.writeLogMessage("prod-" + "Mapping Failed", record.value());
+            producer.writeLogMessage("test-" + "Mapping Failed", record.value());
             P44IncomingModel p44IncomingModel = new P44IncomingModel();
             JsonObject shipment = (JsonObject) JsonParser.parseString(record.value());
             p44IncomingModel.setInternalP44Identifier(shipment.get("shipment").getAsJsonObject().get("id").getAsString());
@@ -153,10 +153,10 @@ public class KafkaConsumerP44 {
                 bmwResponseRepository.save(bmwResponseModel);
             } catch (Exception exception) {
                 logger.error("Unable to push to BMW: " + exception);
-                producer.writeBMWErrorMessage("prod-" + exception.getMessage(), bmwMessage);
+                producer.writeBMWErrorMessage("test-" + exception.getMessage(), bmwMessage);
             }
         } else {
-            producer.writeLogMessage("prod-" + "Mapping Failed", record.value());
+            producer.writeLogMessage("test-" + "Mapping Failed", record.value());
             P44IncomingModel p44IncomingModel = new P44IncomingModel();
             JsonObject shipment = (JsonObject) JsonParser.parseString(record.value());
             p44IncomingModel.setInternalP44Identifier(shipment.get("shipment").getAsJsonObject().get("id").getAsString());
@@ -195,10 +195,10 @@ public class KafkaConsumerP44 {
                 bmwResponseRepository.save(bmwResponseModel);
             } catch (Exception exception) {
                 logger.error("Unable to push to BMW: " + exception);
-                producer.writeBMWErrorMessage("prod-" + exception.getMessage(), bmwMessage);
+                producer.writeBMWErrorMessage("test-" + exception.getMessage(), bmwMessage);
             }
         } else {
-            producer.writeLogMessage("prod-" + "Mapping Failed", record.value());
+            producer.writeLogMessage("test-" + "Mapping Failed", record.value());
             P44IncomingModel p44IncomingModel = new P44IncomingModel();
             JsonObject shipment = (JsonObject) JsonParser.parseString(record.value());
             p44IncomingModel.setInternalP44Identifier(shipment.get("shipment").getAsJsonObject().get("id").getAsString());
@@ -237,10 +237,10 @@ public class KafkaConsumerP44 {
                 bmwResponseRepository.save(bmwResponseModel);
             } catch (Exception exception) {
                 logger.error("Unable to push to BMW: " + exception);
-                producer.writeBMWErrorMessage("prod-" + exception.getMessage(), bmwMessage);
+                producer.writeBMWErrorMessage("test-" + exception.getMessage(), bmwMessage);
             }
         } else {
-            producer.writeLogMessage("prod-" + "Mapping Failed", record.value());
+            producer.writeLogMessage("test-" + "Mapping Failed", record.value());
             P44IncomingModel p44IncomingModel = new P44IncomingModel();
             JsonObject shipment = (JsonObject) JsonParser.parseString(record.value());
             p44IncomingModel.setInternalP44Identifier(shipment.get("shipment").getAsJsonObject().get("id").getAsString());
@@ -279,10 +279,10 @@ public class KafkaConsumerP44 {
                 bmwResponseRepository.save(bmwResponseModel);
             } catch (Exception exception) {
                 logger.error("Unable to push to BMW: " + exception);
-                producer.writeBMWErrorMessage("prod-" + exception.getMessage(), bmwMessage);
+                producer.writeBMWErrorMessage("test-" + exception.getMessage(), bmwMessage);
             }
         } else {
-            producer.writeLogMessage("prod-" + "Mapping Failed", record.value());
+            producer.writeLogMessage("test-" + "Mapping Failed", record.value());
             P44IncomingModel p44IncomingModel = new P44IncomingModel();
             JsonObject shipment = (JsonObject) JsonParser.parseString(record.value());
             p44IncomingModel.setInternalP44Identifier(shipment.get("shipment").getAsJsonObject().get("id").getAsString());
