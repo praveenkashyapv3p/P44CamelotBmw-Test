@@ -88,12 +88,9 @@ public class KafkaConsumerP44 {
     @KafkaListener(topics = "p44DataTest", groupId = "bmwGroupTest")
     public void getP44Message2(ConsumerRecord<String, String> record) {
         MessageMapper messageMapper = new MessageMapper();
-        
-        System.out.println(record.key());
-        System.out.println(record.partition());
-        System.out.println(record.topic());
-        System.out.println(record.offset());
-        
+    
+        logger.info(record.key() + " " + record.partition() + " " + record.partition() + " " + record.offset());
+    
         String correlationId = String.valueOf(UuidGenerator.get64MostSignificantBitsForVersion1());
         Map<String, String> bmwMessageStatus = messageMapper.mapMessage(record.key().substring(5), record.value(), producer, correlationId);
         if (bmwMessageStatus.containsKey("success")) {
@@ -130,12 +127,9 @@ public class KafkaConsumerP44 {
     @KafkaListener(topics = "p44DataTest", groupId = "bmwGroupTest")
     public void getP44Message3(ConsumerRecord<String, String> record) {
         MessageMapper messageMapper = new MessageMapper();
-        
-        System.out.println(record.key());
-        System.out.println(record.partition());
-        System.out.println(record.topic());
-        System.out.println(record.offset());
-        
+    
+        logger.info(record.key() + " " + record.partition() + " " + record.partition() + " " + record.offset());
+    
         String correlationId = String.valueOf(UuidGenerator.get64MostSignificantBitsForVersion1());
         Map<String, String> bmwMessageStatus = messageMapper.mapMessage(record.key().substring(5), record.value(), producer, correlationId);
         if (bmwMessageStatus.containsKey("success")) {
@@ -172,12 +166,9 @@ public class KafkaConsumerP44 {
     @KafkaListener(topics = "p44DataTest", groupId = "bmwGroupTest")
     public void getP44Message4(ConsumerRecord<String, String> record) {
         MessageMapper messageMapper = new MessageMapper();
-        
-        System.out.println(record.key());
-        System.out.println(record.partition());
-        System.out.println(record.topic());
-        System.out.println(record.offset());
-        
+    
+        logger.info(record.key() + " " + record.partition() + " " + record.partition() + " " + record.offset());
+    
         String correlationId = String.valueOf(UuidGenerator.get64MostSignificantBitsForVersion1());
         Map<String, String> bmwMessageStatus = messageMapper.mapMessage(record.key().substring(5), record.value(), producer, correlationId);
         if (bmwMessageStatus.containsKey("success")) {
@@ -214,12 +205,9 @@ public class KafkaConsumerP44 {
     @KafkaListener(topics = "p44DataTest", groupId = "bmwGroupTest")
     public void getP44Message5(ConsumerRecord<String, String> record) {
         MessageMapper messageMapper = new MessageMapper();
-        
-        System.out.println(record.key());
-        System.out.println(record.partition());
-        System.out.println(record.topic());
-        System.out.println(record.offset());
-        
+    
+        logger.info(record.key() + " " + record.partition() + " " + record.partition() + " " + record.offset());
+    
         String correlationId = String.valueOf(UuidGenerator.get64MostSignificantBitsForVersion1());
         Map<String, String> bmwMessageStatus = messageMapper.mapMessage(record.key().substring(5), record.value(), producer, correlationId);
         if (bmwMessageStatus.containsKey("success")) {
@@ -256,11 +244,7 @@ public class KafkaConsumerP44 {
     @KafkaListener(topics = "p44DataTest", groupId = "bmwGroupTest")
     public void getP44Message6(ConsumerRecord<String, String> record) {
         MessageMapper messageMapper = new MessageMapper();
-        
-        System.out.println(record.key());
-        System.out.println(record.partition());
-        System.out.println(record.topic());
-        System.out.println(record.offset());
+        logger.info(record.key() + " " + record.partition() + " " + record.partition() + " " + record.offset());
         
         String correlationId = String.valueOf(UuidGenerator.get64MostSignificantBitsForVersion1());
         Map<String, String> bmwMessageStatus = messageMapper.mapMessage(record.key().substring(5), record.value(), producer, correlationId);
