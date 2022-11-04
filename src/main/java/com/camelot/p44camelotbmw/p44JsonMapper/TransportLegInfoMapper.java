@@ -37,9 +37,11 @@ public class TransportLegInfoMapper {
                 JsonElement transportLegIdentifiers = position.getAsJsonObject().get("location").getAsJsonObject().get("identifiers");
                 for (JsonElement transportLegIdent : transportLegIdentifiers.getAsJsonArray()) {
                     tspLocId = position.getAsJsonObject().get("id").getAsString();
+                    //Required
                     tspLoc = transportLegIdent.getAsJsonObject().get("value").getAsString();
                     leg.setTspLoc(tspLoc);
                 }
+                //Required
                 leg.setLegNumber(String.valueOf(count));
                 for (JsonElement eventsTyp : events) {
                     if ((tspLocId.equals(eventsTyp.getAsJsonObject().get("stopId").getAsString())) && (Arrays.asList("DEPARTURE_FROM_STOP", "GATE_OUT_FULL", "GATE_OUT_EMPTY").contains(eventsTyp.getAsJsonObject().get("type").getAsString()))) {
@@ -86,6 +88,7 @@ public class TransportLegInfoMapper {
                 if (position.getAsJsonObject().has("location") && position.getAsJsonObject().get("location").getAsJsonObject().has("identifiers")) {
                     JsonElement relShipIdentifiers = position.getAsJsonObject().get("location").getAsJsonObject().get("identifiers");
                     for (JsonElement relShipIdent : relShipIdentifiers.getAsJsonArray()) {
+                        //Required
                         polLoc = relShipIdent.getAsJsonObject().get("value").getAsString();
                         pointOfLoading.setPolLoc(polLoc);
                     }
@@ -97,6 +100,7 @@ public class TransportLegInfoMapper {
                 if (position.getAsJsonObject().has("location") && position.getAsJsonObject().get("location").getAsJsonObject().has("identifiers")) {
                     JsonElement relShipIdentifiers = position.getAsJsonObject().get("location").getAsJsonObject().get("identifiers");
                     for (JsonElement relShipIdent : relShipIdentifiers.getAsJsonArray()) {
+                        //Required
                         podLoc = relShipIdent.getAsJsonObject().get("value").getAsString();
                         pointOfDelivery.setPodLoc(podLoc);
                     }

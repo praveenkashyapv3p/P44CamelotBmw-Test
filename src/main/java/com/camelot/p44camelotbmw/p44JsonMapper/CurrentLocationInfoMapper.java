@@ -7,7 +7,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import java.text.ParseException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
@@ -15,24 +14,24 @@ import java.util.Map;
 public class CurrentLocationInfoMapper {
     
     
-    public void mapCurrLocInfo(JsonObject shipmentJson, P44ToBmw bmwMapping) throws ParseException {
-    
+    public void mapCurrLocInfo(JsonObject shipmentJson, P44ToBmw bmwMapping) {
+        
         CurrentLocationInfo currentLocationInfos = new CurrentLocationInfo();
         StatusCodes statusCodes = new StatusCodes();
         String eventStopId = "", statusName = "", eventsType = "", timeStamp = "", longitude = "", latitude = "", geoDateTimeUTC = "",
-                locationID = "", locationName = "", statusCode = "", sourceofPositionData = "";
-    
+                locationID = "", locationName = "", statusCode = "", sourceOfPositionData = "";
+        
         DateTimeFormatter inF = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssX");
         DateTimeFormatter outF = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSSX");
         JsonArray events = (JsonArray) shipmentJson.get("events");
-    
+        
         for (JsonElement eventsTyp : events) {
             if (eventsTyp.getAsJsonObject().has("dateTime")) {
                 eventStopId = eventsTyp.getAsJsonObject().get("stopId").getAsString();
                 eventsType = eventsTyp.getAsJsonObject().get("type").getAsString();
             }
         }
-    
+        
         if (shipmentJson.has("positions")) {
             JsonArray positions = (JsonArray) shipmentJson.get("positions");
             if (positions.size() > 0) {
@@ -53,8 +52,10 @@ public class CurrentLocationInfoMapper {
                 Get the last entry of states array and its details as statusName and timeStamp
                  */
                 for (JsonElement statesTyp : states) {
+                    //Required
                     statusName = statesTyp.getAsJsonObject().get("type").getAsString();
                     ZonedDateTime result = ZonedDateTime.parse(statesTyp.getAsJsonObject().get("startDateTime").getAsString(), inF);
+                    //Required
                     timeStamp = result.format(outF);
                 }
     
@@ -62,6 +63,7 @@ public class CurrentLocationInfoMapper {
                  * Static mapping of status code
                  */
                 Map<String, String> stCod = statusCodes.getStatusCodes();
+                //Required
                 statusCode = stCod.get(eventsType);
     
     
@@ -102,7 +104,7 @@ public class CurrentLocationInfoMapper {
                 currentLocationInfos.setLongitude(longitude);
                 currentLocationInfos.setLocationId(locationID);
                 currentLocationInfos.setLocationName(locationName);
-                currentLocationInfos.setSourceofPositionData(sourceofPositionData);
+                currentLocationInfos.setSourceofPositionData(sourceOfPositionData);
             }
         }
         

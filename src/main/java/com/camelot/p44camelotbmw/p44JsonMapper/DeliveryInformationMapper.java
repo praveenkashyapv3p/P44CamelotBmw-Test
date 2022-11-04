@@ -8,7 +8,6 @@ import com.google.gson.JsonObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.text.ParseException;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -18,9 +17,9 @@ import java.util.Arrays;
 public class DeliveryInformationMapper {
     private static final Logger logger = LogManager.getLogger(DeliveryInformationMapper.class);
     
-    public void mapDeliveryInformation(JsonObject shipmentJson, P44ToBmw bmwMapping) throws ParseException {
+    public void mapDeliveryInformation(String eventCreationDateTimeUTC, JsonObject shipmentJson, P44ToBmw bmwMapping) {
         DeliveryInformation deliveryInformation = new DeliveryInformation();
-        String planPickUpDate = "", planDeliveryDate = "", etaDateTimeUTC = "", etaDateRoutePartUTC = "", etdDateNextRoutePart = "", eventCreationDateTimeUTC = "", eventSendingDateTimeUTC = "", routeSegId = "", nextRouteSeg = "", toStpId = "";
+        String planPickUpDate = "", planDeliveryDate = "", etaDateTimeUTC = "", etaDateRoutePartUTC = "", etdDateNextRoutePart = "", eventSendingDateTimeUTC = "", routeSegId = "", nextRouteSeg = "", toStpId = "";
     
         DateTimeFormatter inF = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssX");
         DateTimeFormatter outF = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSSX");
@@ -28,7 +27,7 @@ public class DeliveryInformationMapper {
     
         eventSendingDateTimeUTC = output;
         deliveryInformation.setEventSendingDateTimeUtc(eventSendingDateTimeUTC);
-        eventCreationDateTimeUTC = output;
+//        eventCreationDateTimeUTC = output;
         deliveryInformation.setEventCreationDateTimeUtc(eventCreationDateTimeUTC);
         if (shipmentJson.get("shipment").getAsJsonObject().has("attributes")) {
             JsonArray attributesList = (JsonArray) shipmentJson.get("shipment").getAsJsonObject().get("attributes");
@@ -39,7 +38,7 @@ public class DeliveryInformationMapper {
                         ZonedDateTime result = ZonedDateTime.parse(value.getAsJsonArray().get(0).getAsString(), inF);
                         planDeliveryDate = result.format(outF);
                     } catch (Exception exception) {
-                        logger.error("Main haulage planned start format error" + exception + "\n" + shipmentJson);
+                        logger.error("Main haulage planned start format error" + exception);
                     }
                 }
                 if ("Main haulage planned end".equalsIgnoreCase(attributes.getAsJsonObject().get("name").getAsString())) {
@@ -48,7 +47,7 @@ public class DeliveryInformationMapper {
                         ZonedDateTime result = ZonedDateTime.parse(value.getAsJsonArray().get(0).getAsString(), inF);
                         planPickUpDate = result.format(outF);
                     } catch (Exception exception) {
-                        logger.error("Main haulage planned end format error" + exception + "\n" + shipmentJson);
+                        logger.error("Main haulage planned end format error" + exception);
                     }
                 }
             }
@@ -100,6 +99,7 @@ public class DeliveryInformationMapper {
                 for (JsonElement eventsTyp : events) {
                     if ((position.getAsJsonObject().get("id").getAsString().equals(eventsTyp.getAsJsonObject().get("stopId").getAsString())) && eventsTyp.getAsJsonObject().has("estimateDateTime") && (Arrays.asList("ARRIVAL_AT_STOP", "GATE_IN_EMPTY", "GATE_IN_FULL").contains(eventsTyp.getAsJsonObject().get("type").getAsString()))) {
                         ZonedDateTime result = ZonedDateTime.parse(eventsTyp.getAsJsonObject().get("estimateDateTime").getAsString(), inF);
+                        //Required
                         etaDateTimeUTC = result.format(outF);
                     }
                 }

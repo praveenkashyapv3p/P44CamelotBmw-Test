@@ -17,7 +17,7 @@ public class MessageMapper {
     
     private static final Logger logger = LogManager.getLogger(MessageMapper.class);
     
-    public Map<String, String> mapMessage(String message, KafkaProducer producer) {
+    public Map<String, String> mapMessage(String eventCreationDateTimeUTC, String message, KafkaProducer producer, String correlationId) {
         
         P44ToBmw bmwMapping = new P44ToBmw();
         RecipientMapper recipientMapper = new RecipientMapper();
@@ -43,20 +43,23 @@ public class MessageMapper {
         bmwMapping.setCurrentLeadTimePickUpUntilCurrentTimestamp("");
         bmwMapping.setCurrentLeadTimePickUpUntilDelivery("");
         bmwMapping.setCurrentLeadTimePickUpUntilEta("");
-    
+        
+        Map<String, String> statusMessage = new HashMap<>();
         String bmwJson = "";
         try {
             JsonObject shipment = (JsonObject) JsonParser.parseString(message);
     
-            identifiersMapper.mapIdentifier(String.valueOf(UuidGenerator.get64MostSignificantBitsForVersion1()), shipment, bmwMapping);
+            identifiersMapper.mapIdentifier(correlationId, shipment, bmwMapping);
+            currentLocationInfoMapper.mapCurrLocInfo(shipment, bmwMapping);
+            deliveryInformationMapper.mapDeliveryInformation(eventCreationDateTimeUTC, shipment, bmwMapping);
+            transportLegInfoMapper.mapTransportLegInfo(shipment, bmwMapping);
+    
             recipientMapper.mapRecipient(shipment, bmwMapping);
             senderMapper.mapSender(shipment, bmwMapping);
             carrierMapper.mapCarrier(shipment, bmwMapping);
-            currentLocationInfoMapper.mapCurrLocInfo(shipment, bmwMapping);
-            deliveryInformationMapper.mapDeliveryInformation(shipment, bmwMapping);
-            transportLegInfoMapper.mapTransportLegInfo(shipment, bmwMapping);
             containerDimensionsMapper.mapContainerDimension(shipment, bmwMapping);
             materialMapper.mapMaterial(shipment, bmwMapping);
+    
             String containerID = bmwMapping.getIdentifier().getContainerId();
             bmwJson = jsonStartingString + "\"" + containerID + "\"" + jsonStringValue + new Gson().toJson(bmwMapping) + jsonEndString;
     
@@ -65,15 +68,14 @@ public class MessageMapper {
                 producer.writeLogMessage("test", bmwJson);
             }
             /*Delete above code after Temporary tracing of containers for Data validation is complete*/
-            producer.writeBMWMessage("test" + (UuidGenerator.get64MostSignificantBitsForVersion1()), bmwJson);
-            Map<String, String> successMessage = new HashMap<>();
-            successMessage.put("success", bmwJson);
-            return successMessage;
+            producer.writeBMWMessage("test-" + UuidGenerator.get64MostSignificantBitsForVersion1(), bmwJson);
+    
+            statusMessage.put("success", bmwJson);
+            return statusMessage;
         } catch (Exception exception) {
-            logger.error("Test-Mapping Exception" + exception + "\n" + message);
-            Map<String, String> failureMessage = new HashMap<>();
-            failureMessage.put(exception.getMessage(), message);
-            return failureMessage;
+            logger.error("Mapping Exception" + exception + "\n" + message);
+            statusMessage.put("Mapping Failed", message);
+            return statusMessage;
         }
     }
 }

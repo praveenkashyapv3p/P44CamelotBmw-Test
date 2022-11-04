@@ -6,13 +6,10 @@ import com.camelot.p44camelotbmw.producer.KafkaProducer;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
 
 public class IdentifiersMapper {
-    private static final Logger logger = LogManager.getLogger(IdentifiersMapper.class);
     private final KafkaProducer producer;
     
     public IdentifiersMapper(KafkaProducer producer) {
@@ -23,11 +20,13 @@ public class IdentifiersMapper {
         Identifier identifiers = new Identifier();
         String internalP44Identifier = "", bmwShipmentID = "", billOfLading = "", bookingNumber = "", vesselName = "", bmwBusinessUnit = "", bmwContainerId = "";
         
+        //Required
         internalP44Identifier = shipmentJson.get("shipment").getAsJsonObject().get("id").getAsString();
         
         JsonArray containerId = (JsonArray) shipmentJson.get("shipment").getAsJsonObject().get("identifiers");
         for (JsonElement contId : containerId) {
             if ("CONTAINER_ID".equalsIgnoreCase(contId.getAsJsonObject().get("type").getAsString())) {
+                //Required
                 bmwContainerId = contId.getAsJsonObject().get("value").getAsString();
                 /*Temporary tracing of containers for Data validation*/
                 if ((Arrays.asList("TXGU5345195", "CAIU7821020", "FFAU4281892", "HLBU2516048", "INKU6646068", "MRKU5030927", "MRSU4502596", "TCNU6440363", "MRKU5784526", "CIPU5007854", "MRKU5543278", "TRHU6654055", "TLLU8817673", "BMOU5648580", "CAIU7815835")).contains(bmwContainerId)) {
@@ -68,6 +67,10 @@ public class IdentifiersMapper {
                 }
             }
         }
+        /*
+         *
+         *
+         */
         if (shipmentJson.get("shipment").getAsJsonObject().get("routeInfo").getAsJsonObject().has("routeSegments")) {
             for (JsonElement routSegIden : (JsonArray) shipmentJson.get("shipment").getAsJsonObject().get("routeInfo").getAsJsonObject().get("routeSegments")) {
                 if (routSegIden.getAsJsonObject().has("identifiers")) {
