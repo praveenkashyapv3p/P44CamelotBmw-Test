@@ -73,7 +73,7 @@ public class ConfigOAuth2 extends AuthorizationServerConfigurerAdapter {
 //                .and()
 //                .withClient("bmwProd").secret(passwordEncoder.encode("$2a$12$TkvSnNaV4unYMCYJrwXbT"))
 //                .scopes("read").authorizedGrantTypes("client_credentials")
-                .accessTokenValiditySeconds(43199).refreshTokenValiditySeconds(43199);
+                .accessTokenValiditySeconds(43199);
     }
     
     

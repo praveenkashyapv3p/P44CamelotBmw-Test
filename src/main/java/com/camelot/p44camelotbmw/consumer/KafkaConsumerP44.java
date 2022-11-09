@@ -18,6 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -37,6 +38,8 @@ public class KafkaConsumerP44 {
     BmwResponseRepository bmwResponseRepository;
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private RetryTemplate retryTemplate;
     
     public KafkaConsumerP44(KafkaProducer producer) {
         this.producer = producer;
@@ -50,8 +53,6 @@ public class KafkaConsumerP44 {
     public void getP44Message(ConsumerRecord<String, String> record) {
         MessageMapper messageMapper = new MessageMapper();
         
-        logger.info(record.key() + " " + record.partition() + " " + record.partition() + " " + record.offset());
-        
         String correlationId = String.valueOf(UuidGenerator.get64MostSignificantBitsForVersion1());
         Map<String, String> bmwMessageStatus = messageMapper.mapMessage(record.key().substring(5), record.value(), producer, correlationId);
         if (bmwMessageStatus.containsKey("success")) {
@@ -60,201 +61,10 @@ public class KafkaConsumerP44 {
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.APPLICATION_JSON);
                 HttpEntity<String> entity = new HttpEntity<>(bmwMessage, headers);
-                ResponseEntity<String> response = restTemplate.postForEntity("https://p44-tracking-data-int.bmwgroup.com", entity, String.class);
-                BmwResponseModel bmwResponseModel = new BmwResponseModel();
-                bmwResponseModel.setResponseCode(response.getStatusCode().toString());
-                bmwResponseModel.setResponseMessage(response.getBody());
-                bmwResponseModel.setCorrelationId(correlationId);
-                bmwResponseModel.setTimestamp(OffsetDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSSX")));
-                bmwResponseRepository.save(bmwResponseModel);
-            } catch (Exception exception) {
-                logger.error("Unable to push to BMW: " + exception);
-                producer.writeBMWErrorMessage("test-" + exception.getMessage(), bmwMessage);
-            }
-        } else {
-            producer.writeLogMessage("test-" + "Mapping Failed", record.value());
-            P44IncomingModel p44IncomingModel = new P44IncomingModel();
-            JsonObject shipment = (JsonObject) JsonParser.parseString(record.value());
-            p44IncomingModel.setInternalP44Identifier(shipment.get("shipment").getAsJsonObject().get("id").getAsString());
-            p44IncomingModel.setTimestamp(OffsetDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSSX")));
-            p44IncomingModel.setCause("Mapping Failed");
-            p44IncomingRepository.save(p44IncomingModel);
-        }
-    }
-    
-    /*Development Consumer*/
-    //@KafkaListener(topics = "p44DataLocal", groupId = "p44DataLocalGroup")
-    /*Production Consumer*/
-    @KafkaListener(topics = "p44DataTest", groupId = "bmwGroupTest")
-    public void getP44Message2(ConsumerRecord<String, String> record) {
-        MessageMapper messageMapper = new MessageMapper();
-    
-        logger.info(record.key() + " " + record.partition() + " " + record.partition() + " " + record.offset());
-    
-        String correlationId = String.valueOf(UuidGenerator.get64MostSignificantBitsForVersion1());
-        Map<String, String> bmwMessageStatus = messageMapper.mapMessage(record.key().substring(5), record.value(), producer, correlationId);
-        if (bmwMessageStatus.containsKey("success")) {
-            String bmwMessage = bmwMessageStatus.get("success");
-            try {
-                HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.APPLICATION_JSON);
-                HttpEntity<String> entity = new HttpEntity<>(bmwMessage, headers);
-                ResponseEntity<String> response = restTemplate.postForEntity("https://p44-tracking-data-int.bmwgroup.com", entity, String.class);
-                BmwResponseModel bmwResponseModel = new BmwResponseModel();
-                bmwResponseModel.setResponseCode(response.getStatusCode().toString());
-                bmwResponseModel.setResponseMessage(response.getBody());
-                bmwResponseModel.setCorrelationId(correlationId);
-                bmwResponseModel.setTimestamp(OffsetDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSSX")));
-                bmwResponseRepository.save(bmwResponseModel);
-            } catch (Exception exception) {
-                logger.error("Unable to push to BMW: " + exception);
-                producer.writeBMWErrorMessage("test-" + exception.getMessage(), bmwMessage);
-            }
-        } else {
-            producer.writeLogMessage("test-" + "Mapping Failed", record.value());
-            P44IncomingModel p44IncomingModel = new P44IncomingModel();
-            JsonObject shipment = (JsonObject) JsonParser.parseString(record.value());
-            p44IncomingModel.setInternalP44Identifier(shipment.get("shipment").getAsJsonObject().get("id").getAsString());
-            p44IncomingModel.setTimestamp(OffsetDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSSX")));
-            p44IncomingModel.setCause("Mapping Failed");
-            p44IncomingRepository.save(p44IncomingModel);
-        }
-    }
-    
-    /*Development Consumer*/
-    //@KafkaListener(topics = "p44DataLocal", groupId = "p44DataLocalGroup")
-    /*Production Consumer*/
-    @KafkaListener(topics = "p44DataTest", groupId = "bmwGroupTest")
-    public void getP44Message3(ConsumerRecord<String, String> record) {
-        MessageMapper messageMapper = new MessageMapper();
-    
-        logger.info(record.key() + " " + record.partition() + " " + record.partition() + " " + record.offset());
-    
-        String correlationId = String.valueOf(UuidGenerator.get64MostSignificantBitsForVersion1());
-        Map<String, String> bmwMessageStatus = messageMapper.mapMessage(record.key().substring(5), record.value(), producer, correlationId);
-        if (bmwMessageStatus.containsKey("success")) {
-            String bmwMessage = bmwMessageStatus.get("success");
-            try {
-                HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.APPLICATION_JSON);
-                HttpEntity<String> entity = new HttpEntity<>(bmwMessage, headers);
-                ResponseEntity<String> response = restTemplate.postForEntity("https://p44-tracking-data-int.bmwgroup.com", entity, String.class);
-                BmwResponseModel bmwResponseModel = new BmwResponseModel();
-                bmwResponseModel.setResponseCode(response.getStatusCode().toString());
-                bmwResponseModel.setResponseMessage(response.getBody());
-                bmwResponseModel.setCorrelationId(correlationId);
-                bmwResponseModel.setTimestamp(OffsetDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSSX")));
-                bmwResponseRepository.save(bmwResponseModel);
-            } catch (Exception exception) {
-                logger.error("Unable to push to BMW: " + exception);
-                producer.writeBMWErrorMessage("test-" + exception.getMessage(), bmwMessage);
-            }
-        } else {
-            producer.writeLogMessage("test-" + "Mapping Failed", record.value());
-            P44IncomingModel p44IncomingModel = new P44IncomingModel();
-            JsonObject shipment = (JsonObject) JsonParser.parseString(record.value());
-            p44IncomingModel.setInternalP44Identifier(shipment.get("shipment").getAsJsonObject().get("id").getAsString());
-            p44IncomingModel.setTimestamp(OffsetDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSSX")));
-            p44IncomingModel.setCause("Mapping Failed");
-            p44IncomingRepository.save(p44IncomingModel);
-        }
-    }
-    
-    /*Development Consumer*/
-    //@KafkaListener(topics = "p44DataLocal", groupId = "p44DataLocalGroup")
-    /*Production Consumer*/
-    @KafkaListener(topics = "p44DataTest", groupId = "bmwGroupTest")
-    public void getP44Message4(ConsumerRecord<String, String> record) {
-        MessageMapper messageMapper = new MessageMapper();
-    
-        logger.info(record.key() + " " + record.partition() + " " + record.partition() + " " + record.offset());
-    
-        String correlationId = String.valueOf(UuidGenerator.get64MostSignificantBitsForVersion1());
-        Map<String, String> bmwMessageStatus = messageMapper.mapMessage(record.key().substring(5), record.value(), producer, correlationId);
-        if (bmwMessageStatus.containsKey("success")) {
-            String bmwMessage = bmwMessageStatus.get("success");
-            try {
-                HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.APPLICATION_JSON);
-                HttpEntity<String> entity = new HttpEntity<>(bmwMessage, headers);
-                ResponseEntity<String> response = restTemplate.postForEntity("https://p44-tracking-data-int.bmwgroup.com", entity, String.class);
-                BmwResponseModel bmwResponseModel = new BmwResponseModel();
-                bmwResponseModel.setResponseCode(response.getStatusCode().toString());
-                bmwResponseModel.setResponseMessage(response.getBody());
-                bmwResponseModel.setCorrelationId(correlationId);
-                bmwResponseModel.setTimestamp(OffsetDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSSX")));
-                bmwResponseRepository.save(bmwResponseModel);
-            } catch (Exception exception) {
-                logger.error("Unable to push to BMW: " + exception);
-                producer.writeBMWErrorMessage("test-" + exception.getMessage(), bmwMessage);
-            }
-        } else {
-            producer.writeLogMessage("test-" + "Mapping Failed", record.value());
-            P44IncomingModel p44IncomingModel = new P44IncomingModel();
-            JsonObject shipment = (JsonObject) JsonParser.parseString(record.value());
-            p44IncomingModel.setInternalP44Identifier(shipment.get("shipment").getAsJsonObject().get("id").getAsString());
-            p44IncomingModel.setTimestamp(OffsetDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSSX")));
-            p44IncomingModel.setCause("Mapping Failed");
-            p44IncomingRepository.save(p44IncomingModel);
-        }
-    }
-    
-    /*Development Consumer*/
-    //@KafkaListener(topics = "p44DataLocal", groupId = "p44DataLocalGroup")
-    /*Production Consumer*/
-    @KafkaListener(topics = "p44DataTest", groupId = "bmwGroupTest")
-    public void getP44Message5(ConsumerRecord<String, String> record) {
-        MessageMapper messageMapper = new MessageMapper();
-    
-        logger.info(record.key() + " " + record.partition() + " " + record.partition() + " " + record.offset());
-    
-        String correlationId = String.valueOf(UuidGenerator.get64MostSignificantBitsForVersion1());
-        Map<String, String> bmwMessageStatus = messageMapper.mapMessage(record.key().substring(5), record.value(), producer, correlationId);
-        if (bmwMessageStatus.containsKey("success")) {
-            String bmwMessage = bmwMessageStatus.get("success");
-            try {
-                HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.APPLICATION_JSON);
-                HttpEntity<String> entity = new HttpEntity<>(bmwMessage, headers);
-                ResponseEntity<String> response = restTemplate.postForEntity("https://p44-tracking-data-int.bmwgroup.com", entity, String.class);
-                BmwResponseModel bmwResponseModel = new BmwResponseModel();
-                bmwResponseModel.setResponseCode(response.getStatusCode().toString());
-                bmwResponseModel.setResponseMessage(response.getBody());
-                bmwResponseModel.setCorrelationId(correlationId);
-                bmwResponseModel.setTimestamp(OffsetDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSSX")));
-                bmwResponseRepository.save(bmwResponseModel);
-            } catch (Exception exception) {
-                logger.error("Unable to push to BMW: " + exception);
-                producer.writeBMWErrorMessage("test-" + exception.getMessage(), bmwMessage);
-            }
-        } else {
-            producer.writeLogMessage("test-" + "Mapping Failed", record.value());
-            P44IncomingModel p44IncomingModel = new P44IncomingModel();
-            JsonObject shipment = (JsonObject) JsonParser.parseString(record.value());
-            p44IncomingModel.setInternalP44Identifier(shipment.get("shipment").getAsJsonObject().get("id").getAsString());
-            p44IncomingModel.setTimestamp(OffsetDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSSX")));
-            p44IncomingModel.setCause("Mapping Failed");
-            p44IncomingRepository.save(p44IncomingModel);
-        }
-    }
-    
-    /*Development Consumer*/
-    //@KafkaListener(topics = "p44DataLocal", groupId = "p44DataLocalGroup")
-    /*Production Consumer*/
-    @KafkaListener(topics = "p44DataTest", groupId = "bmwGroupTest")
-    public void getP44Message6(ConsumerRecord<String, String> record) {
-        MessageMapper messageMapper = new MessageMapper();
-        logger.info(record.key() + " " + record.partition() + " " + record.partition() + " " + record.offset());
-        
-        String correlationId = String.valueOf(UuidGenerator.get64MostSignificantBitsForVersion1());
-        Map<String, String> bmwMessageStatus = messageMapper.mapMessage(record.key().substring(5), record.value(), producer, correlationId);
-        if (bmwMessageStatus.containsKey("success")) {
-            String bmwMessage = bmwMessageStatus.get("success");
-            try {
-                HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.APPLICATION_JSON);
-                HttpEntity<String> entity = new HttpEntity<>(bmwMessage, headers);
-                ResponseEntity<String> response = restTemplate.postForEntity("https://p44-tracking-data-int.bmwgroup.com", entity, String.class);
+                ResponseEntity<String> response = retryTemplate.execute(context -> {
+                    ResponseEntity<String> requestData = restTemplate.postForEntity("https://p44-tracking-data-int.bmwgroup.com", entity, String.class);
+                    return requestData;
+                });
                 BmwResponseModel bmwResponseModel = new BmwResponseModel();
                 bmwResponseModel.setResponseCode(response.getStatusCode().toString());
                 bmwResponseModel.setResponseMessage(response.getBody());
