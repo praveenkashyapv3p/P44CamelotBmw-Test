@@ -23,7 +23,6 @@ import java.util.List;
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     
-    
     @Bean
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
@@ -42,7 +41,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring().antMatchers("/v1/health").antMatchers("/");
+        web.ignoring().antMatchers("/v1/health").antMatchers("/").antMatchers("/actuator/prometheus").antMatchers("/stats");
     }
     
     @Bean

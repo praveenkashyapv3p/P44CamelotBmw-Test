@@ -18,7 +18,7 @@ public class MessageMapper {
     private static final Logger logger = LogManager.getLogger(MessageMapper.class);
     
     public Map<String, String> mapMessage(String eventCreationDateTimeUTC, String message, KafkaProducer producer, String correlationId) {
-        
+    
         P44ToBmw bmwMapping = new P44ToBmw();
         RecipientMapper recipientMapper = new RecipientMapper();
         SenderMapper senderMapper = new SenderMapper();
@@ -43,7 +43,7 @@ public class MessageMapper {
         bmwMapping.setCurrentLeadTimePickUpUntilCurrentTimestamp("");
         bmwMapping.setCurrentLeadTimePickUpUntilDelivery("");
         bmwMapping.setCurrentLeadTimePickUpUntilEta("");
-        
+    
         Map<String, String> statusMessage = new HashMap<>();
         String bmwJson = "";
         try {
@@ -64,11 +64,11 @@ public class MessageMapper {
             bmwJson = jsonStartingString + "\"" + containerID + "\"" + jsonStringValue + new Gson().toJson(bmwMapping) + jsonEndString;
     
             /*Temporary tracing of containers for Data validation*/
-            if ((Arrays.asList("TXGU5345195", "CAIU7821020", "FFAU4281892", "HLBU2516048", "INKU6646068", "MRKU5030927", "MRSU4502596", "TCNU6440363", "MRKU5784526", "CIPU5007854", "MRKU5543278", "TRHU6654055", "TLLU8817673", "BMOU5648580", "CAIU7815835")).contains(containerID)) {
-                producer.writeLogMessage("test", bmwJson);
+            if ((Arrays.asList("OOCU8134157", "MRKU2239322", "TGBU7938957", "TGBU9890615", "HLXU8042494", "MRKU2524084 ", "MSDU8752046")).contains(containerID)) {
+                producer.writeLogMessage("prod", bmwJson);
             }
             /*Delete above code after Temporary tracing of containers for Data validation is complete*/
-            producer.writeBMWMessage("test-" + UuidGenerator.get64MostSignificantBitsForVersion1(), bmwJson);
+            producer.writeBMWMessage("prod-" + UuidGenerator.get64MostSignificantBitsForVersion1(), bmwJson);
     
             statusMessage.put("success", bmwJson);
             return statusMessage;

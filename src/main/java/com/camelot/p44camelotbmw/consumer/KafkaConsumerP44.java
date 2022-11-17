@@ -38,8 +38,10 @@ public class KafkaConsumerP44 {
     BmwResponseRepository bmwResponseRepository;
     @Autowired
     private RestTemplate restTemplate;
+    
     @Autowired
     private RetryTemplate retryTemplate;
+    
     
     public KafkaConsumerP44(KafkaProducer producer) {
         this.producer = producer;
@@ -52,7 +54,6 @@ public class KafkaConsumerP44 {
     @KafkaListener(topics = "p44DataTest", groupId = "bmwGroupTest")
     public void getP44Message(ConsumerRecord<String, String> record) {
         MessageMapper messageMapper = new MessageMapper();
-        
         String correlationId = String.valueOf(UuidGenerator.get64MostSignificantBitsForVersion1());
         Map<String, String> bmwMessageStatus = messageMapper.mapMessage(record.key().substring(5), record.value(), producer, correlationId);
         if (bmwMessageStatus.containsKey("success")) {

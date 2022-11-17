@@ -29,7 +29,7 @@ public class IdentifiersMapper {
                 //Required
                 bmwContainerId = contId.getAsJsonObject().get("value").getAsString();
                 /*Temporary tracing of containers for Data validation*/
-                if ((Arrays.asList("TXGU5345195", "CAIU7821020", "FFAU4281892", "HLBU2516048", "INKU6646068", "MRKU5030927", "MRSU4502596", "TCNU6440363", "MRKU5784526", "CIPU5007854", "MRKU5543278", "TRHU6654055", "TLLU8817673", "BMOU5648580", "CAIU7815835")).contains(bmwContainerId)) {
+                if ((Arrays.asList("OOCU8134157", "MRKU2239322", "TGBU7938957", "TGBU9890615", "HLXU8042494", "MRKU2524084 ", "MSDU8752046")).contains(bmwContainerId)) {
                     //logger.traceEntry(shipmentJson.toString());
                     this.producer.writeLogMessage("test", shipmentJson.toString());
                 }
