@@ -4,7 +4,6 @@ services:
     build: .
     restart: always
     ports:
-      - 8080:8080
-      - 8443:8443
+      - "8080:8080"
     environment:
       - MONGO_URL=mongodb://p44bmw:wsoB9Fm9Ine4KwBy90XKFzl6s2BI9Coe2oknVmkLO4VzEQQaX8fB6gXhoepzE0nMtcomxIfhsMxib7jZeE287A==@p44bmw.mongo.cosmos.azure.com:10255/?ssl=true&retrywrites=false&replicaSet=globaldb&maxIdleTimeMS=120000&appName=@p44bmw@
