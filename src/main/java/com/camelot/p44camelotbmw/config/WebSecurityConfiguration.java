@@ -41,7 +41,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring().antMatchers("/v1/health").antMatchers("/").antMatchers("/actuator/prometheus").antMatchers("/stats");
+        web.ignoring().antMatchers("/v1/health").antMatchers("/");
     }
     
     @Bean

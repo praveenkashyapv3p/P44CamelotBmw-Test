@@ -32,11 +32,17 @@ public class MaterialMapper {
             JsonArray itemsArray = (JsonArray) shipmentIdJSON.getAsJsonObject().get("results").getAsJsonArray().get(0).getAsJsonObject().get("items");
             for (JsonElement items : itemsArray) {
                 Material material = new Material();
-                materialNumber = items.getAsJsonObject().get("stockKeepingUnit").getAsString();
-                deliveryNoteNumber = items.getAsJsonObject().get("description").getAsString();
-                purchaseOrder = items.getAsJsonObject().get("orderIdentifierReferences").getAsJsonArray().get(0).getAsJsonObject().get("orderType").getAsString();
-                if (purchaseOrder.equalsIgnoreCase("PURCHASE_ORDER")) {
-                    purchaseOrder = items.getAsJsonObject().get("orderIdentifierReferences").getAsJsonArray().get(0).getAsJsonObject().get("orderIdentifier").getAsString();
+                if (items.getAsJsonObject().has("stockKeepingUnit"))
+                    materialNumber = items.getAsJsonObject().get("stockKeepingUnit").getAsString();
+                if (items.getAsJsonObject().has("unitQuantity"))
+                    p44Quantity = items.getAsJsonObject().get("unitQuantity").getAsString();
+                if (items.getAsJsonObject().has("description"))
+                    deliveryNoteNumber = items.getAsJsonObject().get("description").getAsString();
+                if (items.getAsJsonObject().has("orderIdentifierReferences")) {
+                    purchaseOrder = items.getAsJsonObject().get("orderIdentifierReferences").getAsJsonArray().get(0).getAsJsonObject().get("orderType").getAsString();
+                    if (purchaseOrder.equalsIgnoreCase("PURCHASE_ORDER")) {
+                        purchaseOrder = items.getAsJsonObject().get("orderIdentifierReferences").getAsJsonArray().get(0).getAsJsonObject().get("orderIdentifier").getAsString();
+                    }
                 }
                 material.setMaterialNumber(materialNumber);
                 material.setDeliveryNoteNumber(deliveryNoteNumber);

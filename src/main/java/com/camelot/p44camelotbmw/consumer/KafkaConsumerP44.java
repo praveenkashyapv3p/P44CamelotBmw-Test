@@ -62,10 +62,7 @@ public class KafkaConsumerP44 {
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.APPLICATION_JSON);
                 HttpEntity<String> entity = new HttpEntity<>(bmwMessage, headers);
-                ResponseEntity<String> response = retryTemplate.execute(context -> {
-                    ResponseEntity<String> requestData = restTemplate.postForEntity("https://p44-tracking-data-int.bmwgroup.com", entity, String.class);
-                    return requestData;
-                });
+                ResponseEntity<String> response = retryTemplate.execute(context -> restTemplate.postForEntity("https://p44-tracking-data-int.bmwgroup.com", entity, String.class));
                 BmwResponseModel bmwResponseModel = new BmwResponseModel();
                 bmwResponseModel.setResponseCode(response.getStatusCode().toString());
                 bmwResponseModel.setResponseMessage(response.getBody());
@@ -77,7 +74,7 @@ public class KafkaConsumerP44 {
                 producer.writeBMWErrorMessage("test-" + exception.getMessage(), bmwMessage);
             }
         } else {
-            producer.writeLogMessage("test-" + "Mapping Failed", record.value());
+            producer.writeLogErrorMessage("test-" + "Mapping Failed", record.value());
             P44IncomingModel p44IncomingModel = new P44IncomingModel();
             JsonObject shipment = (JsonObject) JsonParser.parseString(record.value());
             p44IncomingModel.setInternalP44Identifier(shipment.get("shipment").getAsJsonObject().get("id").getAsString());

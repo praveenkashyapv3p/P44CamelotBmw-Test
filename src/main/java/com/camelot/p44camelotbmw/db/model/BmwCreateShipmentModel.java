@@ -1,14 +1,16 @@
 package com.camelot.p44camelotbmw.db.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
+@Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Document(collection = "bmwCreateShipment")
 public class BmwCreateShipmentModel {
     @Id
@@ -24,45 +26,6 @@ public class BmwCreateShipmentModel {
     
     private String billOfLading;
     
-    public String getId() {
-        return id;
-    }
+    private String relatedShipmentId;
     
-    public void setId(String id) {
-        this.id = id;
-    }
-    
-    public String getShipmentId() {
-        return shipmentId;
-    }
-    
-    public void setShipmentId(String shipmentId) {
-        this.shipmentId = shipmentId;
-    }
-    
-    public String getBookingNumber() {
-        return bookingNumber;
-    }
-    
-    public void setBookingNumber(String bookingNumber) {
-        this.bookingNumber = bookingNumber;
-    }
-    
-    public String getBillOfLading() {
-        return billOfLading;
-    }
-    
-    public void setBillOfLading(String billOfLading) {
-        this.billOfLading = billOfLading;
-    }
-    
-    @Override
-    public String toString() {
-        return "BmwCreateShipmentModel{" +
-                "id='" + id + '\'' +
-                ", shipmentId='" + shipmentId + '\'' +
-                ", bookingNumber='" + bookingNumber + '\'' +
-                ", billOfLading='" + billOfLading + '\'' +
-                '}';
-    }
 }

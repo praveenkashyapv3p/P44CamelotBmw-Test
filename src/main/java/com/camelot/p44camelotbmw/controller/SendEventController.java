@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,19 +30,18 @@ public class SendEventController {
     
     @GetMapping(value = "/v1/health")
     public ResponseEntity<String> healthCheck() {
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("API is running!");
     }
     
     @GetMapping(value = "/")
     public ResponseEntity<String> getCheck() {
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("API is running! Please use complete endpoint.");
     }
     
-    @PostMapping(value = "/v1/sendEvent", consumes = "application/json")
+    @PostMapping(value = "/v1/sendEvent", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> shipmentDetailsFromP44(@RequestBody String shipmentJson) {
         try {
             boolean trackingJson = false;
-            //String jsonKey = String.valueOf(UuidGenerator.get64MostSignificantBitsForVersion1());
             JsonObject ShipJSON = (JsonObject) JsonParser.parseString(shipmentJson);
             JsonArray events = (JsonArray) ShipJSON.get("events");
             for (JsonElement eventsTyp : events) {
@@ -54,7 +54,6 @@ public class SendEventController {
                 }
             }
             if (!trackingJson) {
-    
                 this.producer.writeP44Message("test-" + OffsetDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSSX")), shipmentJson);
             }
             return ResponseEntity.accepted().build();

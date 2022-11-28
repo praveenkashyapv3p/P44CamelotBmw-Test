@@ -4,19 +4,27 @@ import com.camelot.p44camelotbmw.entity.createShipmentEntity.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CreateShipmentMapper {
     /*
      * Mapping for Request body of Step 1 in create shipment process from BMW to Project44
      */
-    public CreateShipmentP44 mapCreateShipment(CreateShipmentP44 createShipmentP44, String containerID, String bmwShipmentId, String bookingNumber, String billOfLading, String bmwBusinessRelation, String senderId, String senderName, String recipientID, String recipientName, String recipientUnloadingPoint, String carrierId, String carrierP44ID, String carrierName, String planPickUpDate, String planDeliveryDate, String totalWeight, String totalVolume) {
-    
+    public CreateShipmentP44 mapCreateShipment(CreateShipmentP44 createShipmentP44, String containerID, String bmwShipmentId, String bookingNumber,
+                                               String billOfLading, String bmwBusinessRelation, String senderId, String senderName,
+                                               String recipientID, String recipientName, String recipientUnloadingPoint, String carrierId,
+                                               String carrierP44ID, String carrierName, String planPickUpDate, String planDeliveryDate,
+                                               String totalWeight, String totalVolume, String masterShipmentId, String relatedShipmentId) {
+        
         String p44BookingNumber = "";
-        List<Identifier> identifierList = new ArrayList<>();
-    
+        
+        createShipmentP44.setId(masterShipmentId);
+        
         /*
          * Identifiers
          */
+        List<Identifier> identifierList = new ArrayList<>();
         Identifier identifierBook = new Identifier();
         //with billOfLading as first priority, map @BOOKING_NUMBER for either billOfLading of bookingNumber
         if (!billOfLading.equals("")) {
@@ -95,6 +103,7 @@ public class CreateShipmentMapper {
          */
         List<RelatedShipment> relatedShipmentList = new ArrayList<>();
         RelatedShipment relatedShipment = new RelatedShipment();
+        relatedShipment.setId(relatedShipmentId);
         List<Identifier_relatedShipment> identifierRelatedShipmentList = new ArrayList<>();
         Identifier_relatedShipment identifierRelatedShipmentContainerID = new Identifier_relatedShipment();
         identifierRelatedShipmentContainerID.setType("CONTAINER_ID");
@@ -124,7 +133,8 @@ public class CreateShipmentMapper {
         attributeRelatedShipmentsWeight.setName("totalWeightKGS");
         attributeRelatedShipmentsWeight.setValue(totalWeight);
         attributeRelatedShipmentsList.add(attributeRelatedShipmentsWeight);
-        relatedShipment.setAttributes(attributeRelatedShipmentsList);
+        List newList = Stream.concat(attributeRelatedShipmentsList.stream(), attributeList.stream()).collect(Collectors.toList());
+        relatedShipment.setAttributes(newList);
         
         relatedShipmentList.add(relatedShipment);
         createShipmentP44.setRelatedShipments(relatedShipmentList);

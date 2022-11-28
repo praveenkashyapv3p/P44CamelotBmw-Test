@@ -24,26 +24,4 @@ public class CarrierMapping {
             }
         };
     }
-    
-    public Map<String, String> getCarrierName() {
-        return new HashMap<>() {
-            {
-                put("91137211", "MAERSK DEUTSCHLAND");
-                put("16785910", "COSCO SHIPPING LINES (GERMANY) GMBH");
-                put("16636310", "HSUD HAMBURG SUEDAMERIKANISCHE");
-                put("59160210", "HAPAG LLOYD AG");
-                put("16829810", "MSC MEDITERRANEAN SHIPPING COMPANY GERMANY GMBH");
-                put("22966710", "ONE OCEAN NETWORK EXPRESS (EUROPE) LTD.");
-                put("89334310", "EVERGREEN SHIPPING AGENCY");
-                put("13766210", "MAERSK, INC. USA");
-                put("10002710", "OOCL ORIENT OVERSEAS CONTAINER LINE LTD");
-                put("13820210", "ONE OCEAN NETWORK EXPRESS PTE.LTD.");
-                put("19851310", "MSC MEDITERRANEAN SHIPPING");
-                put("19403410", "CMA CGM SAS");
-                put("98924710", "DAL DEUTSCHE AFRIKA-LINIEN");
-                put("49705710", "HMM HYUNDAI MERCHANT MARINE");
-                put("21670710", "TFG TRANSFRACHT GMBH");
-            }
-        };
-    }
 }

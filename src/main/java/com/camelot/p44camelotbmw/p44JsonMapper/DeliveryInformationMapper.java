@@ -23,11 +23,9 @@ public class DeliveryInformationMapper {
     
         DateTimeFormatter inF = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssX");
         DateTimeFormatter outF = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSSX");
-        String output = OffsetDateTime.now(ZoneOffset.UTC).format(outF);
     
-        eventSendingDateTimeUTC = output;
+        eventSendingDateTimeUTC = OffsetDateTime.now(ZoneOffset.UTC).format(outF);
         deliveryInformation.setEventSendingDateTimeUtc(eventSendingDateTimeUTC);
-//        eventCreationDateTimeUTC = output;
         deliveryInformation.setEventCreationDateTimeUtc(eventCreationDateTimeUTC);
         if (shipmentJson.get("shipment").getAsJsonObject().has("attributes")) {
             JsonArray attributesList = (JsonArray) shipmentJson.get("shipment").getAsJsonObject().get("attributes");

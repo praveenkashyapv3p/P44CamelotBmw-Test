@@ -7,12 +7,23 @@ import java.util.List;
 
 public class RelatedShipment {
     
+    @SerializedName("id")
+    @Expose
+    private String id;
     @SerializedName("identifiers")
     @Expose
     private List<Identifier_relatedShipment> identifiers = null;
     @SerializedName("attributes")
     @Expose
     private List<Attribute_relatedShipments> attributes = null;
+    
+    public String getId() {
+        return id;
+    }
+    
+    public void setId(String id) {
+        this.id = id;
+    }
     
     public List<Identifier_relatedShipment> getIdentifiers() {
         return identifiers;
@@ -34,6 +45,10 @@ public class RelatedShipment {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(RelatedShipment.class.getName()).append('@').append(Integer.toHexString(System.identityHashCode(this))).append('[');
+        sb.append("id");
+        sb.append('=');
+        sb.append(((this.id == null) ? "<null>" : this.id));
+        sb.append(',');
         sb.append("identifiers");
         sb.append('=');
         sb.append(((this.identifiers == null) ? "<null>" : this.identifiers));

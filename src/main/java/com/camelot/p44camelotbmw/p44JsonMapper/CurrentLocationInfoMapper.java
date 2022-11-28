@@ -88,14 +88,6 @@ public class CurrentLocationInfoMapper {
                     geoDateTimeUTC = timeStamp;
                 }
     
-                //if (!longitude.equals("") && !latitude.equals("")) {
-                //LatLngConverter latLngConverter = new LatLngConverter();
-                //float[] coordinates = {Float.parseFloat(longitude), Float.parseFloat(latitude)};
-                //String dmsResult = latLngConverter.processCoordinates(coordinates);
-                //String[] coordinatesString = (dmsResult.split(","));
-                //longitude = coordinatesString[0];
-                //latitude = coordinatesString[1];
-                //}
                 currentLocationInfos.setStatusCode(statusCode);
                 currentLocationInfos.setStatusName(statusName);
                 currentLocationInfos.setTimeStamp(timeStamp);

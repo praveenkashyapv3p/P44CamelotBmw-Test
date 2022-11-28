@@ -2,19 +2,11 @@ package com.camelot.p44camelotbmw.p44JsonMapper;
 
 import com.camelot.p44camelotbmw.entity.toBmwEntity.Identifier;
 import com.camelot.p44camelotbmw.entity.toBmwEntity.P44ToBmw;
-import com.camelot.p44camelotbmw.producer.KafkaProducer;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import java.util.Arrays;
-
 public class IdentifiersMapper {
-    private final KafkaProducer producer;
-    
-    public IdentifiersMapper(KafkaProducer producer) {
-        this.producer = producer;
-    }
     
     public void mapIdentifier(String jsonKey, JsonObject shipmentJson, P44ToBmw bmwMapping) {
         Identifier identifiers = new Identifier();
@@ -28,12 +20,6 @@ public class IdentifiersMapper {
             if ("CONTAINER_ID".equalsIgnoreCase(contId.getAsJsonObject().get("type").getAsString())) {
                 //Required
                 bmwContainerId = contId.getAsJsonObject().get("value").getAsString();
-                /*Temporary tracing of containers for Data validation*/
-                if ((Arrays.asList("OOCU8134157", "MRKU2239322", "TGBU7938957", "TGBU9890615", "HLXU8042494", "MRKU2524084 ", "MSDU8752046")).contains(bmwContainerId)) {
-                    //logger.traceEntry(shipmentJson.toString());
-                    this.producer.writeLogMessage("test", shipmentJson.toString());
-                }
-                /*Delete above code after Temporary tracing of containers for Data validation is complete*/
             }
             if ("BILL_OF_LADING".equalsIgnoreCase(contId.getAsJsonObject().get("type").getAsString())) {
                 billOfLading = contId.getAsJsonObject().get("value").getAsString();

@@ -25,7 +25,7 @@ public class MessageMapper {
         CarrierMapper carrierMapper = new CarrierMapper();
         CurrentLocationInfoMapper currentLocationInfoMapper = new CurrentLocationInfoMapper();
         DeliveryInformationMapper deliveryInformationMapper = new DeliveryInformationMapper();
-        IdentifiersMapper identifiersMapper = new IdentifiersMapper(producer);
+        IdentifiersMapper identifiersMapper = new IdentifiersMapper();
         TransportLegInfoMapper transportLegInfoMapper = new TransportLegInfoMapper();
         ContainerDimensionsMapper containerDimensionsMapper = new ContainerDimensionsMapper();
         MaterialMapper materialMapper = new MaterialMapper();
@@ -65,15 +65,14 @@ public class MessageMapper {
     
             /*Temporary tracing of containers for Data validation*/
             if ((Arrays.asList("OOCU8134157", "MRKU2239322", "TGBU7938957", "TGBU9890615", "HLXU8042494", "MRKU2524084 ", "MSDU8752046")).contains(containerID)) {
-                producer.writeLogMessage("prod", bmwJson);
+                producer.writeLogMessage("test", "[" + shipment + "," + bmwJson + "]");
             }
             /*Delete above code after Temporary tracing of containers for Data validation is complete*/
-            producer.writeBMWMessage("prod-" + UuidGenerator.get64MostSignificantBitsForVersion1(), bmwJson);
-    
+            producer.writeBMWMessage("test-" + UuidGenerator.get64MostSignificantBitsForVersion1(), bmwJson);
             statusMessage.put("success", bmwJson);
             return statusMessage;
         } catch (Exception exception) {
-            logger.error("Mapping Exception" + exception + "\n" + message);
+            logger.error("Mapping Exception: " + exception + "\n" + message);
             statusMessage.put("Mapping Failed", message);
             return statusMessage;
         }

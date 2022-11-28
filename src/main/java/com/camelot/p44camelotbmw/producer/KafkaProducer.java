@@ -11,12 +11,13 @@ public class KafkaProducer {
     //private static final String P44TOPIC = "p44DataLocal";
     /*Production Topic*/
     private static final String P44TOPIC = "p44DataTest";
-    /*Development Topic*/
-    //private static final String BMWTOPIC = "bmwDataLocal";
-    /*Production Topic*/
     private static final String BMWTOPIC = "bmwDataTest";
+    /*Development Topic*/
+    //private static final String BMWPUSH = "BMWPushLocal";
+    /*Production Topic*/
     private static final String BMWPUSH = "bmwPushTest";
     private static final String LOGPUSH = "logTopic";
+    private static final String LOGERRORPUSH = "logErrorTopic";
     private static final String BMWERRORTOPIC = "bmwError";
     
     
@@ -43,4 +44,7 @@ public class KafkaProducer {
         this.kafkaTemplate.send(LOGPUSH, id, msg);
     }
     
+    public void writeLogErrorMessage(String id, String msg) {
+        this.kafkaTemplate.send(LOGERRORPUSH, id, msg);
+    }
 }
