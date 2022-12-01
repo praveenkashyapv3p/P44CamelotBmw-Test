@@ -22,7 +22,7 @@ public class MetricsController {
         this.metricsRepository = metricsRepository;
     }
     
-    @GetMapping(path = "/stats", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/test/stats", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String getStats(@RequestParam String id) {
         List<MetricsModel> metricsCreate = metricsRepository.findByDate(id);
