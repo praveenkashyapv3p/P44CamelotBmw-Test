@@ -10,7 +10,7 @@ public interface BmwCreateShipmentRepository {
     
     List<BmwCreateShipmentModel> findByBillOfLading(String billOfLading);
     
-    BmwCreateShipmentModel updateUsingFindAndReplace(String isExistingShipmentId, BmwCreateShipmentModel newShipment);
+    void updateUsingFindAndReplace(String isExistingShipmentId, BmwCreateShipmentModel newShipment);
     
     BmwCreateShipmentModel save(BmwCreateShipmentModel city);
 }

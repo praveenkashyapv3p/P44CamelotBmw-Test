@@ -31,11 +31,11 @@ public class BmwCreateShipmentRepositoryImpl implements BmwCreateShipmentReposit
     }
     
     @Override
-    public BmwCreateShipmentModel updateUsingFindAndReplace(String isExistingShipmentId, BmwCreateShipmentModel newShipment) {
+    public void updateUsingFindAndReplace(String isExistingShipmentId, BmwCreateShipmentModel newShipment) {
         Query query = new Query().addCriteria(Criteria.where("shipmentId").is(isExistingShipmentId));
         FindAndReplaceOptions options = new FindAndReplaceOptions().upsert().returnNew();
-        
-        return mongoTemplate.findAndReplace(query, newShipment, options, BmwCreateShipmentModel.class, "bmwCreateShipment", BmwCreateShipmentModel.class);
+    
+        mongoTemplate.findAndReplace(query, newShipment, options, BmwCreateShipmentModel.class, "bmwCreateShipment", BmwCreateShipmentModel.class);
     }
     
     @Override

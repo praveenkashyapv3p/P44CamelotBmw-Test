@@ -2,7 +2,15 @@ package com.camelot.p44camelotbmw.entity.fromP44Entity;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import lombok.*;
 
+@Data
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class State {
     
     @SerializedName("type")
@@ -20,45 +28,5 @@ public class State {
     @SerializedName("routeSegmentId")
     @Expose
     private String routeSegmentId;
-    
-    public String getType() {
-        return type;
-    }
-    
-    public void setType(String type) {
-        this.type = type;
-    }
-    
-    public String getStartDateTime() {
-        return startDateTime;
-    }
-    
-    public void setStartDateTime(String startDateTime) {
-        this.startDateTime = startDateTime;
-    }
-    
-    public String getEndDateTime() {
-        return endDateTime;
-    }
-    
-    public void setEndDateTime(String endDateTime) {
-        this.endDateTime = endDateTime;
-    }
-    
-    public String getStopId() {
-        return stopId;
-    }
-    
-    public void setStopId(String stopId) {
-        this.stopId = stopId;
-    }
-    
-    public String getRouteSegmentId() {
-        return routeSegmentId;
-    }
-    
-    public void setRouteSegmentId(String routeSegmentId) {
-        this.routeSegmentId = routeSegmentId;
-    }
     
 }

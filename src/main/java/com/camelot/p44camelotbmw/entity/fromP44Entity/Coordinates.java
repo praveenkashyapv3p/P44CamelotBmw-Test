@@ -2,7 +2,15 @@ package com.camelot.p44camelotbmw.entity.fromP44Entity;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import lombok.*;
 
+@Data
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class Coordinates {
     
     @SerializedName("latitude")
@@ -12,20 +20,5 @@ public class Coordinates {
     @Expose
     private Double longitude;
     
-    public Double getLatitude() {
-        return latitude;
-    }
-    
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
-    }
-    
-    public Double getLongitude() {
-        return longitude;
-    }
-    
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
-    }
     
 }

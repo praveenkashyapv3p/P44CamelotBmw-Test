@@ -2,9 +2,17 @@ package com.camelot.p44camelotbmw.entity.fromP44Entity;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import lombok.*;
 
 import java.util.List;
 
+@Data
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class Location {
     
     @SerializedName("name")
@@ -16,29 +24,5 @@ public class Location {
     @SerializedName("coordinates")
     @Expose
     private Coordinates coordinates;
-    
-    public String getName() {
-        return name;
-    }
-    
-    public void setName(String name) {
-        this.name = name;
-    }
-    
-    public List<Identifier_Location> getIdentifiers() {
-        return identifiers;
-    }
-    
-    public void setIdentifiers(List<Identifier_Location> identifiers) {
-        this.identifiers = identifiers;
-    }
-    
-    public Coordinates getCoordinates() {
-        return coordinates;
-    }
-    
-    public void setCoordinates(Coordinates coordinates) {
-        this.coordinates = coordinates;
-    }
     
 }
