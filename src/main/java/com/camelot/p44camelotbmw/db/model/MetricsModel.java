@@ -16,6 +16,9 @@ public class MetricsModel {
     @Id
     private String id;
     
-    
+    private String date;
+    private long received;
+    private long mapped;
+    private long sent;
     
 }

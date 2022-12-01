@@ -2,8 +2,10 @@ package com.camelot.p44camelotbmw.consumer;
 
 import com.camelot.p44camelotbmw.constants.UuidGenerator;
 import com.camelot.p44camelotbmw.db.model.BmwResponseModel;
+import com.camelot.p44camelotbmw.db.model.MetricsModel;
 import com.camelot.p44camelotbmw.db.model.P44IncomingModel;
 import com.camelot.p44camelotbmw.db.repository.BmwResponseRepository;
+import com.camelot.p44camelotbmw.db.repository.MetricsRepository;
 import com.camelot.p44camelotbmw.db.repository.P44IncomingRepository;
 import com.camelot.p44camelotbmw.entity.toBmwEntity.P44ToBmw;
 import com.camelot.p44camelotbmw.p44JsonMapper.*;
@@ -24,33 +26,43 @@ import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class KafkaConsumerP44 {
     
     private static final Logger logger = LogManager.getLogger(KafkaConsumerP44.class);
+    private final AtomicLong counterMapped = new AtomicLong();
+    private final AtomicLong counterSent = new AtomicLong();
     private final KafkaProducer producer;
     public P44IncomingRepository p44IncomingRepository;
     BmwResponseRepository bmwResponseRepository;
+    MetricsRepository metricsRepository;
     private final RestTemplate restTemplate;
     private final RetryTemplate retryTemplate;
+    
     @Autowired
-    public KafkaConsumerP44(KafkaProducer producer, P44IncomingRepository p44IncomingRepository, BmwResponseRepository bmwResponseRepository, RestTemplate restTemplate, RetryTemplate retryTemplate) {
+    public KafkaConsumerP44(KafkaProducer producer, P44IncomingRepository p44IncomingRepository, BmwResponseRepository bmwResponseRepository, MetricsRepository metricsRepository, RestTemplate restTemplate, RetryTemplate retryTemplate) {
         this.producer = producer;
         this.p44IncomingRepository = p44IncomingRepository;
         this.bmwResponseRepository = bmwResponseRepository;
+        this.metricsRepository = metricsRepository;
         this.restTemplate = restTemplate;
         this.retryTemplate = retryTemplate;
     }
     
     /*Development Consumer*/
-    @KafkaListener(topics = "p44DataLocal", groupId = "p44DataLocalGroup")
+    //@KafkaListener(topics = "p44DataLocal", groupId = "p44DataLocalGroupTest")
     /*Production Consumer*/
-    //@KafkaListener(topics = "p44DataTest", groupId = "bmwGroupTest")
+    @KafkaListener(topics = "p44DataTest", groupId = "bmwGroupTest")
     public void getP44Message(ConsumerRecord<String, String> record) {
         
         
@@ -94,16 +106,25 @@ public class KafkaConsumerP44 {
             carrierMapper.mapCarrier(shipment, bmwMapping);
             containerDimensionsMapper.mapContainerDimension(shipment, bmwMapping);
             materialMapper.mapMaterial(shipment, bmwMapping);
-            
+    
             String containerID = bmwMapping.getIdentifier().getContainerId();
             String bmwJson = jsonStartingString + "\"" + containerID + "\"" + jsonStringValue + new Gson().toJson(bmwMapping) + jsonEndString;
-            
+    
             /*Temporary tracing of containers for Data validation*/
             if ((Arrays.asList("OOCU8134157", "MRKU2239322", "TGBU7938957", "TGBU9890615", "HLXU8042494", "MRKU2524084 ", "MSDU8752046")).contains(containerID)) {
                 this.producer.writeLogMessage("test", "[" + shipment + "," + bmwJson + "]");
             }
             /*Delete above code after Temporary tracing of containers for Data validation is complete*/
             this.producer.writeBMWMessage("test-" + UuidGenerator.get64MostSignificantBitsForVersion1(), bmwJson);
+            String today = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+            List<MetricsModel> metricsUpdate = metricsRepository.findByDate(today);
+            for (MetricsModel metricsModel : metricsUpdate) {
+                metricsModel.setMapped(counterMapped.incrementAndGet());
+                metricsModel.setReceived(metricsModel.getReceived());
+                metricsModel.setDate(metricsModel.getDate());
+                metricsModel.setSent(metricsModel.getSent());
+                metricsRepository.upsert(metricsModel);
+            }
             BmwResponseModel bmwResponseModel = new BmwResponseModel();
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
@@ -115,6 +136,15 @@ public class KafkaConsumerP44 {
                 bmwResponseModel.setCorrelationId(correlationId);
                 bmwResponseModel.setTimestamp(OffsetDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSSX")));
                 bmwResponseRepository.save(bmwResponseModel);
+                if (Objects.equals(response.getStatusCode().toString(), "200 OK")) {
+                    for (MetricsModel metricsModel : metricsUpdate) {
+                        metricsModel.setSent(counterSent.incrementAndGet());
+                        metricsModel.setReceived(metricsModel.getReceived());
+                        metricsModel.setDate(metricsModel.getDate());
+                        metricsModel.setMapped(metricsModel.getMapped());
+                        metricsRepository.upsert(metricsModel);
+                    }
+                }
             } catch (Exception exception) {
                 logger.error("Unable to push to BMW: " + exception);
                 this.producer.writeBMWErrorMessage("test-" + exception.getMessage(), bmwJson);
